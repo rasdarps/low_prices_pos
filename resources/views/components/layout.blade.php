@@ -30,7 +30,7 @@
 
     <style>
      body{
-        background-image: url(images/posbg.jpg);
+        background-image: url(images/posbg1.jpg);
         background-repeat:no-repeat;
         background-position:center center;
         background-attachment:fixed;
@@ -40,13 +40,22 @@
 
     .bg-gradient-primary {
     background-color: #6e042b !important;
-    background-image: linear-gradient(180deg,#214804 10%,#113e06 100%);
+    background-image: linear-gradient(180deg,#034141 10%,#034141 100%);
    }
 
    .btn-primary{
-    background-color:#214804 !important;
+    background-color:#034141 !important;
     border:none !important;
    }
+
+   .btn-success{
+    background-color:#000 !important;
+    border:none !important;
+   }
+
+  /* .topbar {
+    background: rgb(55, 78, 78) !important;
+}*/
 
     </style>
 

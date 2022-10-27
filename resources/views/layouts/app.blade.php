@@ -20,7 +20,7 @@
     
 <style>
     body{
-        background-image: url(images/posbg.jpg);
+        background-image: url(images/posbg1.jpg) !important;
         background-repeat:no-repeat;
         background-position:center center;
         background-attachment:fixed;
@@ -33,10 +33,10 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel" style="background:#FCFCF5; font-weight:bold;">
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel" style="background:#000; font-weight:bold; background:transparent;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    rictPOS
+                    <img src="{{asset('images/skynet.png')}}" alt="" width="80px">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -51,8 +51,8 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li class=""><a style="color:#214804; font-weight:bold;" class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                            <li style="color:#214804; font-weight:bold;"><a style="color:#214804; font-weight:bold;" class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                            <li class="btn btn-sm btn-success"><a style="color:#fff; font-weight:bold;" class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                            <li class="btn btn-sm btn-warning" style="color:#000; font-weight:bold; margin-left:20px;"><a style="color:#fff; font-weight:bold;" class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                         @else
                             <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
                             <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a></li>

@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card" style="color:#214804; font-weight:bold;">
-                <div class="card-header" style="background-color:#214804; color:#fff">{{ __('Confirm Password') }}</div>
+            <div class="card" style="color:#000; font-weight:bold;">
+                <div class="card-header" style="background-color:#000; color:#fff">{{ __('Confirm Password') }}</div>
 
                 <div class="card-body">
                     {{ __('Please confirm your password before continuing.') }}
@@ -29,7 +29,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary" style="background-color:#214804; color:#fff; border:none;">
+                                <button type="submit" class="btn btn-primary" style="background-color:#000; color:#fff; border:none;">
                                     {{ __('Confirm Password') }}
                                 </button>
 

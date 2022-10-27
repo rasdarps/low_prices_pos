@@ -33,7 +33,7 @@
 
 <style>
     body {
-        background-image:url(images/posbg.jpg) !important;
+        background-image:url(images/posbg1.jpg) !important;
         width:100%;
         /*background-image:url(images/school.jpg);*/
         background-repeat:no-repeat;
@@ -76,7 +76,7 @@
     <div class="jumbotron col-md-12">
         <div class="os-animation" data-os-animation="zoomIn" data-os-animation-delay="0.5s">
             <div class="col-md-8 mx-auto">
-            <img src="{{asset('images/spin.gif')}}" width="200px" /> <br><br>
+            <img src="{{asset('images/spinners.gif')}}" width="200px" /> <br><br>
                 <h1 style="text-align:center;">rictPOS System.....</h1>
                 <h5 style="text-align:center;">Powered by <a href="https://rictconsult.com">RICT Consult.....</a></h5>
             </div>

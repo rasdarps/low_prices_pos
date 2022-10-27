@@ -55,7 +55,7 @@
                         <td>
                             <a class="btn btn-sm btn-primary" href="{{ route('supplier.show', $supplier) }}">Show</a>
                             @can('supplier-edit')
-                            <a class="btn btn-sm btn-primary" href="{{ route('supplier.edit', $supplier) }}">Edit</a>
+                            <a class="btn btn-sm btn-success" href="{{ route('supplier.edit', $supplier) }}">Edit</a>
                            @endcan
 
                             @can('supplier-delete')
