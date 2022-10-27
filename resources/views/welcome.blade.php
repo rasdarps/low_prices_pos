@@ -33,7 +33,7 @@
 
 <style>
     body {
-        background-image:linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url(images/posbg.jpg) !important;
+        background-image:url(images/posbg.jpg) !important;
         width:100%;
         /*background-image:url(images/school.jpg);*/
         background-repeat:no-repeat;
