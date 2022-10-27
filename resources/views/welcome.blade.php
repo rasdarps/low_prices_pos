@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!--Online Links-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!--Offline Links-->
+    <!-- Custom fonts for this template -->
+    <link href="{{asset('fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+     <!-- Custom datatable styles for this page -->
+    <link rel="stylesheet" type="text/css" href="{{asset('datatables/Buttons-2.2.3/css/buttons.dataTables.min.css')}}"/>
+    <link href="{{asset('datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+
+<script>
+    setTimeout(function() {
+        window.location = "{{'login'}}";
+    }, 2000);
+</script>
+
+<style>
+    body {
+        background-image:linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url(images/posbg.jpg) !important;
+        width:100%;
+        /*background-image:url(images/school.jpg);*/
+        background-repeat:no-repeat;
+        background-position:center center;
+        background-attachment:fixed;
+        background-size:cover;
+    }
+    
+    .jumbotron {
+        /*background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)) !important;*/
+        background: transparent;
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        color: #fff!important;
+        text-align: center;
+    }
+
+    a{
+        text-decoration: none;
+    }
+    
+    /*MEDIA QUERY*/
+    
+    @media (max-width: 992px) {
+        .jumbotron {
+            margin-top: 350px !important;
+        }
+    }
+    
+    @media (max-width: 768px) {}
+    
+    @media (max-width: 576px) {}
+</style>
+</head>
+
+<body>
+<div class="container" style="margin-top:150px;">
+    <div class="jumbotron col-md-12">
+        <div class="os-animation" data-os-animation="zoomIn" data-os-animation-delay="0.5s">
+            <div class="col-md-8 mx-auto">
+            <img src="{{asset('images/spin.gif')}}" width="200px" /> <br><br>
+                <h1 style="text-align:center;">rictPOS System.....</h1>
+                <h5 style="text-align:center;">Powered by <a href="https://rictconsult.com">RICT Consult.....</a></h5>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{{asset('jquery/jquery.min.js')}}"></script>
+<script src="{{asset('bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{{asset('jquery-easing/jquery.easing.min.js')}}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{{asset('js/sb-admin-2.min.js')}}"></script>
+
+<!-- Page level plugins -->
+<script src="{{asset('datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('datatables/dataTables.bootstrap4.min.js')}}"></script>
+
+ <!--Offline links-->
+<script type="text/javascript" src="{{asset('datatables/JSZip-2.5.0/jszip.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('datatables/pdfmake-0.1.36/pdfmake.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('datatables/pdfmake-0.1.36/vfs_fonts.js')}}"></script>
+<script type="text/javascript" src="{{asset('datatables/Buttons-2.2.3/js/dataTables.buttons.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('datatables/Buttons-2.2.3/js/buttons.html5.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('datatables/Buttons-2.2.3/js/buttons.print.min.js')}}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{asset('js/demo/datatables-demo.js')}}"></script>
+
+<!--online links-->
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>    
+
+<script>
+    //calling datatable function
+    $(document).ready( function () {
+    $('#myTable').DataTable(
+        {
+        dom: 'Bfrtip',
+        buttons: [
+           'copy', 'excel', 'pdf', 'print'
+        ]
+    } );
+
+    });
+</script>
+
+</body>
+
+</html>
