@@ -96,6 +96,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
+            @role('Admin')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseZero"
                     aria-expanded="true" aria-controls="collapseZero">
@@ -110,6 +111,7 @@
                     </div>
                 </div>
             </li>
+            @endrole
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -123,7 +125,7 @@
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Sales Setup:</h6>
+                        <h6 class="collapse-header">Entries:</h6>
                         <a class="collapse-item" href="#">Sales</a>
                         <a class="collapse-item" href="#">Purchases</a>
                     </div>
@@ -197,6 +199,7 @@
              <hr class="sidebar-divider">
 
              <!-- Nav Item - Pages Collapse Menu -->
+             @role('Admin')
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
                     aria-expanded="true" aria-controls="collapseFive">
@@ -211,12 +214,13 @@
                     </div>
                 </div>
             </li>
+            @endrole
 
              <!-- Divider -->
              <hr class="sidebar-divider">
 
               <!-- Nav Item - Pages Collapse Menu -->
-             
+              @role('Admin')
               <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
                     aria-expanded="true" aria-controls="collapseSix">
@@ -231,12 +235,13 @@
                     </div>
                 </div>
             </li>
-           
+            @endrole
 
              <!-- Divider -->
              <hr class="sidebar-divider">
 
              <!-- Nav Item - Pages Collapse Menu -->
+             @role('Admin')
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSeven"
                     aria-expanded="true" aria-controls="collapseSeven">
@@ -252,7 +257,7 @@
                     </div>
                 </div>
             </li>
-           
+           @endrole
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
