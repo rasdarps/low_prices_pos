@@ -40,3 +40,4 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('customer',CustomerController::class); 
     Route::resource('supplier',SupplierController::class); 
 });
+
