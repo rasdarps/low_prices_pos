@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('tb_customer', function (Blueprint $table) {
             $table->id('id');
             $table->string('customer_name');
-            $table->string('contact_name');
+            $table->string('contact')->unique();
             $table->string('address');
-            $table->string('city');
             $table->timestamps();
         });
     }

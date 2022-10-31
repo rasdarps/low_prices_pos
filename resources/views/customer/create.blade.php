@@ -24,10 +24,10 @@
         </div>
 
         <div class="col-md-6">
-            <label for="contact_name" class="">Contact Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="contact_name"  value="{{ old('contact_name') }}" placeholder="">
+            <label for="contact" class="">Contact Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="contact"  value="{{ old('contact') }}" placeholder="">
             <div class="text-danger">
-                @error('contact_name')
+                @error('contact')
                     {{$message}}
                 @enderror
             </div>
@@ -36,11 +36,11 @@
         <div class="col-md-6">
             <label for="address" class="">Address</label>
             <input type="text" class="form-control" name="address"  value="{{ old('address') }}" placeholder="">
-        </div>
-
-        <div class="col-md-6">
-            <label for="city" class="">City</label>
-            <input type="text" class="form-control" name="city"  value="{{ old('city') }}" placeholder="">
+            <div class="text-danger">
+                @error('address')
+                    {{$message}}
+                @enderror
+            </div>
         </div>
         
     </div><!--End of row-->
@@ -53,7 +53,8 @@
     </div>
     </center>
 
-    </form>
+</form>
+
 </div><!--End of card body-->
 </div><!--End of card header-->
 </div><!--End of card-->

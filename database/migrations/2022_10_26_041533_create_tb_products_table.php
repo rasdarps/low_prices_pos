@@ -16,7 +16,17 @@ return new class extends Migration
         Schema::create('tb_products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('detail');
+            $table->foreignId('category_id')
+                    ->constrained('tb_category')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->foreignId('unit_id')
+                    ->constrained('tb_unit')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->float('stock_qty');
+            $table->float('price');
+            $table->float('re-order')->nullable();       
             $table->timestamps();
         });
     }

@@ -12,8 +12,8 @@ class Customer extends Model
     protected $table = 'tb_customer';
     protected $primarykey = 'id';
     protected $fillable = ['customer_name',
-                            'contact_name',
+                            'contact',
                             'address',
-                            'city'];
+                            ];
 
 }

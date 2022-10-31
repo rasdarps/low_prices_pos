@@ -36,9 +36,9 @@
                     <thead style="text-align:center;">
                         <th>#</th>
                         <th>Supplier Name</th>
-                        <th>Contact Name</th>
+                        <th>Contact</th>
                         <th>Address</th>
-                        <th>City</th>
+                        
                         <th>Action</th>
                     </thead>
                
@@ -49,9 +49,9 @@
                       <tr>
                         <td>{{$no ++}}</td>
                         <td>{{$supplier->supplier_name}}</td>
-                        <td>{{$supplier->contact_name}}</td>
+                        <td>{{$supplier->contact}}</td>
                         <td>{{$supplier->address}}</td>
-                        <td>{{$supplier->city}}</td>
+                        
                         <td>
                             <a class="btn btn-sm btn-primary" href="{{ route('supplier.show', $supplier) }}">Show</a>
                             @can('supplier-edit')

@@ -11,5 +11,5 @@ class Supplier extends Model
 
     protected $table = 'tb_supplier';
     protected $primarykey = 'id';
-    protected $fillable = ['supplier_name','contact_name','address','city'];
+    protected $fillable = ['supplier_name','contact','address'];
 }

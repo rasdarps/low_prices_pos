@@ -35,9 +35,8 @@
                     <thead style="text-align:center;">
                         <th>#</th>
                         <th>Customer Name</th>
-                        <th>Contact Name</th>
-                        <th>Address</th>
-                        <th>City</th>
+                        <th>Contact</th>
+                        <th>Address</th>   
                         <th>Action</th>
                     </thead>
                
@@ -48,9 +47,9 @@
                       <tr>
                         <td>{{$no ++}}</td>
                         <td>{{$customer->customer_name}}</td>
-                        <td>{{$customer->contact_name}}</td>
+                        <td>{{$customer->contact}}</td>
                         <td>{{$customer->address}}</td>
-                        <td>{{$customer->city}}</td>
+                      
                         <td>
                             <a class="btn btn-sm btn-primary" href="{{ route('customer.show', $customer) }}">Show</a>
 

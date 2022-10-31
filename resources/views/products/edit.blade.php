@@ -1,54 +1,80 @@
-<x-layout> {{--Extends the layout page to this page--}}
-    
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Edit Product</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('products.index') }}"> Back</a>
-            </div>
-        </div>
+<x-layout :title="' - Product Create '"> {{--Extends the layout page to this page--}}
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Product Creation Form</h1>
     </div>
+    
+    <div class="card col">
+        <div class="card-header">
+            <div class="card-body px-4">
+    
+    <form method="POST" action="{{route('products.store', $supplier)}}" class="form control mb-4">
+        @csrf {{--Protects form from cross scripting--}}
+        @method('PUT'){{--method to allow records to be updated--}}
+        <div class="row g-3">
+    
+            <div class="col-md-6">
+                <label for="name" class="">Product Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="name"  value="{{ old('name', $product->name) }}" placeholder="">
+                <div class="text-danger">
+                    @error('name')
+                        {{$message}}
+                    @enderror
+                </div>
+            </div>
+    
+            <div class="col-md-6">
+                <label for="unit" class="">Unit<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="unit_id"  value="{{ old('unit_id', $product->unit_id) }}" placeholder="">
+                
+            </div>
+    
+            <div class="col-md-6">
+                <label for="category" class="">Category</label>
+                <input type="text" class="form-control" name="category_id"  value="{{ old('category_id', $product->category_id) }}" placeholder="">
+                
+            </div>
 
+            <div class="col-md-6">
+                <label for="stock" class="">Stock Quantity <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="stock_quantity"  value="{{ old('stock_quantity', $product->stock_quantity) }}" placeholder="">
+                <div class="text-danger">
+                    @error('name')
+                        {{$message}}
+                    @enderror
+                </div>
+            </div>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            <div class="col-md-6">
+                <label for="price" class="">Price<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="price"  value="{{ old('price', $product->price) }}" placeholder="">
+                <div class="text-danger">
+                    @error('name')
+                        {{$message}}
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label for="reorder" class="">Re-Order Level</label>
+                <input type="number" class="form-control" name="re_order_level"  value="{{ old('order_level', $product->order_level) }}" placeholder="">
+                
+            </div>
+            
+        </div><!--End of row-->
+        <br><br>
+    
+        <center>
+        <div class="mb-3">
+        <button class="btn btn-primary" name="submit" id="">Save</button>
+         <a class="btn btn-danger" href="{{route('products.index')}}"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
-    @endif
-
-
-    <form action="{{ route('products.update',$product->id) }}" method="POST">
-    	@csrf
-        @method('PUT')
-
-
-         <div class="row">
-		    <div class="col-xs-12 col-sm-12 col-md-12">
-		        <div class="form-group">
-		            <strong>Name:</strong>
-		            <input type="text" name="name" value="{{ $product->name }}" class="form-control" placeholder="Name">
-		        </div>
-		    </div>
-		    <div class="col-xs-12 col-sm-12 col-md-12">
-		        <div class="form-group">
-		            <strong>Detail:</strong>
-		            <textarea class="form-control" style="height:150px" name="detail" placeholder="Detail">{{ $product->detail }}</textarea>
-		        </div>
-		    </div>
-		    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-		      <button type="submit" class="btn btn-primary">Submit</button>
-		    </div>
-		</div>
-
-
+        </center>
+    
     </form>
-
-
-</x-layout>
+    
+    </div><!--End of card body-->
+    </div><!--End of card header-->
+    </div><!--End of card-->
+           
+    </x-layout>

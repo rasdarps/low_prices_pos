@@ -19,9 +19,9 @@ class CustomerFactory extends Factory
         return [
             //
             'customer_name' => $this->faker->name(),
-            'contact_name' => $this->faker->name(),
+            'contact' => $this->faker->number(min:10, max:10),
             'address' => $this->faker->text(50),
-            'city' => $this->faker->city(),
+            
             
         ];
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 class SupplierController extends Controller
@@ -61,7 +62,8 @@ class SupplierController extends Controller
         //
         $request->validate([
             'supplier_name' => ['required'],
-            'contact_name' => ['required'],
+            'contact' => ['required' , Rule::unique('tb_supplier', 'contact')],
+            'address' => ['required'],
 
         ]);
 
@@ -109,14 +111,14 @@ class SupplierController extends Controller
         //
         $request->validate([
             'supplier_name' => 'required',
-            'contact_name' => 'required',
+            'contact' => ['required' , Rule::unique('tb_supplier', 'contact')],
+            'address' => 'required',
 
         ]);
 
         $supplier -> supplier_name = $request -> supplier_name;
-        $supplier -> contact_name = $request -> contact_name;
+        $supplier -> contact = $request -> contact;
         $supplier -> address = $request -> address;
-        $supplier -> city = $request -> city;
         $supplier->save();
         //after saving a new customer it returns to index page to view list
         return redirect('supplier')->with('success', 'Supplier Updated Successfully');

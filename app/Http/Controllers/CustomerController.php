@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -65,7 +66,8 @@ class CustomerController extends Controller
         //
         $request->validate([
             'customer_name' => ['required'],
-            'contact_name' => ['required'],
+            'contact' => ['required' , Rule::unique('tb_supplier', 'contact')],
+            'address' => ['required'],
 
         ]);
 
@@ -113,14 +115,14 @@ class CustomerController extends Controller
         //
         $request->validate([
             'customer_name' => 'required',
-            'contact_name' => 'required',
+            'contact' => ['required' , Rule::unique('tb_customer', 'contact')],
+            'address' => 'required',
 
         ]);
 
         $customer -> customer_name = $request -> customer_name;
-        $customer -> contact_name = $request -> contact_name;
+        $customer -> contact = $request -> contact;
         $customer -> address = $request -> address;
-        $customer -> city = $request -> city;
         $customer->save();
         //after saving a new customer it returns to index page to view list
         return redirect('customer')->with('success', 'Customer Updated Successfully');

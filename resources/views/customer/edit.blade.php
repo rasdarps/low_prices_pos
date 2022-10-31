@@ -24,10 +24,10 @@
         </div>
 
         <div class="col-md-6">
-            <label for="contact_name" class="">Contact Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="contact_name"  value="{{ old('contact_name', $customer->contact_name) }}" placeholder="">
+            <label for="contact_name" class="">Contact<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="contact"  value="{{ old('contact', $customer->contact) }}" placeholder="">
             <div class="text-danger">
-                @error('contact_name')
+                @error('contact')
                     {{$message}}
                 @enderror
             </div>
@@ -36,11 +36,11 @@
         <div class="col-md-6">
             <label for="address" class="">Address</label>
             <input type="text" class="form-control" name="address"  value="{{ old('address', $customer->address) }}" placeholder="">
-        </div>
-
-        <div class="col-md-6">
-            <label for="city" class="">City</label>
-            <input type="text" class="form-control" name="city"  value="{{ old('city', $customer->city) }}" placeholder="">
+            <div class="text-danger">
+                @error('address')
+                    {{$message}}
+                @enderror
+            </div>
         </div>
         
     </div><!--End of row-->

@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_supplier', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('supplier_name');
-            $table->string('contact')->unique();
-            $table->string('address');
+        Schema::create('tb_category', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_supplier');
+        Schema::dropIfExists('tb_category');
     }
 };

@@ -1,4 +1,4 @@
-<x-layout :title="' - Customer Edit '"> {{--Extends the layout page to this page--}}
+<x-layout :title="' - Supplier Edit '"> {{--Extends the layout page to this page--}}
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Supplier Edit Form</h1>
@@ -23,10 +23,10 @@
         </div>
 
         <div class="col-md-6">
-            <label for="contact_name" class="">Contact Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="contact_name"  value="{{ old('contact_name', $supplier->contact_name) }}" placeholder="">
+            <label for="contact" class="">Contact<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="contact"  value="{{ old('contact', $supplier->contact) }}" placeholder="">
             <div class="text-danger">
-                @error('contact_name')
+                @error('contact')
                     {{$message}}
                 @enderror
             </div>
@@ -35,13 +35,14 @@
         <div class="col-md-6">
             <label for="address" class="">Address</label>
             <input type="text" class="form-control" name="address"  value="{{ old('address', $supplier->address) }}" placeholder="">
+            <div class="text-danger">
+                @error('address')
+                    {{$message}}
+                @enderror
+            </div>
         </div>
 
-        <div class="col-md-6">
-            <label for="city" class="">City</label>
-            <input type="text" class="form-control" name="city"  value="{{ old('city', $supplier->city) }}" placeholder="">
-        </div>
-        
+    
     </div><!--End of row-->
     <br><br>
 
