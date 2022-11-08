@@ -13,21 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_products', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->engine = 'InnoDB'; //Add this line
             $table->id();
-            $table->string('name');
-            $table->foreignId('cat_id')
-                    ->constrained('tb_category')
+            $table->date('transaction_date');
+            $table->integer('sales_id');
+            $table->integer('paid_amount');
+            $table->integer('balance');
+            $table->string('payment_method')->default('cash');
+            $table->float('transaction_amount');
+            $table->foreignId('user_id')
+                    ->constrained('users')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->foreignId('unit_id')
-                    ->constrained('tb_unit')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
-            $table->float('stock_qty');
-            $table->float('price');
-            $table->float('re_order')->nullable();       
+
             $table->timestamps();
         });
     }
@@ -39,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_products');
+        Schema::dropIfExists('transactions');
     }
 };

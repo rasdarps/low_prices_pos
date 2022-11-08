@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('tb_sales', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

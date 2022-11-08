@@ -17,6 +17,6 @@ class Product extends Model
     protected $table = 'tb_products';
     protected $primarykey = 'id';
     protected $fillable = [
-        'name', 'detail'
+        'name', 'cat_id', 'unit_id', 'stock_qty', 'price', 're_order'
     ];
 }

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Customer;
+use App\Models\Discount;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CustomerSeeder extends Seeder
+class DiscountSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +15,9 @@ class CustomerSeeder extends Seeder
      */
     public function run()
     {
+        //
         //to update or add to customer factory
         //Customer::factory()->count(50)->firstOrCreate();
-        Customer::factory()->count(50)->create();
+        Discount::factory()->count(50)->create();
     }
 }

@@ -14,7 +14,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_purchase', function (Blueprint $table) {
+            $table->engine = 'InnoDB'; //Add this line
             $table->id();
+            $table->foreignId('product_id')
+                    ->constrained('tb_products')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->foreignId('supplier_id')
+                    ->constrained('tb_supplier')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->float('quantity');
+            $table->float('unit_price');
+            $table->integer('amount');
             $table->timestamps();
         });
     }

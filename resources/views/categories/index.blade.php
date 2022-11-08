@@ -1,4 +1,4 @@
-<x-layout :title="' - Product List '"> {{--Extends the layout page to this page--}}
+<x-layout :title="' - Unit List '"> {{--Extends the layout page to this page--}}
 
 
     @if (session('success'))
@@ -9,7 +9,7 @@
     @endif
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Product List</h1>
+        <h1 class="h3 mb-0 text-gray-800">Category List</h1>
     </div>
         
     <div class="card fluid" tyle="margin:20px;">
@@ -24,7 +24,7 @@
                     -->
 
                     <div class="col">
-                        <a class="btn btn-primary float-right" href="{{route('products.create')}}"><i class="fas fa-plus"></i>
+                        <a class="btn btn-primary float-right" href="{{route('categories.create')}}"><i class="fas fa-plus"></i>
                         Add New</a>
                     </div>
                 </form>
@@ -35,40 +35,32 @@
                 <table class="display nowrap" style="text-align:center;" id="myTable">
                     <thead style="text-align:center;">
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Unit</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Re-order Level</th>
+                        <th>Category Name</th>
                         <th>Action</th>
                     </thead>
                
 
                     <?php $no = 1 ?>
 
-                    @foreach($products as $product)
+                    @foreach($units as $unit)
                       <tr>
                         <td>{{$no ++}}</td>
-                        <td>{{$product->name}}</td>
-                        <td>{{$product->cat_id}}</td>
-                        <td>{{$product->unit_id}}</td>
-                        <td>{{$product->stock_qty}}</td>
-                        <td>{{$product->price}}</td>
-                        <td>{{$product->re_order}}</td>
+                        <td>{{$category->cat_name}}</td>
+                        
                         <td>
-                            <form action="{{ route('products.destroy', $product) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete?')">
-                            <a class="btn btn-sm btn-info" href="{{ route('products.show',$product->id) }}">Show</a>
-                            @can('product-edit')
-                            <a class="btn btn-primary" href="{{ route('products.edit', $product) }}">Edit</a>
-                            @endcan
+                            <a class="btn btn-sm btn-primary" href="{{ route('categories.show', $category) }}">Show</a>
+                            
+                            <a class="btn btn-sm btn-success" href="{{ route('categories.edit', $category) }}">Edit</a>
+                           
 
+                            @can('unit-delete')
+                            <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete?')">
                                 @csrf
                                 @method('DELETE')
-                                @can('product-delete')
                                 <button class="btn btn-sm btn-danger">Delete</button>
-                                @endcan
+                            
                             </form>
+                            @endcan
                         </td>
                       </tr>
                    

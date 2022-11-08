@@ -18,6 +18,11 @@
 </div>
 @endif
 
+@if ($message = Session::get('error'))
+<div class="alert alert-success">
+  <p>{{ $message }}</p>
+</div>
+@endif
 
 <table class="table table-bordered shadow">
  <tr>

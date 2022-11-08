@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Faker\Provider\PhoneNumber;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class SupplierFactory extends Factory
         return [
             //
             'supplier_name' => $this->faker->name(),
-            'contact' => $this->faker->number(min:10, max:10),
+            'contact' => $this->faker->PhoneNumber('501-###-###'),
             'address' => $this->faker->text(50),
             
             

@@ -115,7 +115,7 @@ class CustomerController extends Controller
         //
         $request->validate([
             'customer_name' => 'required',
-            'contact' => ['required' , Rule::unique('tb_customer', 'contact')],
+            'contact' => 'required',
             'address' => 'required',
 
         ]);

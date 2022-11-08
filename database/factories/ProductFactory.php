@@ -19,7 +19,11 @@ class ProductFactory extends Factory
         return [
             //
             'name' => $this->faker->name(),
-            'detail' => $this->faker->text(50),
+            'cat_id' => $this->faker->bigInt(),
+            'unit_id' => $this->faker->bigInt(),
+            'stock_quantity' => $this->faker->float(),
+            'price' => $this->faker->float(),
+            're-order' => $this->faker->float(),
         ];
     }
 }

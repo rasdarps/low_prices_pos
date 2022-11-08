@@ -11,7 +11,7 @@
         <h1 class="h3 mb-0 text-gray-800">Customer List</h1>
     </div>
         
-    <div class="card fluid" tyle="margin:20px;">
+    <div class="card fluid" style="margin:20px;">
             <div class="card-header">
                 <form action="" class="row row-cols-auto g-1">
                     <!--<div class="col">
@@ -23,12 +23,12 @@
                     </div>-->
 
                     <div class="col">
-                        <a class="btn btn-primary" href="{{route('customer.create')}}"><i class="fas fa-plus"></i>
+                        <a class="btn btn-primary float-right" href="{{route('customer.create')}}"><i class="fas fa-plus"></i>
                         Add New</a>
                     </div>
                 </form>
 
-            </div>
+            </div><!--Card Head ends-->
             <div class="card-body">
                
                 <table class="display nowrap" style="width:100%; text-align:center;" id="myTable">

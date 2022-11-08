@@ -39,19 +39,40 @@ class PermissionTableSeeder extends Seeder
               
             'sales-list',
             'sales-create',
-            'sales-update',
+            'sales-edit',
             'sales-delete',
 
             'purchase-list',
             'purchase-create',
-            'purchase-update',
+            'purchase-edit',
             'purchase-delete',
+
+            'discount-list',
+            'discount-create',
+            'discount-edit',
+            'discount-delete',
+
+            'company-list',
+            'company-create',
+            'company-edit',
+            'company-delete',
+
+            'unit-list',
+            'unit-create',
+            'unit-edit',
+            'unit-delete',
+
+            'category-list',
+            'category-create',
+            'category-edit',
+            'category-delete',
+
 
          ];
       
          foreach ($permissions as $permission) {
                
-              // Permission::create(['name' => $permission]); 
+              //Permission::create(['name' => $permission]); 
               //add to exixting seeder use firstOrCreate
               Permission::firstOrCreate(['name' => $permission]); 
          }

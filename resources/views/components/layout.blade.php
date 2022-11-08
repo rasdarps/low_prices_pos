@@ -38,13 +38,23 @@
 
      }
 
+     .top-bar{
+        background:#034141 !important; 
+
+     }
+
+     .card-header{
+        background:#034141 !important;
+        color:#fff !important;
+     }
+
     .bg-gradient-primary {
     background-color: #6e042b !important;
     background-image: linear-gradient(180deg,#034141 10%,#034141 100%);
    }
 
    .btn-primary{
-    background-color:#034141 !important;
+    background-color:#000 !important;
     border:none !important;
    }
 
@@ -53,9 +63,21 @@
     border:none !important;
    }
 
+   i{
+    font-size:25px !important;
+   }
+
   /* .topbar {
     background: rgb(55, 78, 78) !important;
 }*/
+
+@media only screen and (max-width: 600px) {
+    .top-buttons{
+    display: none;
+        }
+           
+        }
+
 
     </style>
 
@@ -83,8 +105,8 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="{{route('home')}}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Home</span></a>
             </li>
 
             <!-- Divider -->
@@ -100,7 +122,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseZero"
                     aria-expanded="true" aria-controls="collapseZero">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-fw fa-building"></i>
                     <span>Company</span>
                 </a>
                 <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionSidebar">
@@ -120,7 +142,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-fw fa-money-bill"></i>
                     <span>Transactions</span>
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
@@ -139,8 +161,8 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Manage Customer</span>
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Manage Customers</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -158,8 +180,8 @@
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                     aria-expanded="true" aria-controls="collapseThree">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Manage Supplier</span>
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Manage Suppliers</span>
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -177,8 +199,8 @@
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
                     aria-expanded="true" aria-controls="collapseFour">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Manage Product</span>
+                    <i class="fas fa-fw fa-truck"></i>
+                    <span>Manage Products</span>
                 </a>
                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -195,6 +217,29 @@
                 </div>
             </li>
 
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            @role('Admin')
+            <li class="nav-item">
+               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEight"
+                   aria-expanded="true" aria-controls="collapseEight">
+                   <i class="fas fa-fw fa-cog"></i>
+                   <span>Manage Units</span>
+               </a>
+               <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordionSidebar">
+                   <div class="bg-white py-2 collapse-inner rounded">
+                       <h6 class="collapse-header">Unit Setup:</h6>
+                       <a class="collapse-item" href="{{ route('units.index') }}">View</a>
+                       <a class="collapse-item" href="{{ route('units.create') }}">Create</a>
+                   </div>
+               </div>
+           </li>
+           @endrole
+
+           
+
              <!-- Divider -->
              <hr class="sidebar-divider">
 
@@ -203,8 +248,8 @@
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
                     aria-expanded="true" aria-controls="collapseFive">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Manage User</span>
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Manage Users</span>
                 </a>
                 <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -224,8 +269,8 @@
               <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
                     aria-expanded="true" aria-controls="collapseSix">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Manage Role</span>
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Manage Roles</span>
                 </a>
                 <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -277,7 +322,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow top-bar">
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <form class="form-inline">
@@ -286,16 +331,29 @@
                         </button>
                     </form>
 
+                    <!--<div class="top-buttons">
+                        <button class="btn btn-primary">Sales</button>
+                        <button class="btn btn-primary">Sales</button>
+                        <button class="btn btn-primary">Sales</button>
+                        <button class="btn btn-primary">Sales</button>
+                        <button class="btn btn-primary">Sales</button>
+                        <button class="btn btn-primary">Sales</button>
+                    </div>-->
+                    <div class="col-10">
+                        <marquee behavior="" direction="left"><h3 style="color:#b7b9cc">WELCOME TO RICT POS SYSTEM..... <span style="color:#b7b9cc">{{ Auth::user()->name }}</span> </h3></marquee>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) 
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
-                            <!-- Dropdown - Messages -->
+                             Dropdown - Messages 
                             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                                 aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
@@ -311,7 +369,7 @@
                                     </div>
                                 </form>
                             </div>
-                        </li>
+                        </li>-->
 
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <!---------------------------------------------------------->

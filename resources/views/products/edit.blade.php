@@ -8,7 +8,7 @@
         <div class="card-header">
             <div class="card-body px-4">
     
-    <form method="POST" action="{{route('products.store', $supplier)}}" class="form control mb-4">
+    <form method="POST" action="{{route('products.update', $product)}}" class="form control mb-4">
         @csrf {{--Protects form from cross scripting--}}
         @method('PUT'){{--method to allow records to be updated--}}
         <div class="row g-3">
@@ -31,13 +31,13 @@
     
             <div class="col-md-6">
                 <label for="category" class="">Category</label>
-                <input type="text" class="form-control" name="category_id"  value="{{ old('category_id', $product->category_id) }}" placeholder="">
+                <input type="text" class="form-control" name="cat_id"  value="{{ old('cat_id', $product->cat_id) }}" placeholder="">
                 
             </div>
 
             <div class="col-md-6">
                 <label for="stock" class="">Stock Quantity <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="stock_quantity"  value="{{ old('stock_quantity', $product->stock_quantity) }}" placeholder="">
+                <input type="text" class="form-control" name="stock_qty"  value="{{ old('stock_qty', $product->stock_qty) }}" placeholder="">
                 <div class="text-danger">
                     @error('name')
                         {{$message}}
@@ -57,7 +57,7 @@
 
             <div class="col-md-6">
                 <label for="reorder" class="">Re-Order Level</label>
-                <input type="number" class="form-control" name="re_order_level"  value="{{ old('order_level', $product->order_level) }}" placeholder="">
+                <input type="number" class="form-control" name="re_order"  value="{{ old('re_order', $product->re_order) }}" placeholder="">
                 
             </div>
             
@@ -66,7 +66,7 @@
     
         <center>
         <div class="mb-3">
-        <button class="btn btn-primary" name="submit" id="">Save</button>
+        <button class="btn btn-primary" name="submit" id="">Update</button>
          <a class="btn btn-danger" href="{{route('products.index')}}"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
         </center>

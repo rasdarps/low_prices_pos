@@ -51,7 +51,11 @@ class ProductController extends Controller
     {
         request()->validate([
             'name' => 'required',
-            'detail' => 'required',
+            'cat_id' => 'required',
+            'unit_id' => 'required',
+            'stock_qty' => 'required',
+            'price' => 'required',
+            
         ]);
     
         Product::create($request->all());
@@ -93,7 +97,10 @@ class ProductController extends Controller
     {
          request()->validate([
             'name' => 'required',
-            'detail' => 'required',
+            'cat_id' => 'required',
+            'unit_id' => 'required',
+            'stock_qty' => 'required',
+            'price' => 'required',
         ]);
     
         $product->update($request->all());

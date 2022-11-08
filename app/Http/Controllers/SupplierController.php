@@ -111,7 +111,7 @@ class SupplierController extends Controller
         //
         $request->validate([
             'supplier_name' => 'required',
-            'contact' => ['required' , Rule::unique('tb_supplier', 'contact')],
+            'contact' => 'required',
             'address' => 'required',
 
         ]);

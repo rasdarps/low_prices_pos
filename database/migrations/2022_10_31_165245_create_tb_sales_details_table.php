@@ -13,21 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_products', function (Blueprint $table) {
+        Schema::create('tb_sales_details', function (Blueprint $table) {
             $table->engine = 'InnoDB'; //Add this line
             $table->id();
-            $table->string('name');
-            $table->foreignId('cat_id')
-                    ->constrained('tb_category')
+            $table->foreignId('product_id')
+                    ->constrained('tb_products')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->foreignId('unit_id')
-                    ->constrained('tb_unit')
+            $table->foreignId('sales_id')
+                    ->constrained('tb_sales')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->float('stock_qty');
-            $table->float('price');
-            $table->float('re_order')->nullable();       
+            $table->float('quantity');
+            $table->float('unit_price');
+            $table->foreignId('discount_id')->nullable()
+                    ->constrained('tb_discount')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->float('amount');
             $table->timestamps();
         });
     }
@@ -39,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_products');
+        Schema::dropIfExists('tb_sales_details');
     }
 };

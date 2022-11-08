@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tb_unit', function (Blueprint $table) {
             $table->id();
+            $table->string('unit')->unique();
             $table->timestamps();
         });
     }

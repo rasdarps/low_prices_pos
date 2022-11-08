@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_discount', function (Blueprint $table) {
+        Schema::create('tb_category', function (Blueprint $table) {
             $table->id();
-            $table->float('discount')->nullable();
+            $table->string('cat_name')->unique();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_discount');
+        Schema::dropIfExists('tb_category');
     }
 };

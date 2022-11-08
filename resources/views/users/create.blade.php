@@ -1,15 +1,12 @@
 <x-layout> {{--Extends the layout page to this page--}}
 
-<div class="row">
+   
+
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Create New User</h2>
         </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
-        </div>
     </div>
-</div>
 
 
 @if (count($errors) > 0)
@@ -23,7 +20,21 @@
   </div>
 @endif
 
+<div class="card fluid shadow mb-4">
+    <!-- Card Header-->
+    <div class="card-header">
+        <form action="" class="row row-cols-auto g-1">
 
+            <div class="col">
+                <a class="btn btn-primary" href="{{route('users.index')}}"><i class="fas fa-plus"></i>
+                View Customer</a>
+            </div>
+        </form>
+
+    </div><!--Card Head ends-->
+
+ <!-- Card Body -->
+ <div class="card-body">
 
 {!! Form::open(array('route' => 'users.store','method'=>'POST')) !!}
 <div class="row">
@@ -63,5 +74,6 @@
 </div>
 {!! Form::close() !!}
 
-
+    </div>
+</div>
 </x-layout>
