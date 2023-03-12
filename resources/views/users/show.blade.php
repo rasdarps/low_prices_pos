@@ -1,4 +1,9 @@
-<x-layout> {{--Extends the layout page to this page--}}
+@extends('admin.admin_master')
+@section('title') {{'Show User'}} @endsection
+@section('admin')
+
+<div class="page-content">
+    <div class="container-fluid">
 
 <div class="row">
     <div class="col-lg-12 margin-tb">
@@ -34,6 +39,9 @@
                 @endforeach
             @endif
         </div>
+    </div>
+</div>
+
     </div>
 </div>
 

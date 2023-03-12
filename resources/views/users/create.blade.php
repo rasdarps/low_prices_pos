@@ -1,65 +1,70 @@
-<x-layout> {{--Extends the layout page to this page--}}
+@extends('admin.admin_master')
+@section('title') {{'Create User'}} @endsection
 
-   
+@section('admin')
 
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Create New User</h2>
+<!--Validator link-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+
+<div class="page-content">
+<div class="container-fluid">
+
+<div class="row">
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <span style="font-size:20px;">Create User</span>
+            <a class="m-0 btn btn-dark btn-rounded waves-effect waves-light" href="{{route('users.index')}}" style="float:right">
+                <i class="fas fa-list"></i> View User</a>
         </div>
-    </div>
+        <div class="card-body">
+
+             <!--Error Message-->
+            @if(count($errors))
+                @foreach ($errors->all() as $error)
+                <p class="alert alert-danger alert-dismissible fade show"> {{ $error}} </p>
+                @endforeach
+
+            @endif
 
 
-@if (count($errors) > 0)
-  <div class="alert alert-danger">
-    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-    <ul>
-       @foreach ($errors->all() as $error)
-         <li>{{ $error }}</li>
-       @endforeach
-    </ul>
-  </div>
-@endif
+
 
 <div class="card fluid shadow mb-4">
-    <!-- Card Header-->
-    <div class="card-header">
-        <form action="" class="row row-cols-auto g-1">
 
-            <div class="col">
-                <a class="btn btn-primary" href="{{route('users.index')}}"><i class="fas fa-plus"></i>
-                View Customer</a>
-            </div>
-        </form>
-
-    </div><!--Card Head ends-->
-
- <!-- Card Body -->
- <div class="card-body">
-
-{!! Form::open(array('route' => 'users.store','method'=>'POST')) !!}
+{!! Form::open(array('route' => 'users.store','method'=>'POST', 'id' => 'myForm'))  !!}
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
-            <strong>Name:</strong>
-            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+            <strong>Full Name:</strong>
+            {!! Form::text('name', null, array('placeholder' => '','class' => 'form-control')) !!}
         </div>
     </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group">
+            <strong>Username:</strong>
+            {!! Form::text('username', null, array('placeholder' => '','class' => 'form-control')) !!}
+        </div>
+    </div>
+
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Email:</strong>
-            {!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control')) !!}
+            {!! Form::text('email', null, array('placeholder' => '','class' => 'form-control')) !!}
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Password:</strong>
-            {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control')) !!}
+            {!! Form::password('password', array('placeholder' => '','class' => 'form-control')) !!}
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Confirm Password:</strong>
-            {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
+            {!! Form::password('confirm-password', array('placeholder' => '','class' => 'form-control')) !!}
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
@@ -68,12 +73,71 @@
             {!! Form::select('roles[]', $roles,[], array('class' => 'form-control','multiple')) !!}
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="col-xs-12 col-sm-12 col-md-12 text-center my-4">
+        <button type="submit" class="btn btn-info">Submit</button>
     </div>
 </div>
 {!! Form::close() !!}
 
-    </div>
 </div>
-</x-layout>
+</div>
+</div> <!-- end col -->
+</div>
+
+
+
+</div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function (){
+        $('#myForm').validate({
+            rules: {
+                name: {
+                    required : true,
+                },
+                email: {
+                    required : true,
+                },
+                password: {
+                    required : true,
+                }, 
+
+                confirm_password: {
+                    required : true,
+                },
+            },
+            messages :{
+                name: {
+                    required : 'Please Enter name',
+                },
+                email: {
+                    required : 'Please Enter email',
+                },
+                password: {
+                    required : 'Please Enter password',
+                },
+
+                confirm_password: {
+                    required : 'Please confirm password',
+                },
+            },
+            errorElement : 'span', 
+            errorPlacement: function (error,element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight : function(element, errorClass, validClass){
+                $(element).addClass('is-invalid');
+            },
+            unhighlight : function(element, errorClass, validClass){
+                $(element).removeClass('is-invalid');
+            },
+        });
+    });
+    
+</script>
+
+
+ 
+@endsection 

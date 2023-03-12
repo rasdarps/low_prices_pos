@@ -53,9 +53,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => ['required','string', 'max:255'],
+            'username' => ['required','string', 'max:255'],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
+            'profile_image'=>'nullable',
             'roles' => 'required'
         ]);
     
@@ -112,6 +114,7 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            'username' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
             'roles' => 'required'

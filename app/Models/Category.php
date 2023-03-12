@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    protected $table = 'tb_category';
-    protected $primarykey = 'id';
-    protected $fillable = ['cat_name',
-                            ];
+    protected $guarded = [];
 }

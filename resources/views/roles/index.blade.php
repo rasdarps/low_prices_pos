@@ -1,31 +1,57 @@
-<x-layout> {{--Extends the layout page to this page--}}
+@extends('admin.admin_master')
+@section('title') {{'View Roles'}} @endsection
 
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Role Management</h2>
-        </div>
-        <div class="pull-right">
-        @can('role-create')
-            <a class="btn btn-primary" style="margin-bottom:10px;" href="{{ route('roles.create') }}"> Create New Role</a>
-            @endcan
+@section('admin')
+
+<!--Validator link-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+
+<div class="page-content">
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">Role Records</h4>
+
+                 
+
+            </div>
         </div>
     </div>
-</div>
+    <!-- end page title -->
 
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
 
-@if ($message = Session::get('success'))
-    <div class="alert alert-success">
-        <p>{{ $message }}</p>
-    </div>
-@endif
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+                  
+                <div class="mb-5">
+                   <a href="{{ route('roles.create') }}" class="btn btn-dark btn-rounded waves-effect waves-light" 
+                   style="float:right"><i class="fas fa-plus-circle"></i> Add Role</a>
+                </div>
 
+                    <h4 class="card-title">Roles | Data </h4>
 
-<table class="table table-bordered striped shadow">
-  <tr>
+<table id="myTable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead> 
+    <tr>
      <th>No</th>
      <th>Name</th>
      <th width="280px">Action</th>
+
+    </thead>
+
+    <tbody>
+
   </tr>
     @foreach ($roles as $key => $role)
     <tr>
@@ -44,10 +70,24 @@
         </td>
     </tr>
     @endforeach
+
+</tbody>
+
 </table>
 
 
 {!! $roles->render() !!}
 
 
-</x-layout>
+
+</div>
+</div>
+</div> <!-- end col -->
+</div> <!-- end row -->
+
+
+
+</div> <!-- container-fluid -->
+</div>
+
+@endsection

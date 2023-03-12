@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
-    protected $table = 'tb_unit';
-    protected $primarykey = 'id';
-    protected $fillable = ['unit',
-                            ];
+    protected $guarded = [];
 }

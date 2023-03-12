@@ -36,6 +36,11 @@ class PermissionTableSeeder extends Seeder
             'customer-create',
             'customer-edit',
             'customer-delete',
+
+            'invoice-list',
+            'invoice-create',
+            'invoice-edit',
+            'invoice-delete',
               
             'sales-list',
             'sales-create',
@@ -46,16 +51,6 @@ class PermissionTableSeeder extends Seeder
             'purchase-create',
             'purchase-edit',
             'purchase-delete',
-
-            'discount-list',
-            'discount-create',
-            'discount-edit',
-            'discount-delete',
-
-            'company-list',
-            'company-create',
-            'company-edit',
-            'company-delete',
 
             'unit-list',
             'unit-create',

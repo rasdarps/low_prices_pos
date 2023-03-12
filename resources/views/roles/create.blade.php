@@ -1,37 +1,63 @@
-<x-layout :title="' - Create Role '"> {{--Extends the layout page to this page--}}
+@extends('admin.admin_master')
+@section('title') {{'Create Roles'}} @endsection
 
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Create New Role</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('roles.index') }}"> Back</a>
+@section('admin')
+
+<!--Validator link-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+
+<div class="page-content">
+<div class="container-fluid">
+
+
+   <!-- start page title -->
+   <div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Role Records</h4>
+
+             
+
         </div>
     </div>
 </div>
+<!-- end page title -->
 
+<div class="row">
+    <div class="col-12">
+        <div class="card">
 
-@if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-        <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-        </ul>
-    </div>
-@endif
+            <div class="card-header">
+                <span style="font-size:20px;">Create Role</span>
+                <a  href="{{ route('roles.index') }}" class="m-0 btn btn-dark btn-rounded waves-effect waves-light" style="float:right"><i class="fas fa-list"></i> 
+                    View Roles</a>
+            </div>
+
+            <div class="card-body">
+
+                <!--Error message-->
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        </ul>
+                    </div>
+                @endif
 
 
 {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 my-3">
         <div class="form-group">
-            <strong>Name:</strong>
-            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+            <strong>Role Name:</strong>
+            {!! Form::text('name', null, array('placeholder' => '','class' => 'form-control')) !!}
         </div>
     </div>
+
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Permission:</strong>
@@ -43,11 +69,20 @@
             @endforeach
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="col-xs-12 col-sm-12 col-md-12 text-center my-4">
+        <button type="submit" class="btn btn-info">Submit</button>
     </div>
 </div>
 {!! Form::close() !!}
 
+</div>
+</div>
+</div> <!-- end col -->
+</div>
 
-</x-layout>
+
+
+</div>
+</div>
+
+@endsection

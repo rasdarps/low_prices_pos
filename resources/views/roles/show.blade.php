@@ -1,4 +1,14 @@
-<x-layout> {{--Extends the layout page to this page--}}
+@extends('admin.admin_master')
+@section('title') {{'Show Role'}} @endsection
+
+@section('admin')
+
+<!--Validator link-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+
+<div class="page-content">
+<div class="container-fluid">
 
 <div class="row">
     <div class="col-lg-12 margin-tb">
