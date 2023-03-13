@@ -38,6 +38,7 @@
                             <th>Supplier Name</th>      
                              
                             <th>Amount(Gh¢)</th>
+                            <th>Action</th>
                             
                         </thead>
 
@@ -52,6 +53,13 @@
                 <td> {{ $item['purchase_payment']['supplier']['name'] }} </td>     
                 
                 <td>  {{ $item['purchase_payment']['total_amount'] }} </td>
+
+                <td>
+                    <a href="{{ route('print.purchase',$item->id) }}" class="btn btn-info sm" title="Print purchase" >  <i class="fa fa-print"></i> </a>
+                    <a href="{{ route('purchase.delete',$item->id) }}" class="btn btn-danger sm" title="Delete Data" id="delete">  <i class="fas fa-trash-alt"></i> </a>
+
+                
+                </td>
                
             </tr>
                         @endforeach

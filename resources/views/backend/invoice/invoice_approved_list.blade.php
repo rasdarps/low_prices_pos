@@ -55,7 +55,7 @@
 
                 <td>
                     <a href="{{ route('print.invoice',$item->id) }}" class="btn btn-danger sm" title="Print Invoice" >  <i class="fa fa-print"></i> </a>
-                               </td>
+                </td>
                
             </tr>
                         @endforeach

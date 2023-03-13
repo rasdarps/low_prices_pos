@@ -34,11 +34,11 @@
             </div>
             <!-- end row -->
 
-      <div class="row mb-3">
+      <div class="row mb-3 form-group">
         <label class="col-sm-2 col-form-label">Unit Name </label>
         <div class="col-sm-10">
-            <select name="unit_id" class="form-select" aria-label="Default select example" value="{{ old('unit_id') }}">
-                <option selected="">Open this select menu</option>
+            <select name="unit_id" class="form-select select2" aria-label="Default select example" value="{{ old('unit_id') }}">
+                <option disabled selected value="">Open this select menu</option>
                 @foreach($unit as $uni)
                 <option value="{{ $uni->id }}">{{ $uni->name }}</option>
                @endforeach
@@ -49,11 +49,11 @@
 
 
 
-      <div class="row mb-3">
+      <div class="row mb-3 form-group">
         <label class="col-sm-2 col-form-label">Category Name </label>
         <div class="col-sm-10">
-            <select name="category_id" class="form-select" aria-label="Default select example" value="{{ old('category_id') }}">
-                <option selected="">Open this select menu</option>
+            <select name="category_id" class="form-select select2" aria-label="Default select example" value="{{ old('category_id') }}">
+                <option disabled selected value="">Open this select menu</option>
                 @foreach($category as $cat)
                 <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                @endforeach
@@ -94,9 +94,6 @@
                 name: {
                     required : true,
                 }, 
-                 supplier_id: {
-                    required : true,
-                },
                  unit_id: {
                     required : true,
                 },
@@ -106,10 +103,7 @@
             },
             messages :{
                 name: {
-                    required : 'Please Enter Your Product Name',
-                },
-                supplier_id: {
-                    required : 'Please Select One Supplier',
+                    required : 'Please Enter Product Name',
                 },
                 unit_id: {
                     required : 'Please Select One Unit',

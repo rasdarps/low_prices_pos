@@ -55,7 +55,7 @@
 
                 <td>
                     <a href="{{ route('print.purchase',$item->id) }}" class="btn btn-danger sm" title="Print purchase" >  <i class="fa fa-print"></i> </a>
-                               </td>
+                </td>
                
             </tr>
                         @endforeach

@@ -28,8 +28,8 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{ route('purchase.add') }}">Create</a></li>
                                     <li><a href="{{ route('purchase.all') }}">All Purchase</a></li>
-                                    <li><a href="{{ route('purchase.approved.list') }}">Approved List</a></li>
-                                    <li><a href="{{ route('purchase.pending.list') }}">Pending Approval</a></li>
+                                    {{-- <li><a href="{{ route('purchase.approved.list') }}">Approved List</a></li>
+                                    <li><a href="{{ route('purchase.pending.list') }}">Pending Approval</a></li> --}}
                                     <li><a href="{{ route('print.purchase.list') }}">Print Purchase List</a></li>
                                     <!--<li><a href="{{-- route('purchase.pending') --}}">Approval Purchase</a></li>-->
                                     <li><a href="{{ route('daily.purchase.report') }}">Daily Purchase Report</a></li>
@@ -45,8 +45,8 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{ route('invoice.add') }}">Create</a></li>
                                     <li><a href="{{ route('invoice.all') }}">All Invoice</a></li>
-                                    <li><a href="{{ route('invoice.approved.list') }}">Approved List</a></li>
-                                    <li><a href="{{ route('invoice.pending.list') }}">Pending Approval</a></li>
+                                    {{-- <li><a href="{{ route('invoice.approved.list') }}">Approved List</a></li>
+                                    <li><a href="{{ route('invoice.pending.list') }}">Pending Approval</a></li> --}}
                                     <li><a href="{{ route('print.invoice.list') }}">Print Invoice List</a></li>
                                     <li><a href="{{ route('daily.invoice.report') }}">Daily Invoice Report</a></li>
                                 </ul>

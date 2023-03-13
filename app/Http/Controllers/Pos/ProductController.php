@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Pos;
 use App\Models\Unit;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
@@ -31,11 +30,9 @@ class ProductController extends Controller
 
 
     public function ProductAdd(){
-
-        //$supplier = Supplier::all();
         $category = Category::all();
         $unit = Unit::all();
-        return view('backend.product.product_add',compact('supplier','category','unit'));
+        return view('backend.product.product_add',compact('category','unit'));
     } // End Method 
 
 
@@ -50,7 +47,6 @@ class ProductController extends Controller
         Product::insert([
 
             'name' => $request->name,
-            //'supplier_id' => $request->supplier_id,
             'unit_id' => $request->unit_id,
             'category_id' => $request->category_id,
             'quantity' => '0',
@@ -71,12 +67,10 @@ class ProductController extends Controller
 
 
     public function ProductEdit($id){
-
-        //$supplier = Supplier::all();
         $category = Category::all();
         $unit = Unit::all();
         $product = Product::findOrFail($id);
-        return view('backend.product.product_edit',compact('product','supplier','category','unit'));
+        return view('backend.product.product_edit',compact('product','category','unit'));
     } // End Method 
 
 
@@ -94,7 +88,6 @@ class ProductController extends Controller
          Product::findOrFail($product_id)->update([
 
             'name' => $request->name,
-            //'supplier_id' => $request->supplier_id,
             'unit_id' => $request->unit_id,
             'category_id' => $request->category_id, 
             'stock_level' => $request->stock_level, 

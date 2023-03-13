@@ -37,6 +37,7 @@
                             <th>Invoice No </th>
                             <th>Date </th>
                             <th>Amount (Gh¢) </th>
+                            <th>Action</th>
                             
                         </thead>
 
@@ -50,6 +51,10 @@
                 <td> {{ $item->invoice_no }} </td>              
                 <td> {{ $item['payment']['customer']['name'] }} </td>    
                 <td>  {{ $item['payment']['total_amount'] }} </td>
+                <td>
+                    <a href="{{ route('print.invoice',$item->id) }}" class="btn btn-info sm" title="Print Invoice" >  <i class="fa fa-print"></i> </a>
+                    <a href="{{ route('invoice.delete',$item->id) }}" class="btn btn-danger sm" title="Delete Data" id="delete">  <i class="fas fa-trash-alt"></i> </a>
+                </td>
                
             </tr>
                         @endforeach

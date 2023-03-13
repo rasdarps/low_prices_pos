@@ -85,8 +85,9 @@ class PurchaseController extends Controller
     $purchase->purchase_no = $request->purchase_no;
     $purchase->date = date('Y-m-d',strtotime($request->date));
     $purchase->description = $request->description;
-    $purchase->status = '0';
+    $purchase->status = '1';
     $purchase->created_by = Auth::user()->id; 
+
 
     DB::transaction(function() use($request,$purchase){
         if ($purchase->save()) {
@@ -102,9 +103,10 @@ class PurchaseController extends Controller
               $purchase_details->unit_price = $request->unit_price[$i];
               $purchase_details->buying_price = $request->buying_price[$i];
               $purchase_details->unit_id = $request->unit_id[$i];
-              $purchase_details->status = '0'; 
+              $purchase_details->status = '1'; 
               $purchase_details->save(); 
            }
+           
 
             if ($request->supplier_id == '0') {
                 $supplier = new Supplier();
@@ -159,10 +161,10 @@ class PurchaseController extends Controller
     } // End Method
 
 
-    public function PendingList(){
-        $allData = Purchase::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
-            return view('backend.purchase.purchase_pending_list',compact('allData'));
-    } // End Method
+    // public function PendingList(){
+    //     $allData = Purchase::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
+    //         return view('backend.purchase.purchase_pending_list',compact('allData'));
+    // } // End Method
 
 
 
@@ -184,56 +186,42 @@ class PurchaseController extends Controller
 
 
 
-    public function PurchaseApprove($id){
+    // public function PurchaseApprove($id){
 
-        $purchase = Purchase::with('purchase_details')->findOrFail($id);
-        return view('backend.purchase.purchase_approve',compact('purchase'));
+    //     $purchase = Purchase::with('purchase_details')->findOrFail($id);
+    //     return view('backend.purchase.purchase_approve',compact('purchase'));
 
-    }// End Method
+    // }// End Method
 
 
-    public function ApprovalStore(Request $request, $id){
+    // public function ApprovalStore(Request $request, $id){
 
-       /* foreach($request->buying_qty as $key => $val){
-            $purchase_details = PurchaseDetail::where('id',$key)->first();
-            $product = Product::where('id',$purchase_details->product_id)->first();
-            if($product->quantity < $request->buying_qty[$key]){
+    //     $purchase = Purchase::findOrFail($id);
+    //     $purchase->updated_by = Auth::user()->id;
+    //     $purchase->status = '1';
 
-        $notification = array(
-        'message' => 'Sorry stock quantity is less than purchase quantity', 
-        'alert-type' => 'error'
-    );
-    return redirect()->back()->with($notification); 
+    //     DB::transaction(function() use($request,$purchase,$id){
+    //         foreach($request->buying_qty as $key => $val){
+    //          $purchase_details = PurchaseDetail::where('id',$key)->first();
 
-            }
-        }*/  // End foreach 
+    //          $purchase_details->status = '1';
+    //          $purchase_details->save();
 
-        $purchase = Purchase::findOrFail($id);
-        $purchase->updated_by = Auth::user()->id;
-        $purchase->status = '1';
+    //          $product = Product::where('id',$purchase_details->product_id)->first();
+    //          $product->quantity = ((float)$request->buying_qty[$key]) + ((float)$product->quantity);
+    //          $product->save();
+    //         } // end foreach
 
-        DB::transaction(function() use($request,$purchase,$id){
-            foreach($request->buying_qty as $key => $val){
-             $purchase_details = PurchaseDetail::where('id',$key)->first();
+    //         $purchase->save();
+    //     });
 
-             $purchase_details->status = '1';
-             $purchase_details->save();
+    // $notification = array(
+    //     'message' => 'Purchase Approved Successfully', 
+    //     'alert-type' => 'success'
+    // );
+    // return redirect()->route('purchase.pending.list')->with($notification);  
 
-             $product = Product::where('id',$purchase_details->product_id)->first();
-             $product->quantity = ((float)$request->buying_qty[$key]) + ((float)$product->quantity);
-             $product->save();
-            } // end foreach
-
-            $purchase->save();
-        });
-
-    $notification = array(
-        'message' => 'Purchase Approved Successfully', 
-        'alert-type' => 'success'
-    );
-    return redirect()->route('purchase.pending.list')->with($notification);  
-
-    } // End Method
+    // } // End Method
 
 
     public function PrintPurchaseList(){
