@@ -68,8 +68,8 @@
 
 
            <div class="col-md-1">
-            <div class="md-3">
-                <label for="example-text-input" class="form-label">Stock(Pic/Kg)</label>
+            <div class="md-4">
+                <label for="example-text-input" class="form-label">Stock Balance</label>
                  <input class="form-control example-date-input" name="current_stock_qty" type="text"  id="current_stock_qty" readonly style="background-color:#ddd" >
             </div>
         </div>
@@ -78,7 +78,7 @@
 <div class="col-md-2">
     <div class="md-3">
         <label for="example-text-input" class="form-label" style="margin-top:43px;">  </label>
-        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore"></i> Add More
+        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore">Add</i> 
     </div>
 </div>
 
@@ -99,10 +99,10 @@
                     <tr>
                         <th>Category</th>
                         <th>Product Name </th>
-                        <th width="7%">PSC/KG</th>
+                        <th width="10%">PSC/KG</th>
                         <th width="10%">Unit Price </th>
                         <th  width="15%">Per</th> 
-                        <th width="15%">Total Price</th>
+                        <th width="15%">Total Price (Ghc)</th>
                         <th width="7%">Action</th> 
 
                     </tr>

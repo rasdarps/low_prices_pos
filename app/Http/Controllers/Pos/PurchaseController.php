@@ -64,22 +64,24 @@ class PurchaseController extends Controller
 
     if ($request->category_id == null) {
 
-       $notification = array(
-        'message' => 'Sorry You do not select any item', 
-        'alert-type' => 'error'
-    );
-    return redirect()->back()->with($notification);
-
-    } else{
+        $notification = array(
+            'message' => 'Sorry You do not select any item', 
+            'alert-type' => 'error'
+        );
+        return redirect()->back()->with($notification);
+    
+    }
+    else{
         if ($request->paid_amount > $request->estimated_amount) {
 
            $notification = array(
-        'message' => 'Sorry Paid Amount is Maximum the total price', 
-        'alert-type' => 'error'
-    );
-    return redirect()->back()->with($notification);
+            'message' => 'Sorry Paid Amount is Maximum the total price', 
+            'alert-type' => 'error'
+            );
+            return redirect()->back()->with($notification);
 
-        } else {
+        } 
+    else {
 
     $purchase = new Purchase();
     $purchase->purchase_no = $request->purchase_no;
@@ -88,10 +90,11 @@ class PurchaseController extends Controller
     $purchase->status = '1';
     $purchase->created_by = Auth::user()->id; 
 
-
     DB::transaction(function() use($request,$purchase){
         if ($purchase->save()) {
+            
            $count_category = count($request->category_id);
+   
            for ($i=0; $i < $count_category ; $i++) { 
 
               $purchase_details = new PurchaseDetail();
@@ -105,10 +108,17 @@ class PurchaseController extends Controller
               $purchase_details->unit_id = $request->unit_id[$i];
               $purchase_details->status = '1'; 
               $purchase_details->save(); 
-           }
-           
+
+              //stock addition control
+              $product = Product::where('id',$request->product_id[$i])->first();
+              $purchase_qty = ((float)($purchase_details->buying_qty))+((float)($product->quantity));
+              $product->quantity = $purchase_qty;
+              $product->save();
+           }           
+
 
             if ($request->supplier_id == '0') {
+                
                 $supplier = new Supplier();
                 $supplier->name = $request->name;
                 $supplier->mobile_no = $request->mobile_no;
@@ -116,6 +126,7 @@ class PurchaseController extends Controller
                 $supplier->save();
                 $supplier_id = $supplier->id;
             } else{
+                
                 $supplier_id = $request->supplier_id;
             } 
 
@@ -146,7 +157,9 @@ class PurchaseController extends Controller
             $purchase_payment_details->purchase_id = $purchase->id; 
             $purchase_payment_details->date = date('Y-m-d',strtotime($request->date));
             $purchase_payment_details->save(); 
-        } 
+          
+
+            } 
 
             }); 
 
@@ -157,7 +170,7 @@ class PurchaseController extends Controller
         'message' => 'purchase Data Inserted Successfully', 
         'alert-type' => 'success'
     );
-    return redirect()->route('purchase.pending.list')->with($notification);  
+    return redirect()->route('purchase.all')->with($notification);  
     } // End Method
 
 

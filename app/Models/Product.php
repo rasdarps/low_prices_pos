@@ -23,6 +23,19 @@ class Product extends Model
     }
 
 
+    public function purchasedetails()
+    {
+        return $this->hasMany(PurchaseDetail::class);
+    }
+
+    public function invoicedetails()
+    {
+        return $this->hasMany(InvoiceDetail::class);
+    }
+
+   
+
+
 
 
 }

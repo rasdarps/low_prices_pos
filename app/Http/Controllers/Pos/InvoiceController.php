@@ -81,8 +81,9 @@ class InvoiceController extends Controller
     );
     return redirect()->back()->with($notification);
 
-        } else {
-
+    } else 
+    
+    {
     $invoice = new Invoice();
     $invoice->invoice_no = $request->invoice_no;
     $invoice->date = date('Y-m-d',strtotime($request->date));
@@ -105,7 +106,16 @@ class InvoiceController extends Controller
               $invoice_details->selling_price = $request->selling_price[$i];
               $invoice_details->unit_id = $request->unit_id[$i];
               $invoice_details->status = '1'; 
-              $invoice_details->save(); 
+              $invoice_details->save();
+              
+             //stock deduction control
+             $product = Product::where('id',$request->product_id[$i])->first();
+             $selling_qty = ((float)($product->quantity))-((float)($invoice_details->selling_qty));
+             $product->quantity = $selling_qty;
+             $product->save();
+
+             //$product->quantity = ((float)$product->quantity) - ((float)$request->selling_qty);
+              
            }
 
             if ($request->customer_id == '0') {
@@ -146,6 +156,8 @@ class InvoiceController extends Controller
             $payment_details->invoice_id = $invoice->id; 
             $payment_details->date = date('Y-m-d',strtotime($request->date));
             $payment_details->save(); 
+
+    
         } 
 
             }); 
@@ -157,7 +169,7 @@ class InvoiceController extends Controller
         'message' => 'Invoice Data Inserted Successfully', 
         'alert-type' => 'success'
     );
-    return redirect()->route('invoice.pending.list')->with($notification);  
+    return redirect()->route('invoice.add')->with($notification);  
     } // End Method
 
 

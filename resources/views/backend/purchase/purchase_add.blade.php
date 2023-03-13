@@ -100,7 +100,7 @@
                         <th width="7%">PSC/KG</th>
                         <th width="10%">Unit Price </th> 
                         <th  width="15%">Per</th>
-                        <th width="15%">Total Price</th>
+                        <th width="15%">Total Price(Ghc)</th>
                         <th width="7%">Action</th> 
 
                     </tr>
