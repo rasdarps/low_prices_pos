@@ -21,7 +21,7 @@
 
                 <input type="hidden" name="id" value="{{ $product->id }}">
 
-            <div class="row mb-3">
+            <div class="row mb-3 form-group">
                 <label for="example-text-input" class="col-sm-2 col-form-label">Product Name </label>
                 <div class="form-group col-sm-10">
                     <input name="name" value="{{ $product->name }}" class="form-control" type="text"    >
@@ -29,10 +29,10 @@
             </div>
             <!-- end row -->
 
-      <div class="row mb-3">
+      <div class="row mb-3 form-group">
         <label class="col-sm-2 col-form-label">Unit Name </label>
         <div class="col-sm-10">
-            <select name="unit_id" class="form-select" aria-label="Default select example">
+            <select name="unit_id" class="form-select select2" aria-label="Default select example">
                 <option selected="">Open this select menu</option>
                 @foreach($unit as $uni)
                 <option value="{{ $uni->id }}" {{ $uni->id == $product->unit_id ? 'selected' : '' }} >{{ $uni->name }}</option>
@@ -44,10 +44,10 @@
 
 
 
-      <div class="row mb-3">
+      <div class="row mb-3 form-group">
         <label class="col-sm-2 col-form-label">Category Name </label>
         <div class="col-sm-10">
-            <select name="category_id" class="form-select" aria-label="Default select example">
+            <select name="category_id" class="form-select select2" aria-label="Default select example">
                 <option selected="">Open this select menu</option>
                 @foreach($category as $cat)
                 <option value="{{ $cat->id }}" {{ $cat->id == $product->category_id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -89,9 +89,6 @@
                 name: {
                     required : true,
                 }, 
-                 supplier_id: {
-                    required : true,
-                },
                  unit_id: {
                     required : true,
                 },
@@ -102,9 +99,6 @@
             messages :{
                 name: {
                     required : 'Please Enter Your Product Name',
-                },
-                supplier_id: {
-                    required : 'Please Select One Supplier',
                 },
                 unit_id: {
                     required : 'Please Select One Unit',

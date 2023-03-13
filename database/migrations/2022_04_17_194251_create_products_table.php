@@ -15,9 +15,19 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            //$table->integer('supplier_id');
-            $table->integer('unit_id');
-            $table->integer('category_id');
+    
+            $table->foreignId('unit_id')
+            ->constrained('units')
+            ->unsigned()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+            $table->foreignId('category_id')
+            ->constrained('categories')
+            ->unsigned()
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
             $table->string('name')->unique();
             $table->double('quantity')->default('0');
             $table->double('stock_level')->default('0');

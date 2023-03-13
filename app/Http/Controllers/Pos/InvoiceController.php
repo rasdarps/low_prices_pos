@@ -87,7 +87,7 @@ class InvoiceController extends Controller
     $invoice->invoice_no = $request->invoice_no;
     $invoice->date = date('Y-m-d',strtotime($request->date));
     $invoice->description = $request->description;
-    $invoice->status = '0';
+    $invoice->status = '1';
     $invoice->created_by = Auth::user()->id; 
 
     DB::transaction(function() use($request,$invoice){
@@ -104,7 +104,7 @@ class InvoiceController extends Controller
               $invoice_details->unit_price = $request->unit_price[$i];
               $invoice_details->selling_price = $request->selling_price[$i];
               $invoice_details->unit_id = $request->unit_id[$i];
-              $invoice_details->status = '0'; 
+              $invoice_details->status = '1'; 
               $invoice_details->save(); 
            }
 
@@ -161,10 +161,10 @@ class InvoiceController extends Controller
     } // End Method
 
 
-    public function PendingList(){
-        $allData = Invoice::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
-            return view('backend.invoice.invoice_pending_list',compact('allData'));
-    } // End Method
+    // public function PendingList(){
+    //     $allData = Invoice::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
+    //         return view('backend.invoice.invoice_pending_list',compact('allData'));
+    // } // End Method
 
 
 
@@ -186,56 +186,56 @@ class InvoiceController extends Controller
 
 
 
-    public function InvoiceApprove($id){
+    // public function InvoiceApprove($id){
 
-        $invoice = Invoice::with('invoice_details')->findOrFail($id);
-        return view('backend.invoice.invoice_approve',compact('invoice'));
+    //     $invoice = Invoice::with('invoice_details')->findOrFail($id);
+    //     return view('backend.invoice.invoice_approve',compact('invoice'));
 
-    }// End Method
+    // }// End Method
 
 
-    public function ApprovalStore(Request $request, $id){
+    // public function ApprovalStore(Request $request, $id){
 
-        foreach($request->selling_qty as $key => $val){
-            $invoice_details = InvoiceDetail::where('id',$key)->first();
-            $product = Product::where('id',$invoice_details->product_id)->first();
-            if($product->quantity < $request->selling_qty[$key]){
+    //     foreach($request->selling_qty as $key => $val){
+    //         $invoice_details = InvoiceDetail::where('id',$key)->first();
+    //         $product = Product::where('id',$invoice_details->product_id)->first();
+    //         if($product->quantity < $request->selling_qty[$key]){
 
-        $notification = array(
-        'message' => 'Sorry stock quantity is less than invoice quantity', 
-        'alert-type' => 'error'
-    );
-    return redirect()->back()->with($notification); 
+    //     $notification = array(
+    //     'message' => 'Sorry stock quantity is less than invoice quantity', 
+    //     'alert-type' => 'error'
+    // );
+    // return redirect()->back()->with($notification); 
 
-            }
-        } // End foreach 
+    //         }
+    //     } // End foreach 
 
-        $invoice = Invoice::findOrFail($id);
-        $invoice->updated_by = Auth::user()->id;
-        $invoice->status = '1';
+    //     $invoice = Invoice::findOrFail($id);
+    //     $invoice->updated_by = Auth::user()->id;
+    //     $invoice->status = '1';
 
-        DB::transaction(function() use($request,$invoice,$id){
-            foreach($request->selling_qty as $key => $val){
-             $invoice_details = InvoiceDetail::where('id',$key)->first();
+    //     DB::transaction(function() use($request,$invoice,$id){
+    //         foreach($request->selling_qty as $key => $val){
+    //          $invoice_details = InvoiceDetail::where('id',$key)->first();
 
-             $invoice_details->status = '1';
-             $invoice_details->save();
+    //          $invoice_details->status = '1';
+    //          $invoice_details->save();
 
-             $product = Product::where('id',$invoice_details->product_id)->first();
-             $product->quantity = ((float)$product->quantity) - ((float)$request->selling_qty[$key]);
-             $product->save();
-            } // end foreach
+    //          $product = Product::where('id',$invoice_details->product_id)->first();
+    //          $product->quantity = ((float)$product->quantity) - ((float)$request->selling_qty[$key]);
+    //          $product->save();
+    //         } // end foreach
 
-            $invoice->save();
-        });
+    //         $invoice->save();
+    //     });
 
-    $notification = array(
-        'message' => 'Invoice Approve Successfully', 
-        'alert-type' => 'success'
-    );
-    return redirect()->route('invoice.pending.list')->with($notification);  
+    // $notification = array(
+    //     'message' => 'Invoice Approve Successfully', 
+    //     'alert-type' => 'success'
+    // );
+    // return redirect()->route('invoice.pending.list')->with($notification);  
 
-    } // End Method
+    // } // End Method
 
 
     public function PrintInvoiceList(){

@@ -1,0 +1,41 @@
+#To use validater.min.js to validate form fields
+#1. copy the file into the bckend folder in the js folder
+#2. add the jquery script below to the page
+#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+#3. call the validator.min.js script in your scripts section
+#4. call the class form-group in divs surrounding inputs
+
+
+##Using Github
+
+#adding new project to git
+create repo
+git init
+git add .
+git commit -m "new app"
+git branch -m "master"
+git remote add origin your repo url
+git push -u origin "master"
+
+
+#Switching Branches
+git checkout branch_name eg TNC_updates
+
+
+#Updating a branch on git/ "update" be comment and can be anything
+git add .
+git commit -m "update"
+git push origin -u YEA_store
+
+
+#To merge
+git checkout master
+git merge branch name eg TNC_updates
+
+
+#pulling, fetching and merging from the main/master brnch on github
+git pull
+git fetch 
+git merge origin/master
+
+

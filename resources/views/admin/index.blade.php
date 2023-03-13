@@ -25,10 +25,10 @@
 </div>
 <!-- end page title -->
 
-<div class="row">
-<div class="col-xl-3 col-md-6">
-<a href="{{ route('invoice.pending.list') }}">
-<div class="card">
+{{-- <div class="row">
+    <div class="col-xl-3 col-md-6">
+    <a href="{{ route('invoice.pending.list') }}">
+    <div class="card">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
@@ -45,12 +45,13 @@
             </div>
         </div>                                            
     </div><!-- end cardbody -->
-</div><!-- end card -->
-</a>
-</div><!-- end col -->
-<div class="col-xl-3 col-md-6">
+    </div><!-- end card -->
+    </a>
+</div><!-- end col --> --}}
+
+{{-- <div class="col-xl-3 col-md-6">
     <a href="{{ route('invoice.all') }}">
-<div class="card">
+    <div class="card">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
@@ -65,12 +66,13 @@
             </div>
         </div>                                              
     </div><!-- end cardbody -->
-</div><!-- end card -->
-</a>
-</div><!-- end col -->
-<div class="col-xl-3 col-md-6">
+    </div><!-- end card -->
+    </a>
+</div><!-- end col --> --}}
+
+{{-- <div class="col-xl-3 col-md-6">
     <a href="{{ route('purchase.pending.list') }}">
-<div class="card">
+    <div class="card">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
@@ -85,12 +87,13 @@
             </div>
         </div>                                              
     </div><!-- end cardbody -->
-</div><!-- end card -->
-</a>
+    </div><!-- end card -->
+    </a>
 </div><!-- end col -->
+
 <div class="col-xl-3 col-md-6">
     <a href="{{ route('purchase.all') }}">
-<div class="card">
+    <div class="card">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
@@ -105,17 +108,15 @@
             </div>
         </div>                                              
     </div><!-- end cardbody -->
-</div><!-- end card -->
-</a>
-</div><!-- end col -->
-</div><!-- end row -->
+    </div><!-- end card -->
+    </a>
+    </div><!-- end col -->
+</div><!-- end row --> --}}
 
 <div class="row">
- 
-
-<div class="row">
-<div class="col-xl-12">
-<div class="card">
+    <div class="row">
+    <div class="col-xl-12">
+    <div class="card">
     <div class="card-body">
         <div class="dropdown float-end">
             <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
