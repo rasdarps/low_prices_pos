@@ -25,7 +25,7 @@ git checkout branch_name eg TNC_updates
 #Updating a branch on git/ "update" be comment and can be anything
 git add .
 git commit -m "update"
-git push origin -u YEA_store
+git push origin -u rictPOS_updates
 
 
 #To merge

@@ -1,0 +1,28 @@
+##follow steps below to install application on your machine locally 
+
+#if you clone from Github
+  -run command:
+    composer install
+
+#Database
+- Create a database in your local environment eg XAMPP, WAMP etc with any name
+
+#Migrate tables into database
+- run command in terminal; 
+    php artisan migrate
+
+#Run seeder to create admin account
+- run commands below: 
+    php artisan db:seed --class=PermissionTableSeeder
+    php artisan db:seed --class=CreateAdminUserSeeder
+ 
+
+#Last step to start server and run application in your browser 
+-run command:
+    php artisan serve
+
+    when done press Control and click on the ip 127.0.0.1 to open app in your default browser
+
+#for queries contact RICT Consult on +233242222874 or email us on rictconsult@gmail.com
+
+
