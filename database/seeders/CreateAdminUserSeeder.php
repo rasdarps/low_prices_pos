@@ -23,7 +23,7 @@ class CreateAdminUserSeeder extends Seeder
             'name' => 'Kwaku Darpah',
             'username' => 'rasdarps', 
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('123456')
+            'password' => bcrypt('juliana@1985')
         ]);
     
         //creating roles in spatie
