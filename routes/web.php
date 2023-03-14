@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
@@ -197,6 +198,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
  }); // End Group Middleware
 
 
+    // This route will trigger the backup process when accessed
+    // Route::get('/backup', function () {
+    //     // Call the backup:run command
+    //     Artisan::call('backup:run');
+    //     // Redirect the user back to the previous page
+    //     return redirect()->back();
+    // })->name('backup');
 
 
 // Default All Route 

@@ -164,17 +164,17 @@
             </div> <!-- // end row --> <br>
 
 <!-- Hide Add Customer Form -->
-<div class="row new_supplier" style="">
+<div class="row new_supplier" style="display:none;">
     <div class="form-group col-md-4">
-        <input type="hidden" name="name" id="name" class="form-control" placeholder="Supplier Name">
+        <input type="text" name="name" id="name" class="form-control" placeholder="Supplier Name">
     </div>
 
     <div class="form-group col-md-4">
-        <input type="hidden" name="mobile_no" id="mobile_no" class="form-control" placeholder="Write Customer Mobile No">
+        <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Customer Mobile No" minlength="10" maxlength="10"  onkeypress="return isNumberKey(event)">
     </div>
 
     <div class="form-group col-md-4">
-        <input type="hidden" name="email" id="email" class="form-control" placeholder="Write Customer Email">
+        <input type="text" name="email" id="email" class="form-control" placeholder="Customer Email">
     </div>
 </div>
 <!-- End Hide Add Customer Form -->

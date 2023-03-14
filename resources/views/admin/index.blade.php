@@ -1,6 +1,28 @@
 @extends('admin.admin_master')
 @section('title') {{'Admin Dashboard'}} @endsection
 
+<style>
+    .sell-card{
+        background:#144E4E !important;
+    }
+
+    .buy-card{
+        background:#f89d13 !important;
+    }
+
+    .purchase_count{
+        background:#5a04e4 !important;
+
+    }
+
+    .invoice_count{
+        background:#d10363 !important;
+
+    }
+
+
+
+</style>
 @section('admin')
 
 
@@ -25,18 +47,25 @@
 </div>
 <!-- end page title -->
 
-{{-- <div class="row">
+ {{-- <!-- This button will submit a GET request to the /backup route when clicked -->
+ <form action="{{ route('backup') }}" method="GET">
+    @csrf
+    <!-- Display a button with the label "Backup Database" -->
+    <button type="submit">Backup Database</button>
+</form> --}}
+
+<div class="row">
     <div class="col-xl-3 col-md-6">
-    <a href="{{ route('invoice.pending.list') }}">
-    <div class="card">
+    <a href="{{ route('invoice.add') }}">
+    <div class="card sell-card">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
-                <p class="text-truncate font-size-14 mb-2">Pending Invoice</p>
+                <p class="text-truncate font-size-14 mb-2">Need to Sell</p>
                 
-                <h4 class="mb-2">{{ $pending_invoice }}</h4>
+                <h4 class="mb-2" style="color:#fff;">Create Sale</h4>
                
-                <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i></span>Pending supplies</p>
+                <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i></span>Sales Order</p>
             </div>
             <div class="avatar-sm">
                 <span class="avatar-title bg-light text-primary rounded-3">
@@ -47,17 +76,17 @@
     </div><!-- end cardbody -->
     </div><!-- end card -->
     </a>
-</div><!-- end col --> --}}
+</div><!-- end col --> 
 
-{{-- <div class="col-xl-3 col-md-6">
-    <a href="{{ route('invoice.all') }}">
-    <div class="card">
+<div class="col-xl-3 col-md-6">
+    <a href="{{ route('purchase.add') }}">
+    <div class="card buy-card">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
-                <p class="text-truncate font-size-14 mb-2">Approved Invoice</p>
-                <h4 class="mb-2">{{ $approved_invoice }}</h4>
-                <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i></span>Approved supplies</p>
+                <p class="text-truncate font-size-14 mb-2">Need to buy</p>
+                <h4 class="mb-2" style="color:#fff">Create Buy</h4>
+                <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i></span>Purchase Order</p>
             </div>
             <div class="avatar-sm">
                 <span class="avatar-title bg-light text-success rounded-3">
@@ -68,17 +97,17 @@
     </div><!-- end cardbody -->
     </div><!-- end card -->
     </a>
-</div><!-- end col --> --}}
+</div><!-- end col --> 
 
-{{-- <div class="col-xl-3 col-md-6">
-    <a href="{{ route('purchase.pending.list') }}">
-    <div class="card">
+<div class="col-xl-3 col-md-6">
+    <a href="#">
+    <div class="card purchase_count">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
-                <p class="text-truncate font-size-14 mb-2">Pending Purchase</p>
-                <h4 class="mb-2">{{ $pending_purchase }}</h4>
-                <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i></span>Pending purchase</p>
+                <p class="text-truncate font-size-14 mb-2" style="color:#fff;">Total Purchases</p>
+                <h4 class="mb-2" style="color:#fff">{{ $total_purchase }}</h4>
+                <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i></span>Count</p>
             </div>
             <div class="avatar-sm">
                 <span class="avatar-title bg-light text-primary rounded-3">
@@ -92,14 +121,14 @@
 </div><!-- end col -->
 
 <div class="col-xl-3 col-md-6">
-    <a href="{{ route('purchase.all') }}">
-    <div class="card">
+    <a href="#">
+    <div class="card invoice_count">
     <div class="card-body">
         <div class="d-flex">
             <div class="flex-grow-1">
-                <p class="text-truncate font-size-14 mb-2">Approved Purchase</p>
-                <h4 class="mb-2">{{ $approved_purchase }}</h4>
-                <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i></span>Approved</p>
+                <p class="text-truncate font-size-14 mb-2" style="color:#fff;">Total Invoices</p>
+                <h4 class="mb-2" style="color:#fff">{{ $total_invoice }}</h4>
+                <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i></span>Count</p>
             </div>
             <div class="avatar-sm">
                 <span class="avatar-title bg-light text-success rounded-3">
@@ -111,7 +140,7 @@
     </div><!-- end card -->
     </a>
     </div><!-- end col -->
-</div><!-- end row --> --}}
+</div><!-- end row --> 
 
 <div class="row">
     <div class="row">
