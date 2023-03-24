@@ -126,7 +126,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
             Route::get('/product/edit/{id}', 'ProductEdit')->name('product.edit');
             Route::post('/product/update', 'ProductUpdate')->name('product.update');
             Route::get('/product/delete/{id}', 'ProductDelete')->name('product.delete');
-            
+            // Route::post('/check-quantity', 'ProductController@checkQuantity')->name('checkQuantity');
+            //Route::post('/check-quantity', 'checkQuantity')->name('checkQuantity');
+
+
         });
 
 

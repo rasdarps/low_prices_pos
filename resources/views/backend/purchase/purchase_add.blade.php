@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 my-2">
             <div class="md-3">
                 <label for="example-text-input" class="form-label">Unit </label>
                 <select name="unit_id" id="unit_id" class="form-select select2" aria-label="Default select example">
@@ -65,7 +65,7 @@
         </div>
 
 
-           <div class="col-md-1">
+           <div class="col-md-2">
             <div class="md-3">
                 <label for="example-text-input" class="form-label">Stock(Pic/Kg)</label>
                  <input class="form-control example-date-input" name="current_stock_qty" type="text"  id="current_stock_qty" readonly style="background-color:#ddd" >
@@ -76,7 +76,7 @@
 <div class="col-md-2">
     <div class="md-3">
         <label for="example-text-input" class="form-label" style="margin-top:43px;">  </label>
-        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore"></i> Add More
+        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore">Add</i> 
     </div>
 </div>
 
@@ -222,11 +222,11 @@
 
 
      <td>
-        <input type="number" min="1" class="form-control buying_qty text-right" name="buying_qty[]" value=""> 
+        <input type="number" min="1" class="form-control buying_qty text-right" id="buying_qty" name="buying_qty[]" value="{{ old('buying_qty') }}"> 
     </td>
 
     <td>
-        <input type="number" class="form-control unit_price text-right" name="unit_price[]" value=""> 
+        <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}"> 
     </td>
 
     <td>
@@ -411,6 +411,8 @@
             //var name = $('#name').val();
             //var mobile_no = $('#mobile_no').val();
             //var email = $('#email').val();
+            var buying_qty = $('#buying_qty').val();
+            var unit_price = $('#unit_price').val();
 
             if(paid_status == ''){
                 $.notify("Paid Status is Required" ,  {globalPosition: 'top right', className:'error' });
@@ -436,6 +438,16 @@
                 //$.notify("Email is Required" ,  {globalPosition: 'top right', className:'error' });
                 //return false;
                  //}
+
+                 if(buying_qty == ''){
+                $.notify("Buying quantity is Required" ,  {globalPosition: 'top right', className:'error' });
+                return false;
+                 }
+
+                 if(unit_price == ''){
+                $.notify("Unit is Required" ,  {globalPosition: 'top right', className:'error' });
+                return false;
+                 }
 
         });
     });  

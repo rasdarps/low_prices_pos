@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
   
@@ -117,6 +118,32 @@ class ProductController extends Controller
         return redirect()->back()->with($notification); 
 
     } // End Method 
+
+
+//     public function checkQuantity(Request $request)
+// {
+//     $sellingQty = $request->input('selling_qty');
+//     $productId = $request->productId;
+//     // Query the database for the product quantity
+//     $productQty = DB::table('products')->where('id', $productId)->value('quantity');
+
+//     // Compare the product quantity to the selling quantity
+//     if ($productQty < $sellingQty) {
+//         $response = [
+//             'status' => 'error',
+//             'message' => 'Insufficient stock quantity',
+//         ];
+//     } else {
+//         $response = [
+//             'status' => 'success',
+//             'message' => 'Quantity available',
+//         ];
+//     }
+
+//     // Return the response as JSON
+//     return response()->json($response);
+// }
+
 
 
 
