@@ -30,7 +30,10 @@ git push origin -u rictPOS_updates
 
 #To merge
 git checkout master
+git pull
 git merge branch name eg TNC_updates
+git commit -m "Merge <feature-branch> into main branch"
+git push
 
 
 #pulling, fetching and merging from the main/master brnch on github
