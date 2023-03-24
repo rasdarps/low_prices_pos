@@ -1,5 +1,5 @@
 @extends('admin.admin_master')
-@section('title') {{'View Product'}} @endsection
+@section('title') {{'View Supplier'}} @endsection
 
 @section('admin')
 

@@ -32,15 +32,15 @@ class DashboardController extends Controller
     public function index()
     {
         
-        $pending_invoice = Invoice::where('status','0')->count(); 
-        $approved_invoice =Invoice::where('status','1')->count();
+        $total_purchase = Purchase::where('status','1')->count(); 
+        $total_invoice =Invoice::where('status','1')->count();
         $pending_purchase = Purchase::where('status','0')->count();
         $approved_purchase =Purchase::where('status','1')->count();
        
         $products = DB::select('SELECT * FROM products WHERE quantity < stock_level');
         
-        return view('admin.index', compact('products','pending_invoice','approved_invoice',
-        'pending_purchase','approved_purchase'));
+        return view('admin.index', compact('total_purchase','total_invoice','pending_purchase',
+        'products','approved_purchase'));
     }
 
     

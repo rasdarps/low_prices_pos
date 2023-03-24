@@ -13,7 +13,7 @@
         <div class="card-header">
             <span style="font-size:20px;">Add Invoice</span>
         </div>
-        <div class="card-body"> 
+        <div class="card-body">   
 
     <div class="row">
 
@@ -37,9 +37,9 @@
             <div class="md-3">
                 <label for="example-text-input" class="form-label">Category Name (Select)</label>
                 <select name="category_id" id="category_id" class="form-select select2" aria-label="Default select example">
-                <option selected=""></option>
+                <option  selected value=""></option>
                   @foreach($category as $cat)
-                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                @endforeach
                 </select>
             </div>
@@ -50,37 +50,37 @@
             <div class="md-3">
                 <label for="example-text-input" class="form-label">Product Name </label>
                 <select name="product_id" id="product_id" class="form-select select2" aria-label="Default select example">
-                <option selected="">Open this select menu</option>
+                <option disabled selected value="">Open this select menu</option>
                
                 </select>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 my-2">
             <div class="md-3">
                 <label for="example-text-input" class="form-label">Unit </label>
                 <select name="unit_id" id="unit_id" class="form-select select2" aria-label="Default select example">
-                <option selected="">Open this select menu</option>
+                <option disabled selected value="">Open this select menu</option>
                
                 </select>
             </div>
         </div>
 
 
-           <div class="col-md-1">
+        <div class="col-md-2">
             <div class="md-4">
                 <label for="example-text-input" class="form-label">Stock Balance</label>
-                 <input class="form-control example-date-input" name="current_stock_qty" type="text"  id="current_stock_qty" readonly style="background-color:#ddd" >
+                 <input class="form-control" name="current_stock_qty" type="text"  id="current_stock_qty" value="{{ old('current_stock_qty') }}" onchange="checkQuantity()" readonly style="background-color:#ddd" >
             </div>
         </div>
 
 
-<div class="col-md-2">
-    <div class="md-3">
-        <label for="example-text-input" class="form-label" style="margin-top:43px;">  </label>
-        <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore">Add</i> 
-    </div>
-</div>
+        <div class="col-md-2">
+            <div class="md-3">
+                <label for="example-text-input" class="form-label" style="margin-top:43px;">  </label>
+                <i class="btn btn-secondary btn-rounded waves-effect waves-light fas fa-plus-circle addeventmore">Add</i> 
+            </div>
+        </div>
 
 
 
@@ -92,7 +92,19 @@
 <!--  ---------------------------------- -->
 
         <div class="card-body">
-        <form method="post" action="{{ route('invoice.store') }}">
+            <!--Throw stock low error message-->
+            @if (session()->has('error_message'))
+                <div id="flash-message" class="alert alert-danger">
+                    {{ session('error_message') }}
+                </div>
+                <script>
+                    setTimeout(function() {
+                        document.getElementById('flash-message').style.display = 'none';
+                    }, 10000); // Close message after 10 seconds
+                </script>
+            @endif
+           
+        <form method="post" action="{{ route('invoice.store') }}" >
             @csrf
             <table class="table-sm table-bordered" width="100%" style="border-color: #ddd;">
                 <thead>
@@ -109,7 +121,7 @@
                 </thead>
 
                 <tbody id="addRow" class="addRow">
-                    
+                   
                 </tbody>
 
                 <tbody>
@@ -135,7 +147,7 @@
 
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <textarea name="description" class="form-control" id="description" placeholder="Write Description Here"></textarea>
+                    <textarea name="description" class="form-control" id="description" placeholder="Description Here"></textarea>
                 </div>
             </div><br>
 
@@ -166,17 +178,17 @@
             </div> <!-- // end row --> <br>
 
 <!-- Hide Add Customer Form -->
-<div class="row new_customer" style="">
+<div class="row new_customer" style="display:none;">
     <div class="form-group col-md-4">
-        <input type="hidden" name="name" id="name" class="form-control" placeholder="Write Customer Name">
+        <input type="text" name="name" id="name" class="form-control" placeholder="Customer Name">
     </div>
 
     <div class="form-group col-md-4">
-        <input type="hidden" name="mobile_no" id="mobile_no" class="form-control" placeholder="Write Customer Mobile No">
+        <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Customer Mobile No" minlength="10" maxlength="10"  onkeypress="return isNumberKey(event)">
     </div>
 
     <div class="form-group col-md-4">
-        <input type="hidden" name="email" id="email" class="form-control" placeholder="Write Customer Email">
+        <input type="text" name="email" id="email" class="form-control" placeholder="Customer Email">
     </div>
 </div>
 <!-- End Hide Add Customer Form -->
@@ -190,31 +202,16 @@
             
         </form>
 
-
-
-
-
-
-        </div> <!-- End card-body -->
-
-
- 
-
-
-
+        </div> <!-- End card-body --> 
 
     </div>
 </div> <!-- end col -->
 </div>
  
-
-
 </div>
 </div>
 
  
-
-
 <script id="document-template" type="text/x-handlebars-template">
      
 <tr class="delete_add_more_item" id="delete_add_more_item">
@@ -234,11 +231,11 @@
 
     
      <td>
-        <input type="number" min="1" class="form-control selling_qty text-right" name="selling_qty[]" value=""> 
+        <input type="number" min="1" class="form-control selling_qty text-right" id="selling_qty" name="selling_qty[]" value="{{ old('selling_qty') }}" onchange="checkQuantity()"> 
     </td>
 
     <td>
-        <input type="number" class="form-control unit_price text-right" name="unit_price[]" value=""> 
+        <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}" onchange="checkQuantity()"> 
     </td>
 
     <td>
@@ -249,6 +246,7 @@
 
      <td>
         <input type="number" class="form-control selling_price text-right" name="selling_price[]" value="0" readonly> 
+        
     </td>
 
      <td>
@@ -414,15 +412,51 @@
 
 </script>
 
+{{-- check quantity script --}}
+<script>
+    function checkQuantity() {
+      var unit_prices = document.getElementsByName('unit_price[]');
+      var current_stock_qtys = document.getElementsByName('current_stock_qty');
+      var selling_qtys = document.getElementsByName('selling_qty[]');
+      
+      for (var i = 0; i < unit_prices.length; i++) {
+        var unit_price = unit_prices[i];
+        // var current_stock_qty = current_stock_qtys[i];
+        var selling_qty = selling_qtys[i];
+        
+        if (parseInt(selling_qty.value) > parseInt(current_stock_qty.value)) {
+          alert('Selling quantity cannot be more than current stock quantity!');
+          unit_price.disabled = true;
+        } else {
+          unit_price.disabled = false;
+        }
+      }
+    }
+    </script>
+    
+
 <script>
     //Payment and customer validation
     $(document).ready(function(){
         $(document).on("click",".storeButton", function(){
+            var selling_qty = $('#selling_qty').val();
+            var unit_price = $('#unit_price').val();
             var paid_status = $('#paid_status').val();
             var customer_id = $('#customer_id').val();
             //var name = $('#name').val();
             //var mobile_no = $('#mobile_no').val();
             //var email = $('#email').val();
+           
+
+            if(selling_qty == ''){
+                $.notify("Selling quantity is Required" ,  {globalPosition: 'top right', className:'error' });
+                return false;
+                 }
+
+                 if(unit_price == ''){
+                $.notify("Unit is Required" ,  {globalPosition: 'top right', className:'error' });
+                return false;
+                 }
 
             if(paid_status == ''){
                 $.notify("Paid Status is Required" ,  {globalPosition: 'top right', className:'error' });
@@ -476,9 +510,6 @@
 
 
 </script>
-
- 
-
 
  
 @endsection 

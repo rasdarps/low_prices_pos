@@ -30,7 +30,7 @@
             <div class="row mb-3">
                 <label for="example-text-input" class="col-sm-2 col-form-label">Supplier Name <span class="text-danger">*</span></label>
                 <div class="form-group col-sm-10">
-                    <input name="name" class="form-control" type="text"    >
+                    <input name="name" class="form-control" type="text" onkeypress="return isCharKey(event)">
                 </div>
             </div>
             <!-- end row -->
@@ -39,7 +39,7 @@
               <div class="row mb-3">
                 <label for="example-text-input" class="col-sm-2 col-form-label">Supplier Mobile </label>
                 <div class="form-group col-sm-10">
-                    <input name="mobile_no" class="form-control" type="text"    >
+                    <input name="mobile_no" class="form-control" type="text" minlength="10" maxlength="10"  onkeypress="return isNumberKey(event)" >
                 </div>
             </div>
             <!-- end row -->

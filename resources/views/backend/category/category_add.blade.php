@@ -19,8 +19,13 @@
             <!--Throw error message-->
             @if(count($errors))
                 @foreach ($errors->all() as $error)
-                <p class="alert alert-danger alert-dismissible fade show"> {{ $error}} </p>
+                <p class="alert alert-danger alert-dismissible fade show" id="flash-message"> {{ $error}} </p>
                 @endforeach
+                <script>
+                    setTimeout(function() {
+                        document.getElementById('flash-message').style.display = 'none';
+                    }, 10000); // Close message after 10 seconds
+                </script>
 
             @endif    
 
@@ -30,7 +35,7 @@
             <div class="row mb-3">
                 <label for="example-text-input" class="col-sm-2 col-form-label">Category Name </label>
                 <div class="form-group col-sm-10">
-                    <input name="name" class="form-control" type="text"    >
+                    <input name="name" class="form-control" type="text"  value="{{ old('name') }}">
                 </div>
             </div>
             <!-- end row --> 
