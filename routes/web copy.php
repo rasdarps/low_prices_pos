@@ -107,27 +107,15 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 
         // Category All Route 
-        // Route::controller(CategoryController::class)->group(function () {
-        //     Route::get('/category/all', 'CategoryAll')->name('category.all'); 
-        //     Route::get('/category/add', 'CategoryAdd')->name('category.add');
-        //     Route::post('/category/store', 'CategoryStore')->name('category.store');
-        //     Route::get('/category/edit/{id}', 'CategoryEdit')->name('category.edit');
-        //     Route::post('/category/update', 'CategoryUpdate')->name('category.update');
-        //     Route::get('/category/delete/{id}', 'CategoryDelete')->name('category.delete');
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('/category/all', 'CategoryAll')->name('category.all'); 
+            Route::get('/category/add', 'CategoryAdd')->name('category.add');
+            Route::post('/category/store', 'CategoryStore')->name('category.store');
+            Route::get('/category/edit/{id}', 'CategoryEdit')->name('category.edit');
+            Route::post('/category/update', 'CategoryUpdate')->name('category.update');
+            Route::get('/category/delete/{id}', 'CategoryDelete')->name('category.delete');
             
-        // });
-
-         Route::prefix('categories')->name('categories.')->group(function () {
-            Route::get('/', [CategoryController::class, 'index'])->name('index');
-            Route::get('/show/{id}', [CategoryController::class, 'show'])->name('show');
-            Route::get('/create', [CategoryController::class, 'create'])->name('create');
-            Route::post('/store', [CategoryController::class, 'store'])->name('store');
-            Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-            Route::patch('/update/{id}', [CategoryController::class, 'update'])->name('update');
-            Route::delete('/destroy/{id}', [CategoryController::class, 'destroy'])->name('destroy');
-             
-
-         });
+        });
 
 
         // Product All Route 

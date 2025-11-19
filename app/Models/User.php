@@ -2,15 +2,16 @@
   
 namespace App\Models;
   
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
   
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, SoftDeletes, Notifiable, HasRoles;
   
     /**
      * The attributes that are mass assignable.
@@ -21,8 +22,12 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
+        'phone',
         'password',
         'profile_image',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
   
     /**
@@ -43,4 +48,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Find user for authentication (supports both email and username)
+     *
+     * @param string $username
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function findForPassport($username)
+    {
+        return $this->where('email', $username)
+                    ->orWhere('username', $username)
+                    ->first();
+    }
 }

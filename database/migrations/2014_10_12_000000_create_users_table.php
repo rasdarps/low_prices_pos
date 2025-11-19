@@ -18,11 +18,21 @@ return new class extends Migration
             $table->string('name');
             $table->string('username');
             $table->string('email')->unique();
+            $table->string('phone')->unique(); 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('profile_image')->nullable();
+
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('updated_by')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('created_by')->references('id')->on('users')->nullOnDelete();
+            $table->foreign('deleted_by')->references('id')->on('users')->nullOnDelete();
         });
     }
 

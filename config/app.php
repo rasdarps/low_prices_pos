@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use Spatie\Html\HtmlFacade;
 
 return [
 
@@ -214,6 +215,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Image' => Intervention\Image\Facades\Image::class, 
+        'Html' => Spatie\Html\Facades\Html::class,
 
         ])->toArray(),
 

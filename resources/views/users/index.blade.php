@@ -67,7 +67,7 @@
                           </td>
                           <td>
                             <!--<a href="{{-- route('supplier.show',$user->id) --}}" class="btn btn-info sm" title="Show Data">  <i class="fas fa-eye"></i> </a>-->
-                             <a href="{{ route('users.edit',$user->id) }}" class="btn btn-info sm" title="Edit Data">  <i class="fas fa-edit"></i> </a>
+                             <a href="{{ route('users.edit', Crypt::encrypt($user->id)) }}" class="btn btn-info sm" title="Edit Data">  <i class="fas fa-edit"></i> </a>
                               {!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline', 'onsubmit'=>'return confirm("Delete?")' ]) !!}
                                   {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) !!}
                               {!! Form::close() !!}

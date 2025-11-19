@@ -23,11 +23,13 @@ class CreateAdminUserSeeder extends Seeder
             'name' => 'Kwaku Darpah',
             'username' => 'rasdarps', 
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('juliana@1985')
+            'phone' => '0242222874',  // Add phone number
+            'password' => bcrypt('juliana@1985'),
+            'created_by' => 1  // Since this is the first admin user, set to 1 or null
         ]);
     
         //creating roles in spatie
-        $role = Role::create(['name' => 'Admin']); 
+        $role = Role::create(['name' => 'Super Admin']); 
 
         //adding all roles to a user using pluck which will extract a particular data from a collection
         $permissions = Permission::pluck('id','id')->all(); 

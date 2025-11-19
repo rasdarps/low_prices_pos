@@ -25,7 +25,7 @@
             <div class="card">
                 <div class="card-body">
 
-    <a href="{{ route('category.add') }}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;"><i class="fas fa-plus-circle"> Add Category </i></a> <br>  <br>               
+    <a href="{{ route('categories.create') }}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;"><i class="fas fa-plus-circle"> Add Category </i></a> <br>  <br>               
 
                     <h4 class="card-title">Category All Data </h4>
                     
@@ -42,17 +42,17 @@
 
                         <tbody>
                         	 
-                        	@foreach($categoris as $key => $item)
+                        	@foreach($categoris as $key => $category)
                         <tr>
                             <td> {{ $key+1}} </td>
-                            <td> {{ $item->name }} </td>  
+                            <td> {{ $category->name }} </td>  
                             <td>
                                 @can('category-edit')
-                                    <a href="{{ route('category.edit',$item->id) }}" class="btn btn-info sm" title="Edit Data">  <i class="fas fa-edit"></i> </a>
+                             <a href="{{ route('categories.edit', Crypt::encrypt($category->id)) }}" class="btn btn-info sm" title="Edit Data">  <i class="fas fa-edit"></i> </a>
                                 @endcan
 
                                 @can('category-delete')
-                                    <a href="{{ route('category.delete',$item->id) }}" class="btn btn-danger sm" title="Delete Data" id="delete">  <i class="fas fa-trash-alt"></i> </a>
+                                    <a href="{{ route('categories.destroy',Crypt::encrypt($category->id)) }}" class="btn btn-danger sm" title="Delete Data" id="delete">  <i class="fas fa-trash-alt"></i> </a>
                                 @endcan
                             </td>
                            

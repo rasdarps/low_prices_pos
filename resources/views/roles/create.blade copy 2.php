@@ -59,54 +59,17 @@
             </div>
         </div>
 
-        @php
-            // Group permissions by resource and action
-            $grouped = [];
-            foreach($permission as $perm) {
-                // Split permission name into resource and action
-                if (preg_match('/^(.*)-(list|create|edit|delete)$/', $perm->name, $matches)) {
-                    $resource = ucfirst($matches[1]);
-                    $action = $matches[2];
-                    $grouped[$resource][$action] = $perm;
-                }
-            }
-            $actions = ['list', 'create', 'edit', 'delete'];
-        @endphp
-
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Permission:</strong>
                 <br/>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Resource</th>
-                                <th>List</th>
-                                <th>Create</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($grouped as $resource => $perms)
-                                <tr>
-                                    <td><strong>{{ $resource }}</strong></td>
-                                    @foreach($actions as $action)
-                                        <td>
-                                            @if(isset($perms[$action]))
-                                                <label>
-                                                    <input type="checkbox" name="permission[]" value="{{ $perms[$action]->id }}">
-                                                    {{ ucfirst($action) }}
-                                                </label>
-                                            @endif
-                                        </td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                @foreach($permission as $value)
+                    <label>
+                        <input type="checkbox" name="permission[]" value="{{ $value->id }}" class="name">
+                        {{ $value->name }}
+                    </label>
+                    <br/>
+                @endforeach
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center my-4">

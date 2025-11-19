@@ -2,13 +2,15 @@
     
 namespace App\Http\Controllers;
     
-use App\Models\User;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use Spatie\Permission\Models\Role;
     
 class UserController extends Controller
 {
@@ -20,10 +22,11 @@ class UserController extends Controller
 
     function __construct()
     {
-         $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-         $this->middleware('permission:role-create', ['only' => ['create','store']]);
-         $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        // Change from role-* to user-*
+        $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:user-create', ['only' => ['create','store']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
     }
     
     public function index(Request $request)
@@ -40,7 +43,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name','name')->all();
+        // ensures super admin role is not assigned to anyone during user creation
+        $roles = Role::where('name', '!=', 'Super Admin')->pluck('name','name')->all();
         return view('users.create',compact('roles'));
     }
     
@@ -52,101 +56,217 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validatedData = $this->validate($request, [
             'name' => ['required','string', 'max:255'],
             'username' => ['required','string', 'max:255'],
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
+            'phone' => 'required|digits:10|numeric|unique:users,phone',
+            'password' => 'required|same:confirm_password',
             'profile_image'=>'nullable',
             'roles' => 'required'
+        ], [
+            'name.required' => 'Full Name is required',
+            'username.required' => 'Username is required',
+            'email.required' => 'Email is required',
+            'email.email' => 'Enter valid email',
+            'email.unique' => 'Email already exists',
+            'password.required' => 'Password is required',
+            'password.same' => 'Password and Confirm Password must match',
+            'roles.required' => 'At least one role must be selected',
         ]);
-    
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-    
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
-    
-        return redirect()->route('users.index')
-                        ->with('success','User created successfully');
+
+        try {
+            // Get all data and hash password
+            $data = $validatedData;
+            $data['password'] = Hash::make($data['password']);
+            $data['created_by'] = Auth::id();
+            
+            // Use transaction for data integrity
+            DB::transaction(function () use ($data, $request) {
+                // Create user
+                $user = User::create($data);
+                
+                // Assign roles to user
+                $user->assignRole($request->input('roles'));
+            });
+
+            return response()->json([
+                'status' => 200,
+                'message' => "User '{$data['name']}' was successfully created",
+            ]);
+
+        } catch(\Throwable $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => $e->getMessage(),
+            ]); 
+        }
     }
     
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $encryptedId
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($encryptedId)
     {
-        $user = User::find($id);
-        return view('users.show',compact('user'));
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $user = User::find($id);
+            
+            if (!$user) {
+                return redirect()->route('users.index')->with('error', 'User not found.');
+            }
+            
+            return view('users.show', compact('user'));
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Invalid user ID.');
+        }
     }
     
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $encryptedId
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($encryptedId)
     {
-        $user = User::find($id);
-        //check and redirect if user not found
-        if(!$user){
-            return redirect()->route('users.index')
-            ->with('error','User not found');
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $user = User::find($id);
+            
+            if (!$user) {
+                return redirect()->route('users.index')->with('error', 'User not found.');
+            }
+            
+            // ensures super admin role is not assigned to anyone during user update
+            $roles = Role::where('name', '!=', 'Super Admin')->pluck('name','name')->all();
+            $userRole = $user->roles->pluck('name','name')->all();
+
+            return view('users.edit', compact('user', 'roles', 'userRole'));
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Invalid user ID.');
         }
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
-    
-        return view('users.edit',compact('user','roles','userRole'));
     }
     
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $encryptedId
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $encryptedId)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'username' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
-        ]);
-    
-        $input = $request->all();
-        if(!empty($input['password'])){ 
-            $input['password'] = Hash::make($input['password']);
-        }else{
-            $input = Arr::except($input,array('password'));    
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $user = User::find($id);
+            
+            if (!$user) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User not found.',
+                ]);
+            }
+
+           $validatedData = $this->validate($request, [
+                'name' => ['required','string', 'max:255'],
+                'username' => ['required','string', 'max:255', 'unique:users,username,' . $id],
+                'email' => 'required|email|unique:users,email,' . $id,
+                'phone' => 'required|digits:10|numeric|unique:users,phone,' . $id,
+                'password' => 'nullable|same:confirm_password',
+                'profile_image'=>'nullable',
+                'roles' => 'required'
+            ], [
+                'name.required' => 'Full Name is required',
+                'username.required' => 'Username is required',
+                'username.unique' => 'Username already exists',
+                'email.required' => 'Email is required',
+                'email.email' => 'Enter valid email',
+                'email.unique' => 'Email already exists',
+                'phone.required' => 'Phone is required',
+                'phone.unique' => 'Phone number already exists',
+                'password.same' => 'Password and Confirm Password must match',
+                'roles.required' => 'At least one role must be selected',
+            ]);
+
+            try {
+                
+                //fetch only validated data
+                $data = $validatedData;
+                
+                // Only update password if provided
+                if ($request->filled('password')) {
+                    $data['password'] = Hash::make($data['password']);
+                } else {
+                    $data = Arr::except($data, array('password', 'confirm_password'));
+                }
+                
+                $data['updated_by'] = Auth::id();
+                
+                // Use transaction for data integrity
+                DB::transaction(function () use ($data, $request, $user, $id) {
+                    // Update user
+                    $user->update($data);
+                    
+                    // Remove existing roles and assign new ones
+                    DB::table('model_has_roles')->where('model_id', $id)->delete();
+                    $user->assignRole($request->input('roles'));
+                });
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => "User '{$data['name']}' was successfully updated",
+                    'redirect' => route('users.index')
+                ]);
+
+            } catch(\Throwable $e) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => $e->getMessage(),
+                ]); 
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid user ID.',
+            ]);
         }
-    
-        $user = User::find($id);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
-    
-        $user->assignRole($request->input('roles'));
-    
-        return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
     }
     
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $encryptedId
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($encryptedId)
     {
-        User::find($id)->delete();
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $user = User::find($id);
+            
+            if (!$user) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'User not found.',
+                ]);
+            }
+            
+            $userName = $user->name;
+            $user->delete();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => "User '{$userName}' was successfully deleted.",
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid user ID.',
+            ]);
+        }
     }
 }

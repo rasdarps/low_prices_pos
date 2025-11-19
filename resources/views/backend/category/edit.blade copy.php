@@ -1,5 +1,5 @@
 @extends('admin.admin_master')
-@section('title') {{'Create Category'}} @endsection
+@section('title') {{'Edit Category'}} @endsection
 
 @section('admin')
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -10,40 +10,34 @@
 <div class="row">
 <div class="col-12">
     <div class="card">
-        <div class="card-header">
-            <span style="font-size:20px;">Add Category</span>
-        </div>
         <div class="card-body">
-           
-
+            
             <!--Throw error message-->
             @if(count($errors))
                 @foreach ($errors->all() as $error)
-                <p class="alert alert-danger alert-dismissible fade show" id="flash-message"> {{ $error}} </p>
+                <p class="alert alert-danger alert-dismissible fade show"> {{ $error}} </p>
                 @endforeach
-                <script>
-                    setTimeout(function() {
-                        document.getElementById('flash-message').style.display = 'none';
-                    }, 10000); // Close message after 10 seconds
-                </script>
 
-            @endif    
+            @endif
 
-            <form method="post" action="{{ route('category.store') }}" id="myForm" >
+            <h4 class="card-title">Edit Category Page </h4><br><br>
+            
+  
+
+            <form method="post" action="{{ route('categories.update', Crypt::encrypt($category->id)) }}" id="myForm" >
                 @csrf
 
+            <input type="hidden" name="id" value="{{ $category->id }}">
             <div class="row mb-3">
                 <label for="example-text-input" class="col-sm-2 col-form-label">Category Name </label>
                 <div class="form-group col-sm-10">
-                    <input name="name" class="form-control" type="text"  value="{{ old('name') }}">
+                    <input name="name" value="{{ $category->name }}" class="form-control" type="text"    >
                 </div>
             </div>
             <!-- end row --> 
 
-            <center>
-            <input type="submit" class="btn btn-info waves-effect waves-light" value="Add Category">
-            </center>
-
+        
+            <input type="submit" class="btn btn-info waves-effect waves-light" value="Update Category">
             </form>
              
            
@@ -69,7 +63,7 @@
             },
             messages :{
                 name: {
-                    required : 'Please Enter Category Name',
+                    required : 'Please Enter Your Name',
                 },
                  
             },

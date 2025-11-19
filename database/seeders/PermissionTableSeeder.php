@@ -17,52 +17,16 @@ class PermissionTableSeeder extends Seeder
     {
         //
         $permissions = [
-            'role-list',
-            'role-create',
-            'role-edit',
-            'role-delete',
-            
-            'product-list',
-            'product-create',
-            'product-edit',
-            'product-delete',
-            
-            'supplier-list',
-            'supplier-create',
-            'supplier-edit',
-            'supplier-delete',
-            
-            'customer-list',
-            'customer-create',
-            'customer-edit',
-            'customer-delete',
-
-            'invoice-list',
-            'invoice-create',
-            'invoice-edit',
-            'invoice-delete',
-              
-            'sales-list',
-            'sales-create',
-            'sales-edit',
-            'sales-delete',
-
-            'purchase-list',
-            'purchase-create',
-            'purchase-edit',
-            'purchase-delete',
-
-            'unit-list',
-            'unit-create',
-            'unit-edit',
-            'unit-delete',
-
-            'category-list',
-            'category-create',
-            'category-edit',
-            'category-delete',
-
-
+            'role-list','role-create','role-edit','role-delete',
+            'product-list','product-create','product-edit','product-delete',
+            'supplier-list','supplier-create','supplier-edit','supplier-delete',
+            'customer-list','customer-create','customer-edit','customer-delete',
+            'invoice-list','invoice-create','invoice-edit','invoice-delete',   
+            'sales-list','sales-create','sales-edit','sales-delete',
+            'purchase-list','purchase-create','purchase-edit','purchase-delete',
+            'unit-list','unit-create','unit-edit','unit-delete',
+            'category-list','category-create','category-edit','category-delete',
+            'user-list','user-create', 'user-edit','user-delete',
          ];
       
          foreach ($permissions as $permission) {

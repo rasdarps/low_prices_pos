@@ -48,7 +48,7 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel" style="background:#000; font-weight:bold; background:transparent;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{asset('backend/assets/images/logo_cart.png')}}" alt="" width="50px">
+                    <img src="{{asset('images/rict_logo.png')}}" alt="" width="50px">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
