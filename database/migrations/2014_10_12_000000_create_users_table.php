@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone')->unique(); 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('profile_image')->nullable();
+            $table->string('user_type')->nullable();
 
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();

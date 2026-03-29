@@ -1,5 +1,6 @@
+{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\unit\create.blade.php --}}
 @extends('layout.main')
-@section('title') {{'Create Category'}} @endsection
+@section('title') {{'Create Unit'}} @endsection
 
 @section('content')
 
@@ -12,22 +13,19 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header with-border">
-                            <span class="card-title" style="font-size:20px;">Create | Category </span>
+                            <span class="card-title" style="font-size:20px;">Create | Unit </span>
 
-                            {{-- @can('create asset category') --}}
-                            <a href="{{route('categories.index')}}" style="float:right">
+                            <a href="{{route('units.index')}}" style="float:right">
                                 <button type="button" class="btn btn-primary modal_btn">
-                                    View Categories
+                                    View Units
                                 </button>
                             </a>
 
                               <hr>
 
-                            {{-- @endcan --}}
-
                             <div class="card-body">
 
-                                <form action="{{ route('categories.store') }}" method="POST" id="myForm" enctype="multipart/form-data">
+                                <form action="{{ route('units.store') }}" method="POST" id="myForm" enctype="multipart/form-data">
                                     @csrf
 
                                     {{-- backend error alerts --}}
@@ -38,16 +36,13 @@
                                         <ul id="errors"></ul>
                                     </div>
 
-                                    {{-- <div class="row col-md-10 mx-auto"> --}}
-
                                         <div class="col-md-6 mx-auto">
                                             <div class="form-group">
-                                                <label for="name"><strong>Category <span class="text-danger">*</span></strong></label>
-                                                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" placeholder="enter category" onkeypress="return isCharKey(event)">
+                                                <label for="name"><strong>Unit Name <span class="text-danger">*</span></strong></label>
+                                                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" placeholder="enter unit name" onkeypress="return isCharKey(event)">
                                             </div>
                                         </div>
                                     
-                                    {{-- </div> --}}
                                     {{-- row 1 ends --}}
 
                                     <div class="row">
@@ -123,11 +118,6 @@
         background: linear-gradient(145deg, #f8f9fa, #e9ecef);
     }
 
-        /* .card{
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            transition: 0.3s;
-        } */
-
     .is-invalid {
         border-color: #dc3545;
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
@@ -158,22 +148,25 @@
         $(document).ready(function (){
            
             // Handle form submission
-
             $('#myForm').on('submit', function(e) {
                 e.preventDefault();
 
                 // Client-side validation
                 if(!$('#name').val().trim()) {
                     if (typeof Notiflix !== 'undefined') {
-                        Notiflix.Notify.failure('Please enter a category name');
+                        Notiflix.Notify.failure('Please enter a unit name');
                     } else {
-                        alert('Please enter a category name');
+                        alert('Please enter a unit name');
                     }
                     return;
                 }
-                
 
-                Notiflix.Loading.standard('Form submitting, please wait...');
+                // Show loading
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Loading.standard('Creating unit, please wait...');
+                } else {
+                    console.log('Creating unit...');
+                }
 
                 $.ajax({
                     url: $(this).attr('action'),
@@ -182,25 +175,43 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        Notiflix.Loading.remove();
+                        if (typeof Notiflix !== 'undefined') {
+                            Notiflix.Loading.remove();
+                        }
+                        
                         if (data.status === 200) {
-                            Notiflix.Notify.success(data.message);
+                            if (typeof Notiflix !== 'undefined') {
+                                Notiflix.Notify.success(data.message);
+                            } else {
+                                alert(data.message);
+                            }
                             $('#myForm')[0].reset();
                             if (data.redirect) {
                                 window.location.href = data.redirect;
                             }
                         } else {
-                            Notiflix.Notify.failure(data.message);
+                            if (typeof Notiflix !== 'undefined') {
+                                Notiflix.Notify.failure(data.message);
+                            } else {
+                                alert('Error: ' + data.message);
+                            }
                         }
                     },
                     error: function(xhr, status, error) {
-                        Notiflix.Loading.remove();
+                        if (typeof Notiflix !== 'undefined') {
+                            Notiflix.Loading.remove();
+                        }
+                        
                         $('#errors').empty();
                         if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
                             $('#errorAlert').show();
                             $.each(xhr.responseJSON.errors, function(field, messages) {
                                 $('#errors').append('<li>' + messages[0] + '</li>');
-                                Notiflix.Notify.failure(messages[0]);
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure(messages[0]);
+                                } else {
+                                    alert('Validation Error: ' + messages[0]);
+                                }
                             });
                             $('html, body').animate({
                                 scrollTop: $('#errorAlert').offset().top - 100
@@ -208,15 +219,17 @@
                         } else {
                             $('#errorAlert').show();
                             $('#errors').append('<li>An error occurred. Please try again later.</li>');
-                            Notiflix.Notify.failure('An error occurred. Please try again later.');
+                            if (typeof Notiflix !== 'undefined') {
+                                Notiflix.Notify.failure('An error occurred. Please try again later.');
+                            } else {
+                                alert('An error occurred. Please try again later.');
+                            }
                         }
                     }
                 });
             });
 
-            
         });
-    </script>
+</script>
 
 @endsection
-

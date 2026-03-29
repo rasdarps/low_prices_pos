@@ -8,184 +8,219 @@ use Illuminate\Http\Request;
 use App\Models\PaymentDetail;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Image;
+use Illuminate\Support\Facades\Crypt;
 
 class CustomerController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:customer-list|customer-create|customer-edit|customer-delete', ['only' => ['index','store']]);
+         $this->middleware('permission:customer-list|customer-create|customer-edit|customer-delete', ['only' => ['index','show']]);
          $this->middleware('permission:customer-create', ['only' => ['create','store']]);
          $this->middleware('permission:customer-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
     }
 
-    public function CustomerAll(){
-
-         $customers = Customer::latest()->get();
-        return view('backend.customer.customer_all',compact('customers'));
-
+    public function index(){
+        $customer = Customer::orderBy('name', 'asc')->get();
+        return view('backend.customer.index', compact('customer'));
     } // End Method
 
+    public function create(){
+        return view('backend.customer.create');
+    } // End Method
 
-    public function CustomerAdd(){
-     return view('backend.customer.customer_add');
-    }    // End Method
+    public function store(Request $request){
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:customers,name',
+            'mobile_no' => 'required|string|max:15|unique:customers,mobile_no',
+            'email' => 'nullable|email|max:255|unique:customers,email',
+            'address' => 'nullable|string|max:500',
+        ], [
+            'name.required' => 'Please enter a customer name',
+            'name.unique' => 'This customer name already exists',
+            'mobile_no.required' => 'Please enter a mobile number',
+            'mobile_no.unique' => 'This mobile number already exists',
+            'email.email' => 'Please enter a valid email address',
+            'email.unique' => 'This email address already exists',
+        ]);
 
-
-    public function CustomerStore(Request $request){
-        $request->validate([
-            'name' => ['required'],
-            'mobile_no' => [Rule::unique('customers', 'mobile_no')],//prevent double creation
-            'email' => [Rule::unique('customers', 'email')]//prevent double creation
+        try {
+            // Use only validated data and add created_by
+            $data = $validatedData;
+            $data['created_by'] = Auth::id();
             
-        ]);
+            // Use a transaction to ensure data integrity
+            DB::transaction(function () use ($data) {
+                Customer::create($data);
+            });
 
-        $image = $request->file('customer_image');
-        $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension(); // 343434.png
-        Image::make($image)->resize(200,200)->save('upload/customer/'.$name_gen);
-        $save_url = 'upload/customer/'.$name_gen;
+            return response()->json([
+                'status' => 200,
+                'message' => "Customer '{$data['name']}' was successfully created",
+            ]);
 
-        Customer::insert([
-            'name' => $request->name,
-            'mobile_no' => $request->mobile_no,
-            'email' => $request->email,
-            'address' => $request->address,
-            'customer_image' => $save_url ,
-            'created_by' => Auth::user()->id,
-            'created_at' => Carbon::now(),
+        } catch(\Throwable $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => $e->getMessage(),
+            ]); 
+        }
+    } // End Method
 
-        ]);
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $encryptedId
+     * @return \Illuminate\Http\Response
+     */
+    public function show($encryptedId)
+    {
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $customer = Customer::find($id);
+            
+            if (!$customer) {
+                return redirect()->route('customers.index')->with('error', 'Customer not found.');
+            }
+            
+            return view('backend.customer.show', compact('customer'));
+        } catch (\Exception $e) {
+            return redirect()->route('customers.index')->with('error', 'Invalid customer ID.');
+        }
+    }
 
-         $notification = array(
-            'message' => 'Customer Inserted Successfully', 
-            'alert-type' => 'success'
-        );
+    public function edit($encryptedId){
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $customer = Customer::find($id);
+            
+            if (!$customer) {
+                return redirect()->route('customers.index')->with('error', 'Customer not found.');
+            }
+            
+            return view('backend.customer.edit', compact('customer'));
+        } catch (\Exception $e) {
+            return redirect()->route('customers.index')->with('error', 'Invalid customer ID.');
+        }
+    }// End Method
 
-        return redirect()->route('customer.all')->with($notification);
+    public function update(Request $request, $encryptedId){ 
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $customer = Customer::find($id);
+            
+            if (!$customer) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Customer not found.',
+                ]);
+            }
 
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255|unique:customers,name,' . $id,
+                'mobile_no' => 'required|string|max:15|unique:customers,mobile_no,' . $id,
+                'email' => 'nullable|email|max:255|unique:customers,email,' . $id,
+                'address' => 'nullable|string|max:500',
+            ], [
+                'name.required' => 'Please enter a customer name',
+                'name.unique' => 'This customer name already exists',
+                'mobile_no.required' => 'Please enter a mobile number',
+                'mobile_no.unique' => 'This mobile number already exists',
+                'email.email' => 'Please enter a valid email address',
+                'email.unique' => 'This email address already exists',
+            ]);
+
+            try {
+                DB::transaction(function () use ($validatedData, $customer) {
+                    $updateData = [
+                        'name' => $validatedData['name'],
+                        'mobile_no' => $validatedData['mobile_no'],
+                        'email' => $validatedData['email'],
+                        'address' => $validatedData['address'],
+                        'updated_by' => Auth::id(),
+                    ];
+                    
+                    $customer->update($updateData);
+                });
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => "Customer '{$validatedData['name']}' was successfully updated",
+                    'redirect' => route('customers.index')
+                ]);
+
+            } catch(\Throwable $e) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => $e->getMessage(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid customer ID.',
+            ]);
+        }
+    }// End Method
+
+    public function destroy($encryptedId){
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $customer = Customer::find($id);
+            
+            if (!$customer) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Customer not found.',
+                ]);
+            }
+            
+            $customerName = $customer->name;
+            
+            DB::transaction(function () use ($customer) {
+                $customer->delete();
+            });
+            
+            return response()->json([
+                'status' => 200,
+                'message' => "Customer '{$customerName}' was successfully deleted.",
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Invalid customer ID.',
+            ]);
+        }
     } // End Method
 
 
-    public function CustomerEdit($id){
-
-       $customer = Customer::findOrFail($id);
-       return view('backend.customer.customer_edit',compact('customer'));
-
-    } // End Method
-
-
-    public function CustomerUpdate(Request $request){
-
-        $request->validate([
-            'name' => ['required']
-
-        ]);
-
-        $customer_id = $request->id;
-        if ($request->file('customer_image')) {
-
-        $image = $request->file('customer_image');
-        $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension(); // 343434.png
-        Image::make($image)->resize(200,200)->save('upload/customer/'.$name_gen);
-        $save_url = 'upload/customer/'.$name_gen;
-
-        Customer::findOrFail($customer_id)->update([
-            'name' => $request->name,
-            'mobile_no' => $request->mobile_no,
-            'email' => $request->email,
-            'address' => $request->address,
-            'customer_image' => $save_url ,
-            'updated_by' => Auth::user()->id,
-            'updated_at' => Carbon::now(),
-
-        ]);
-
-         $notification = array(
-            'message' => 'Customer Updated with Image Successfully', 
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('customer.all')->with($notification);
-             
-        } else{
-
-          Customer::findOrFail($customer_id)->update([
-            'name' => $request->name,
-            'mobile_no' => $request->mobile_no,
-            'email' => $request->email,
-            'address' => $request->address, 
-            'updated_by' => Auth::user()->id,
-            'updated_at' => Carbon::now(),
-
-        ]);
-
-         $notification = array(
-            'message' => 'Customer Updated without Image Successfully', 
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('customer.all')->with($notification);
-
-        } // end else 
-
-    } // End Method
-
-
-    public function CustomerDelete($id){
-
-        $customers = Customer::findOrFail($id);
-        $img = $customers->customer_image;
-        unlink($img);
-
-        Customer::findOrFail($id)->delete();
-
-        $notification = array(
-            'message' => 'Customer Deleted Successfully', 
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
-
-    } // End Method
-
-
+    // Keep existing business logic methods unchanged
     public function CreditCustomer(){
-
         $allData = Payment::whereIn('paid_status',['full_due','partial_paid'])->get();
         return view('backend.customer.customer_credit',compact('allData'));
-
     } // End Method
 
-
     public function CreditCustomerPrintPdf(){
-
         $allData = Payment::whereIn('paid_status',['full_due','partial_paid'])->get();
         return view('backend.pdf.customer_credit_pdf',compact('allData'));
-
     }// End Method
-
-
 
     public function CustomerEditInvoice($invoice_id){
-
         $payment = Payment::where('invoice_id',$invoice_id)->first();
         return view('backend.customer.edit_customer_invoice',compact('payment'));
-
     }// End Method
 
-
     public function CustomerUpdateInvoice(Request $request,$invoice_id){
-
         if ($request->new_paid_amount < $request->paid_amount) {
-
             $notification = array(
-            'message' => 'Sorry You Paid Maximum Value', 
-            'alert-type' => 'error'
-        );
-        return redirect()->back()->with($notification); 
+                'message' => 'Sorry You Paid Maximum Value', 
+                'alert-type' => 'error'
+            );
+            return redirect()->back()->with($notification); 
         } else{
             $payment = Payment::where('invoice_id',$invoice_id)->first();
             $payment_details = new PaymentDetail();
@@ -195,12 +230,10 @@ class CustomerController extends Controller
                  $payment->paid_amount = Payment::where('invoice_id',$invoice_id)->first()['paid_amount']+$request->new_paid_amount;
                  $payment->due_amount = '0';
                  $payment_details->current_paid_amount = $request->new_paid_amount;
-
             } elseif ($request->paid_status == 'partial_paid') {
                 $payment->paid_amount = Payment::where('invoice_id',$invoice_id)->first()['paid_amount']+$request->paid_amount;
                 $payment->due_amount = Payment::where('invoice_id',$invoice_id)->first()['due_amount']-$request->paid_amount;
                 $payment_details->current_paid_amount = $request->paid_amount;
-
             }
 
             $payment->save();
@@ -209,24 +242,17 @@ class CustomerController extends Controller
             $payment_details->updated_by = Auth::user()->id;
             $payment_details->save();
 
-              $notification = array(
-            'message' => 'Invoice Update Successfully', 
-            'alert-type' => 'success'
-        );
-        return redirect()->route('credit.customer')->with($notification); 
-
-
+            $notification = array(
+                'message' => 'Invoice Update Successfully', 
+                'alert-type' => 'success'
+            );
+            return redirect()->route('credit.customer')->with($notification); 
         }
-
     }// End Method
 
-
-
     public function CustomerInvoiceDetails($invoice_id){
-
         $payment = Payment::where('invoice_id',$invoice_id)->first();
         return view('backend.pdf.invoice_details_pdf',compact('payment'));
-
     }// End Method
 
     public function PaidCustomer(){
@@ -235,34 +261,22 @@ class CustomerController extends Controller
     }// End Method
 
     public function PaidCustomerPrintPdf(){
-
         $allData = Payment::where('paid_status','!=','full_due')->get();
         return view('backend.pdf.customer_paid_pdf',compact('allData'));
     }// End Method
 
-
     public function CustomerWiseReport(){
-
         $customers = Customer::all();
         return view('backend.customer.customer_wise_report',compact('customers'));
-
     }// End Method
 
-
     public function CustomerWiseCreditReport(Request $request){
-
          $allData = Payment::where('customer_id',$request->customer_id)->whereIn('paid_status',['full_due','partial_paid'])->get();
         return view('backend.pdf.customer_wise_credit_pdf',compact('allData'));
     }// End Method
 
-
     public function CustomerWisePaidReport(Request $request){
-
          $allData = Payment::where('customer_id',$request->customer_id)->where('paid_status','!=','full_due')->get();
         return view('backend.pdf.customer_wise_paid_pdf',compact('allData'));
     }// End Method
-
-
-
 }
- 

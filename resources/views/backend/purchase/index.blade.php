@@ -1,6 +1,5 @@
 @extends('admin.admin_master')
-@section('title') {{'View Product'}} @endsection
-
+@section('title') {{'View Invoice'}} @endsection
 @section('admin')
 
 
@@ -11,7 +10,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0">Product All</h4>
+                                    <h4 class="mb-sm-0">All Purchase List</h4>
 
                                      
 
@@ -25,20 +24,20 @@
             <div class="card">
                 <div class="card-body">
 
-    <a href="{{ route('product.add') }}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;"><i class="fas fa-plus-circle"></i> Add Product</a> <br>  <br>               
+    <a href="{{ route('purchases.create') }}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;"><i class="fas fa-plus-circle"> Add Purchase </i></a> <br>  <br>               
 
-                    <h4 class="card-title">Product All Data </h4>
+                    <h4 class="card-title">Purchase All Data </h4>
                     
 
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
                             <th>Sl</th>
-                            <th>Name</th> 
-                            <th>Unit</th>
-                            <th>Category</th>
-                            <th>Quantity</th> 
-                            <th>Stock Level</th>
+                            <th>Date </th>
+                            <th>Purchase No </th>
+                            <th>Supplier Name</th>      
+                             
+                            <th>Amount(Gh¢)</th>
                             <th>Action</th>
                             
                         </thead>
@@ -46,22 +45,23 @@
 
                         <tbody>
                         	 
-                        	@foreach($product as $key => $item)
-                        <tr>
-                            <td> {{ $key+1}} </td>
-                            <td> {{ $item->name }} </td> 
-                            <td> {{ $item['unit']['name'] }} </td> 
-                            <td> {{ $item['category']['name'] }} </td>
-                            <td> {{ $item->quantity }} </td> 
-                            <td> {{ $item->stock_level }} </td>  
-                            <td>
-   <a href="{{ route('product.edit',$item->id) }}" class="btn btn-info sm" title="Edit Data">  <i class="fas fa-edit"></i> </a>
+                        	@foreach($allData as $key => $item)
+            <tr>
+                <td> {{ $key+1}} </td>
+                <td> {{ date('d-m-Y',strtotime($item->date))  }} </td>
+                <td> {{ $item->purchase_no }} </td> 
+                <td> {{ $item['purchase_payment']['supplier']['name'] }} </td>     
+                
+                <td>  {{ $item['purchase_payment']['total_amount'] }} </td>
 
-     <a href="{{ route('product.delete',$item->id) }}" class="btn btn-danger sm" title="Delete Data" id="delete">  <i class="fas fa-trash-alt"></i> </a>
+                <td>
+                    <a href="{{ route('print.purchase',$item->id) }}" class="btn btn-info sm" title="Print purchase" >  <i class="fa fa-print"></i> </a>
+                    <a href="{{ route('purchases.destroy',$item->id) }}" class="btn btn-danger sm" title="Delete Data" id="delete">  <i class="fas fa-trash-alt"></i> </a>
 
-                            </td>
-                           
-                        </tr>
+                
+                </td>
+               
+            </tr>
                         @endforeach
                         
                         </tbody>

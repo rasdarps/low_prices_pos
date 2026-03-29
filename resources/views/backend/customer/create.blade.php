@@ -1,10 +1,6 @@
-{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\category\edit.blade.php --}}
-@php
-use Illuminate\Support\Facades\Crypt;
-@endphp
-
+{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\customer\create.blade.php --}}
 @extends('layout.main')
-@section('title') {{'Edit Category'}} @endsection
+@section('title') {{'Create Customer'}} @endsection
 
 @section('content')
 
@@ -17,11 +13,11 @@ use Illuminate\Support\Facades\Crypt;
         <div class="col-12">
             <div class="card">
                 <div class="card-header with-border">
-                    <span class="card-title" style="font-size:20px;">Edit | Category </span>
+                    <span class="card-title" style="font-size:20px;">Create | Customer </span>
 
-                    <a href="{{route('categories.index')}}" style="float:right">
+                    <a href="{{route('customers.index')}}" style="float:right">
                         <button type="button" class="btn btn-primary modal_btn">
-                            View Categories
+                            View Customers
                         </button>
                     </a>
 
@@ -29,9 +25,8 @@ use Illuminate\Support\Facades\Crypt;
 
                     <div class="card-body">
 
-                        <form action="{{ route('categories.update', Crypt::encrypt($category->id)) }}" method="POST" id="myForm" enctype="multipart/form-data">
+                        <form action="{{ route('customers.store') }}" method="POST" id="myForm" enctype="multipart/form-data">
                             @csrf
-                            @method('PATCH')  {{-- Using PATCH method --}}
 
                             {{-- backend error alerts --}}
                             <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" style="display: none;">
@@ -41,28 +36,63 @@ use Illuminate\Support\Facades\Crypt;
                                 <ul id="errors"></ul>
                             </div>
 
-                            <div class="col-md-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="name"><strong>Category Name <span class="text-danger">*</span></strong></label>
-                                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $category->name) }}" placeholder="enter category name" onkeypress="return isCharKey(event)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name"><strong>Customer Name <span class="text-danger">*</span></strong></label>
+                                        <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" placeholder="enter customer name" onkeypress="return isCharKey(event)">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="mobile_no"><strong>Mobile Number <span class="text-danger">*</span></strong></label>
+                                        <input type="text" id="mobile_no" name="mobile_no" class="form-control" value="{{ old('mobile_no') }}" placeholder="enter mobile number" maxlength="15">
+                                    </div>
                                 </div>
                             </div>
+                            {{-- row 1 ends --}}
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email"><strong>Email Address</strong></label>
+                                        <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="enter email address">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address"><strong>Address</strong></label>
+                                        <input type="text" id="address" name="address" class="form-control" value="{{ old('address') }}" placeholder="enter address">
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- row 2 ends --}}
 
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button type="submit" class="btn btn-success mt-3">Update Category</button>
+                                    <button type="submit" class="btn btn-success mt-3">Submit</button>
                                 </div>
                             </div>
-
+                            {{-- row 3 ends --}}
+                    
                         </form>
-
+                    
                     </div>
+                        
                 </div>
-            </div>
+                
+
+            <div>
         </div>
+        <!-- end col 12-->
     </div>
+    <!-- end row -->
 </div>
+<!-- container fluid ends -->
 </div>
+<!-- page content ends -->
 
 @endsection 
 
@@ -145,41 +175,49 @@ use Illuminate\Support\Facades\Crypt;
         $('#myForm').on('submit', function(e) {
             e.preventDefault();
 
-           // Client-side validation - IMPROVED
+            // Client-side validation
             if(!$('#name').val().trim()) {
                 if (typeof Notiflix !== 'undefined') {
-                    Notiflix.Notify.failure('Please enter a category name');
+                    Notiflix.Notify.failure('Please enter a customer name');
                 } else {
-                    alert('Please enter a category name');
+                    alert('Please enter a customer name');
+                }
+                return;
+            }
+
+            if(!$('#mobile_no').val().trim()) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure('Please enter a mobile number');
+                } else {
+                    alert('Please enter a mobile number');
+                }
+                return;
+            }
+
+            // Email validation (if provided)
+            if($('#email').val().trim() && !isValidEmail($('#email').val())) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure('Please enter a valid email address');
+                } else {
+                    alert('Please enter a valid email address');
                 }
                 return;
             }
 
             // Show loading
             if (typeof Notiflix !== 'undefined') {
-                Notiflix.Loading.standard('Updating category, please wait...');
+                Notiflix.Loading.standard('Creating customer, please wait...');
             } else {
-                console.log('Updating category...');  // ✅ At least shows something
+                console.log('Creating customer...');
             }
-
-            // Create FormData and manually add _method for PATCH
-            var formData = new FormData(this);
-            
-            // Ensure _method is set to PATCH
-            formData.set('_method', 'PATCH');
 
             $.ajax({
                 url: $(this).attr('action'),
-                type: 'POST',  // Always POST for Laravel
-                data: formData,
+                type: $(this).attr('method'),
+                data: new FormData(this),
                 contentType: false,
                 processData: false,
-                headers: {
-                    'X-HTTP-Method-Override': 'PATCH'  // Additional header for PATCH
-                },
                 success: function(data) {
-                    console.log('Success response:', data);
-                    
                     if (typeof Notiflix !== 'undefined') {
                         Notiflix.Loading.remove();
                     }
@@ -190,7 +228,7 @@ use Illuminate\Support\Facades\Crypt;
                         } else {
                             alert(data.message);
                         }
-                        
+                        $('#myForm')[0].reset();
                         if (data.redirect) {
                             window.location.href = data.redirect;
                         }
@@ -203,16 +241,11 @@ use Illuminate\Support\Facades\Crypt;
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log('Error response:', xhr.responseText);
-                    console.log('Status:', status);
-                    console.log('Error:', error);
-                    
                     if (typeof Notiflix !== 'undefined') {
                         Notiflix.Loading.remove();
                     }
                     
                     $('#errors').empty();
-                    
                     if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
                         $('#errorAlert').show();
                         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -228,17 +261,23 @@ use Illuminate\Support\Facades\Crypt;
                         }, 500);
                     } else {
                         $('#errorAlert').show();
-                        $('#errors').append('<li>Server Error: ' + (xhr.responseText || 'An error occurred. Please try again later.') + '</li>');
-                        
+                        $('#errors').append('<li>An error occurred. Please try again later.</li>');
                         if (typeof Notiflix !== 'undefined') {
                             Notiflix.Notify.failure('An error occurred. Please try again later.');
                         } else {
-                            alert('An error occurred: ' + xhr.responseText);
+                            alert('An error occurred. Please try again later.');
                         }
                     }
                 }
             });
         });
+
+        // Email validation helper function
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
     });
 </script>
 @endsection

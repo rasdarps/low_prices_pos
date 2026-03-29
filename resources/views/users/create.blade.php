@@ -94,6 +94,17 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="user_type"><strong>User Type: <span class="text-danger">*</span></strong></label>
+                                                <select id="user_type" name="user_type" class="form-control">
+                                                    <option value="" disabled selected>Select User Type</option>
+                                                    <option value="Admin" {{ old('user_type') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                                    <option value="User" {{ old('user_type') == 'User' ? 'selected' : '' }}>User</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     
                                     </div>
                                     {{-- row 1 ends --}}
@@ -296,6 +307,10 @@
                 }
                 if(!$('#roles').val() || $('#roles').val().length === 0) {
                     Notiflix.Notify.failure('Please select your Role');
+                    return;
+                }
+                if(!$('#user_type').val()) {
+                    Notiflix.Notify.failure('Please select User Type');
                     return;
                 }
 

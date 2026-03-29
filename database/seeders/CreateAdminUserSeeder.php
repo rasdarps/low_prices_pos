@@ -25,6 +25,7 @@ class CreateAdminUserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'phone' => '0242222874',  // Add phone number
             'password' => bcrypt('juliana@1985'),
+            'user_type' => 'Super Admin',
             'created_by' => 1  // Since this is the first admin user, set to 1 or null
         ]);
     
@@ -38,7 +39,12 @@ class CreateAdminUserSeeder extends Seeder
         $role->syncPermissions($permissions);
      
         //assigning roles to a user
-        $user->assignRole([$role->id]);
+        // $user->assignRole([$role->id]);
+
+        // 6. Assign the Admin role to the user
+        if (!$user->hasRole($role->name)) {
+            $user->assignRole($role->name);
+        }
         
     }
 }

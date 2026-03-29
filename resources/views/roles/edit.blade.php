@@ -34,38 +34,87 @@
 @endif
 
 
-{!! Form::model($role, ['method' => 'PATCH','route' => ['roles.update', $role->id]]) !!}
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Name:</strong>
-            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group">
-                <strong>Permission:</strong>
-                <br/>
-               
-           @foreach($permission as $value)
-           
-                       
-                <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name'))}}
-                    {{ $value->name }}</label>
-                 <br/>
-           
-            @endforeach
-        
-            </div>
-        </div>
+<form action="{{ route('roles.update', $role->id) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Name:</strong>
+                        <input type="text" name="name" value="{{ old('name', $role->name) }}" class="form-control" placeholder="Name">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <strong>Permission:</strong>
+                        <br/>
+                        
+                        {{-- Group permissions by category --}}
+                        @php
+                            $permissionGroups = [
+                                'User Management' => $permission->filter(function($perm) {
+                                    return str_contains($perm->name, 'user-') || str_contains($perm->name, 'unit-') || str_contains($perm->name, 'category-') || str_contains($perm->name, 'role');
+                                }),
+                                'Product Management' => $permission->filter(function($perm) {
+                                    return str_contains($perm->name, 'product-');
+                                }),
+                                'Supplier Management' => $permission->filter(function($perm) {
+                                    return str_contains($perm->name, 'supplier-');
+                                }),
 
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</div>
-{!! Form::close() !!}
+                                'Customer Management' => $permission->filter(function($perm) {
+                                    return str_contains($perm->name, 'customer-');
+                                }),
+
+                                'Transaction Management' => $permission->filter(function($perm) {
+                                    return str_contains($perm->name, 'transaction-')|| str_contains($perm->name, 'invoice-') || str_contains($perm->name, 'sales-') || str_contains($perm->name, 'purchase-');
+                                }),
+
+                                'Other Permissions' => $permission->filter(function($perm) {
+                                    return !str_contains($perm->name, 'user-') && 
+                                           !str_contains($perm->name, 'role-') &&
+                                           !str_contains($perm->name, 'unit-') &&
+                                           !str_contains($perm->name, 'category-') &&
+                                           !str_contains($perm->name, 'product-') && 
+                                           !str_contains($perm->name, 'supplier-') && 
+                                           !str_contains($perm->name, 'customer-') && 
+                                           !str_contains($perm->name, 'transaction-') && 
+                                           !str_contains($perm->name, 'invoice-') &&
+                                           !str_contains($perm->name, 'sales-') &&
+                                           !str_contains($perm->name, 'purchase-');
+
+                                })
+                            ];
+                        @endphp
+
+                        @foreach($permissionGroups as $groupName => $groupPermissions)
+                            @if($groupPermissions->count() > 0)
+                                <div class="mb-4">
+                                    <h6 class="text-primary fw-bold mb-3">{{ $groupName }}</h6>
+                                    <div class="row">
+                                        @foreach($groupPermissions as $value)
+                                            <div class="col-lg-4 col-md-6 col-12 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="permission[]" value="{{ $value->id }}"
+                                                        id="perm{{ $value->id }}"
+                                                        {{ in_array($value->id, $rolePermissions) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="perm{{ $value->id }}">
+                                                        {{ $value->name }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
 
 </div>
 </div>

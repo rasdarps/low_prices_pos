@@ -31,7 +31,8 @@ class UserController extends Controller
     
     public function index(Request $request)
     {
-        $data = User::orderBy('id','DESC')->paginate(5);
+        $data = User::where('user_type', '!=', 'Super Admin')
+                      ->orderBy('id','DESC')->paginate(5);
         return view('users.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -63,7 +64,8 @@ class UserController extends Controller
             'phone' => 'required|digits:10|numeric|unique:users,phone',
             'password' => 'required|same:confirm_password',
             'profile_image'=>'nullable',
-            'roles' => 'required'
+            'roles' => 'required',
+            'user_type' => 'required|in:Admin,User'
         ], [
             'name.required' => 'Full Name is required',
             'username.required' => 'Username is required',
@@ -73,6 +75,8 @@ class UserController extends Controller
             'password.required' => 'Password is required',
             'password.same' => 'Password and Confirm Password must match',
             'roles.required' => 'At least one role must be selected',
+            'user_type.required' => 'User Type is required',
+            'user_type.in' => 'User Type must be either Admin or User',
         ]);
 
         try {
@@ -178,7 +182,8 @@ class UserController extends Controller
                 'phone' => 'required|digits:10|numeric|unique:users,phone,' . $id,
                 'password' => 'nullable|same:confirm_password',
                 'profile_image'=>'nullable',
-                'roles' => 'required'
+                'roles' => 'required',
+                'user_type' => 'required|in:Admin,User'
             ], [
                 'name.required' => 'Full Name is required',
                 'username.required' => 'Username is required',
@@ -190,6 +195,8 @@ class UserController extends Controller
                 'phone.unique' => 'Phone number already exists',
                 'password.same' => 'Password and Confirm Password must match',
                 'roles.required' => 'At least one role must be selected',
+                'user_type.required' => 'User Type is required',
+                'user_type.in' => 'User Type must be either Admin or User',
             ]);
 
             try {

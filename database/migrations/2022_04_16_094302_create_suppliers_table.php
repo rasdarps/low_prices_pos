@@ -16,13 +16,24 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('mobile_no')->unique()->nullable();
+            $table->string('mobile_no', 15)->unique();
             $table->string('email')->nullable()->unique();
-            $table->string('address')->nullable();
-            $table->tinyInteger('status')->default('1');
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->text('address')->nullable();
+            $table->string('city', 100)->nullable();
+            $table->enum('type', ['Distributor', 'Wholesaler', 'Retailer', 'Manufacturer', 'Other'])->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
+
+            // Add foreign key constraints
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+
+            // Add indexes for better performance
+            $table->index('name');
+            $table->index('status');
+            $table->index('type');
         });
     }
 

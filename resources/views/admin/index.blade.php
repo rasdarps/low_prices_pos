@@ -79,7 +79,7 @@
 </div><!-- end col --> 
 
 <div class="col-xl-3 col-md-6">
-    <a href="{{ route('purchase.add') }}">
+    <a href="{{ route('purchases.create') }}">
     <div class="card buy-card">
     <div class="card-body">
         <div class="d-flex">
@@ -180,7 +180,7 @@
                 <td> 
                     @if($product->quantity <=  $product->stock_level)
                     <div class="font-size-13" bis_skin_checked="1">
-                        <a href="{{ route('purchase.add') }}" title="Reorder Product">
+                        <a href="{{ route('purchases.create') }}" title="Reorder Product">
                             <i class="ri-checkbox-blank-circle-fill font-size-10 text-danger align-middle me-2">
                             </i>Reorder
                         </a>

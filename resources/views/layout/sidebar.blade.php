@@ -34,8 +34,8 @@
                                                 <span>Purchase</span>
                                             </a>
                                             <ul class="sub-menu" aria-expanded="false">
-                                                <li><a href="{{ route('purchase.add') }}">Create</a></li>
-                                                <li><a href="{{ route('purchase.all') }}">All Purchase</a></li>
+                                                <li><a href="{{ route('purchases.create') }}">Create</a></li>
+                                                <li><a href="{{ route('purchases.index') }}">All Purchase</a></li>
                                                 {{-- <li><a href="{{ route('purchase.approved.list') }}">Approved List</a></li>
                                                 <li><a href="{{ route('purchase.pending.list') }}">Pending Approval</a></li> --}}
                                                 <li><a href="{{ route('print.purchase.list') }}">Print Purchase List</a></li>
@@ -77,8 +77,8 @@
                                         <span>Suppliers</span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{ route('supplier.add') }}">Create</a></li>
-                                        <li><a href="{{ route('supplier.all') }}">All Supplier</a></li>
+                                        <li><a href="{{ route('suppliers.create') }}">Create</a></li>
+                                        <li><a href="{{ route('suppliers.index') }}">All Supplier</a></li>
                                         
                                         
                                         
@@ -91,8 +91,8 @@
                                         <span>Customers</span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{ route('customer.add') }}">Create</a></li>
-                                        <li><a href="{{ route('customer.all') }}">All Customers</a></li>
+                                        <li><a href="{{ route('customers.create') }}">Create</a></li>
+                                        <li><a href="{{ route('customers.index') }}">All Customers</a></li>
                                         <li><a href="{{ route('credit.customer') }}">Credit Customers</a></li>
 
                                         <li><a href="{{ route('paid.customer') }}">Paid Customers</a></li>
@@ -119,8 +119,8 @@
                                         <span>Unit</span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{ route('unit.add') }}">Create</a></li>
-                                        <li><a href="{{ route('unit.all') }}">All Unit</a></li>
+                                        <li><a href="{{ route('units.create') }}">Create</a></li>
+                                        <li><a href="{{ route('units.index') }}">All Unit</a></li>
                                         
                                     </ul>
                                 </li>
@@ -131,8 +131,8 @@
                                         <span>Product</span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{ route('product.add') }}">Create</a></li>
-                                        <li><a href="{{ route('product.all') }}">All Product</a></li>
+                                        <li><a href="{{ route('products.create') }}">Create</a></li>
+                                        <li><a href="{{ route('products.index') }}">All Product</a></li>
                                     
                                     </ul>
                                 </li>

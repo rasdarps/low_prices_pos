@@ -1,10 +1,10 @@
-{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\category\edit.blade.php --}}
+{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\unit\edit.blade.php --}}
 @php
 use Illuminate\Support\Facades\Crypt;
 @endphp
 
 @extends('layout.main')
-@section('title') {{'Edit Category'}} @endsection
+@section('title') {{'Edit Unit'}} @endsection
 
 @section('content')
 
@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Crypt;
         <div class="col-12">
             <div class="card">
                 <div class="card-header with-border">
-                    <span class="card-title" style="font-size:20px;">Edit | Category </span>
+                    <span class="card-title" style="font-size:20px;">Edit | Unit </span>
 
-                    <a href="{{route('categories.index')}}" style="float:right">
+                    <a href="{{route('units.index')}}" style="float:right">
                         <button type="button" class="btn btn-primary modal_btn">
-                            View Categories
+                            View Units
                         </button>
                     </a>
 
@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Crypt;
 
                     <div class="card-body">
 
-                        <form action="{{ route('categories.update', Crypt::encrypt($category->id)) }}" method="POST" id="myForm" enctype="multipart/form-data">
+                        <form action="{{ route('units.update', Crypt::encrypt($unit->id)) }}" method="POST" id="myForm" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')  {{-- Using PATCH method --}}
 
@@ -43,14 +43,14 @@ use Illuminate\Support\Facades\Crypt;
 
                             <div class="col-md-6 mx-auto">
                                 <div class="form-group">
-                                    <label for="name"><strong>Category Name <span class="text-danger">*</span></strong></label>
-                                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $category->name) }}" placeholder="enter category name" onkeypress="return isCharKey(event)">
+                                    <label for="name"><strong>Unit Name <span class="text-danger">*</span></strong></label>
+                                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $unit->name) }}" placeholder="enter unit name" onkeypress="return isCharKey(event)">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button type="submit" class="btn btn-success mt-3">Update Category</button>
+                                    <button type="submit" class="btn btn-success mt-3">Update Unit</button>
                                 </div>
                             </div>
 
@@ -145,21 +145,21 @@ use Illuminate\Support\Facades\Crypt;
         $('#myForm').on('submit', function(e) {
             e.preventDefault();
 
-           // Client-side validation - IMPROVED
+            // Client-side validation
             if(!$('#name').val().trim()) {
                 if (typeof Notiflix !== 'undefined') {
-                    Notiflix.Notify.failure('Please enter a category name');
+                    Notiflix.Notify.failure('Please enter a unit name');
                 } else {
-                    alert('Please enter a category name');
+                    alert('Please enter a unit name');
                 }
                 return;
             }
 
             // Show loading
             if (typeof Notiflix !== 'undefined') {
-                Notiflix.Loading.standard('Updating category, please wait...');
+                Notiflix.Loading.standard('Updating unit, please wait...');
             } else {
-                console.log('Updating category...');  // ✅ At least shows something
+                console.log('Updating unit...');
             }
 
             // Create FormData and manually add _method for PATCH

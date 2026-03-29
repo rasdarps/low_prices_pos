@@ -15,13 +15,25 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_no');
+            $table->string('invoice_no')->unique();
             $table->date('date');
             $table->text('description')->nullable(); 
             $table->tinyInteger('status')->default('0')->comment('0=Pending, 1=Approved');
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            
+            // Fixed: Proper foreign key relationships to users table
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            
             $table->timestamps();
+
+            // Add foreign key constraints for created_by and updated_by
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+
+            // Add index for better performance on invoice searches
+            $table->index('invoice_no');
+            $table->index('date');
+            $table->index('status');
         });
     } 
 

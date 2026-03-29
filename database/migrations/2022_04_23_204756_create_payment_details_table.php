@@ -23,8 +23,14 @@ return new class extends Migration
             
             $table->double('current_paid_amount')->nullable();
             $table->date('date')->nullable();
-            $table->integer('updated_by')->nullable(); 
+            
+            // Fixed: Proper foreign key relationship to users table
+            $table->unsignedBigInteger('updated_by')->nullable();
+            
             $table->timestamps();
+
+            // Add foreign key constraint for updated_by
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

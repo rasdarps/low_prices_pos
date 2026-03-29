@@ -8,8 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    
+    protected $fillable = [
+        'invoice_no',
+        'date', 
+        'description',
+        'status',
+        'created_by',
+        'updated_by',
+    ];
 
+    protected $casts = [
+        'date' => 'date',
+        'status' => 'integer',
+    ];
+
+    // User relationships
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    // Existing relationships
     public function payment(){
         return $this->belongsTo(Payment::class,'id','invoice_id');
     }

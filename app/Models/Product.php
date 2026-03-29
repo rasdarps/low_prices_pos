@@ -8,7 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    // protected $guarded = [];
+    protected $fillable = [
+    'name',
+    'unit_id',
+    'category_id',
+    'quantity',
+    'stock_level',
+    'created_by',
+    'updated_by',
+];
+
+protected $casts = [
+    'quantity' => 'double',
+    'stock_level' => 'double', 
+    'status' => 'boolean',
+];
 
     /*public function supplier(){
         return $this->belongsTo(Supplier::class,'supplier_id','id');
@@ -31,6 +46,17 @@ class Product extends Model
     public function invoicedetails()
     {
         return $this->hasMany(InvoiceDetail::class);
+    }
+
+    // User relationships - NOW PROPERLY LINKED
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
    

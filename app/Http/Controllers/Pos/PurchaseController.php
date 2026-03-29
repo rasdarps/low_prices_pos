@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PurchasePaymentDetail;
+use Illuminate\Support\Facades\Crypt;
   
 class PurchaseController extends Controller
 {
@@ -27,21 +28,13 @@ class PurchaseController extends Controller
          $this->middleware('permission:purchase-delete', ['only' => ['destroy']]);
     }
 
-    public function PurchaseAll(){
+    // RESTful Methods
+    public function index(){
         $allData = Purchase::orderBy('date','desc')->orderBy('id','desc')->where('status','1')->get();
-            return view('backend.purchase.purchase_all',compact('allData'));
-
+        return view('backend.purchase.index',compact('allData'));
     } // End Method
 
-    public function ApprovedList(){
-        $allData = Purchase::orderBy('date','desc')->orderBy('id','desc')->where('status','1')->get();
-            return view('backend.purchase.purchase_approved_list',compact('allData'));
-
-    } // End Method
-
-
-    public function PurchaseAdd(){ 
-
+    public function create(){ 
         $unit = Unit::all();
         $category = Category::all();
         $suppliers = Supplier::all();
@@ -55,43 +48,36 @@ class PurchaseController extends Controller
             $purchase_no = '0' . $purchase_data+1;
         }
         $date = date('Y-m-d');
-        return view('backend.purchase.purchase_add',compact('purchase_no','category','date','suppliers','unit'));
-
+        return view('backend.purchase.create',compact('purchase_no','category','date','suppliers','unit'));
     } // End Method
 
-
-    public function PurchaseStore(Request $request){
-
-    if ($request->category_id == null) {
-
-        $notification = array(
-            'message' => 'Sorry You do not select any item', 
-            'alert-type' => 'error'
-        );
-        return redirect()->back()->with($notification);
-    
-    }
-    else{
-        if ($request->paid_amount > $request->estimated_amount) {
-
-           $notification = array(
-            'message' => 'Sorry Paid Amount is Maximum the total price', 
-            'alert-type' => 'error'
+    public function store(Request $request){
+        if ($request->category_id == null) {
+            $notification = array(
+                'message' => 'Sorry You do not select any item', 
+                'alert-type' => 'error'
             );
             return redirect()->back()->with($notification);
+        }
+        else{
+            if ($request->paid_amount > $request->estimated_amount) {
+               $notification = array(
+                'message' => 'Sorry Paid Amount is Maximum the total price', 
+                'alert-type' => 'error'
+                );
+                return redirect()->back()->with($notification);
+            } 
+        else {
 
-        } 
-    else {
-
-    $purchase = new Purchase();
-    $purchase->purchase_no = $request->purchase_no;
-    $purchase->date = date('Y-m-d',strtotime($request->date));
-    $purchase->description = $request->description;
-    $purchase->status = '1';
-    $purchase->created_by = Auth::user()->id; 
-
-    DB::transaction(function() use($request,$purchase){
-        if ($purchase->save()) {
+        // Use Model's fillable attributes
+        DB::transaction(function() use($request){
+            $purchase = Purchase::create([
+                'purchase_no' => $request->purchase_no,
+                'date' => $request->date,
+                'description' => $request->description,
+                'status' => 1,
+                'created_by' => Auth::id(),
+            ]);
             
            $count_category = count($request->category_id);
    
@@ -116,17 +102,16 @@ class PurchaseController extends Controller
               $product->save();
            }           
 
-
+            // Handle supplier creation/selection
             if ($request->supplier_id == '0') {
-                
-                $supplier = new Supplier();
-                $supplier->name = $request->name;
-                $supplier->mobile_no = $request->mobile_no;
-                $supplier->email = $request->email;
-                $supplier->save();
+                $supplier = Supplier::create([
+                    'name' => $request->name,
+                    'mobile_no' => $request->mobile_no,
+                    'email' => $request->email,
+                    'created_by' => Auth::id(),
+                ]);
                 $supplier_id = $supplier->id;
             } else{
-                
                 $supplier_id = $request->supplier_id;
             } 
 
@@ -157,84 +142,43 @@ class PurchaseController extends Controller
             $purchase_payment_details->purchase_id = $purchase->id; 
             $purchase_payment_details->date = date('Y-m-d',strtotime($request->date));
             $purchase_payment_details->save(); 
-          
-
-            } 
-
-            }); 
-
+        }); 
         } // end else 
     }
 
      $notification = array(
-        'message' => 'purchase Data Inserted Successfully', 
+        'message' => 'Purchase Data Inserted Successfully', 
         'alert-type' => 'success'
     );
-    return redirect()->route('purchase.all')->with($notification);  
+    return redirect()->route('purchases.index')->with($notification);  
     } // End Method
 
+    public function destroy($encryptedId){
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $purchase = Purchase::findOrFail($id);
+            
+            DB::transaction(function() use($purchase){
+                PurchaseDetail::where('purchase_id',$purchase->id)->delete(); 
+                PurchasePayment::where('purchase_id',$purchase->id)->delete(); 
+                PurchasePaymentDetail::where('purchase_id',$purchase->id)->delete(); 
+                $purchase->delete();
+            });
 
-    // public function PendingList(){
-    //     $allData = Purchase::orderBy('date','desc')->orderBy('id','desc')->where('status','0')->get();
-    //         return view('backend.purchase.purchase_pending_list',compact('allData'));
-    // } // End Method
+             $notification = array(
+            'message' => 'Purchase Deleted Successfully', 
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification); 
 
-
-
-    public function PurchaseDelete($id){
-
-        $purchase = purchase::findOrFail($id);
-        $purchase->delete();
-        PurchaseDetail::where('purchase_id',$purchase->id)->delete(); 
-        PurchasePayment::where('purchase_id',$purchase->id)->delete(); 
-        PurchasePaymentDetail::where('purchase_id',$purchase->id)->delete(); 
-
-         $notification = array(
-        'message' => 'Purchase Deleted Successfully', 
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification); 
-
+        } catch (\Exception $e) {
+            $notification = array(
+                'message' => 'Invalid purchase ID', 
+                'alert-type' => 'error'
+            );
+            return redirect()->back()->with($notification);
+        }
     }// End Method
-
-
-
-    // public function PurchaseApprove($id){
-
-    //     $purchase = Purchase::with('purchase_details')->findOrFail($id);
-    //     return view('backend.purchase.purchase_approve',compact('purchase'));
-
-    // }// End Method
-
-
-    // public function ApprovalStore(Request $request, $id){
-
-    //     $purchase = Purchase::findOrFail($id);
-    //     $purchase->updated_by = Auth::user()->id;
-    //     $purchase->status = '1';
-
-    //     DB::transaction(function() use($request,$purchase,$id){
-    //         foreach($request->buying_qty as $key => $val){
-    //          $purchase_details = PurchaseDetail::where('id',$key)->first();
-
-    //          $purchase_details->status = '1';
-    //          $purchase_details->save();
-
-    //          $product = Product::where('id',$purchase_details->product_id)->first();
-    //          $product->quantity = ((float)$request->buying_qty[$key]) + ((float)$product->quantity);
-    //          $product->save();
-    //         } // end foreach
-
-    //         $purchase->save();
-    //     });
-
-    // $notification = array(
-    //     'message' => 'Purchase Approved Successfully', 
-    //     'alert-type' => 'success'
-    // );
-    // return redirect()->route('purchase.pending.list')->with($notification);  
-
-    // } // End Method
 
 
     public function PrintPurchaseList(){
@@ -267,8 +211,5 @@ class PurchaseController extends Controller
         $end_date = date('Y-m-d',strtotime($request->end_date));
         return view('backend.pdf.daily_purchase_report_pdf',compact('allData','start_date','end_date'));
     } // End Method
-
-
-
+   
 }
- 

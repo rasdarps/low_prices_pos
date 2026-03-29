@@ -1,10 +1,10 @@
-{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\category\edit.blade.php --}}
-@php
+{{-- filepath: c:\xampp\htdocs\rictPOS\resources\views\backend\product\edit.blade.php --}}
+{{-- @php
 use Illuminate\Support\Facades\Crypt;
-@endphp
+@endphp --}}
 
 @extends('layout.main')
-@section('title') {{'Edit Category'}} @endsection
+@section('title') {{'Edit Product'}} @endsection
 
 @section('content')
 
@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Crypt;
         <div class="col-12">
             <div class="card">
                 <div class="card-header with-border">
-                    <span class="card-title" style="font-size:20px;">Edit | Category </span>
+                    <span class="card-title" style="font-size:20px;">Edit | Product </span>
 
-                    <a href="{{route('categories.index')}}" style="float:right">
+                    <a href="{{route('products.index')}}" style="float:right">
                         <button type="button" class="btn btn-primary modal_btn">
-                            View Categories
+                            View Products
                         </button>
                     </a>
 
@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Crypt;
 
                     <div class="card-body">
 
-                        <form action="{{ route('categories.update', Crypt::encrypt($category->id)) }}" method="POST" id="myForm" enctype="multipart/form-data">
+                        <form action="{{ route('products.update', Crypt::encrypt($product->id)) }}" method="POST" id="myForm" enctype="multipart/form-data">
                             @csrf
                             @method('PATCH')  {{-- Using PATCH method --}}
 
@@ -41,18 +41,56 @@ use Illuminate\Support\Facades\Crypt;
                                 <ul id="errors"></ul>
                             </div>
 
-                            <div class="col-md-6 mx-auto">
-                                <div class="form-group">
-                                    <label for="name"><strong>Category Name <span class="text-danger">*</span></strong></label>
-                                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $category->name) }}" placeholder="enter category name" onkeypress="return isCharKey(event)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name"><strong>Product Name <span class="text-danger">*</span></strong></label>
+                                        <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $product->name) }}" placeholder="enter product name">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="unit_id"><strong>Unit Name <span class="text-danger">*</span></strong></label>
+                                        <select name="unit_id" id="unit_id" class="form-control select2" aria-label="Select unit">
+                                            <option disabled value="">Select Unit</option>
+                                            @foreach($unit as $uni)
+                                            <option value="{{ $uni->id }}" {{ (old('unit_id', $product->unit_id) == $uni->id) ? 'selected' : '' }}>{{ $uni->name }}</option>
+                                           @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            {{-- row 1 ends --}}
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="category_id"><strong>Category Name <span class="text-danger">*</span></strong></label>
+                                        <select name="category_id" id="category_id" class="form-control select2" aria-label="Select category">
+                                            <option disabled value="">Select Category</option>
+                                            @foreach($category as $cat)
+                                            <option value="{{ $cat->id }}" {{ (old('category_id', $product->category_id) == $cat->id) ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                           @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="stock_level"><strong>Stock Level <span class="text-danger">*</span></strong></label>
+                                        <input type="number" id="stock_level" name="stock_level" class="form-control" value="{{ old('stock_level', $product->stock_level) }}" placeholder="enter stock level" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- row 2 ends --}}
 
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <button type="submit" class="btn btn-success mt-3">Update Category</button>
+                                    <button type="submit" class="btn btn-success mt-3">Update Product</button>
                                 </div>
                             </div>
+                            {{-- row 3 ends --}}
 
                         </form>
 
@@ -134,6 +172,10 @@ use Illuminate\Support\Facades\Crypt;
         border-color: #dc3545;
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
+
+    .select2 {
+        width: 100% !important;
+    }
 </style>
 @endsection
 
@@ -145,21 +187,48 @@ use Illuminate\Support\Facades\Crypt;
         $('#myForm').on('submit', function(e) {
             e.preventDefault();
 
-           // Client-side validation - IMPROVED
+            // Client-side validation
             if(!$('#name').val().trim()) {
                 if (typeof Notiflix !== 'undefined') {
-                    Notiflix.Notify.failure('Please enter a category name');
+                    Notiflix.Notify.failure('Please enter a product name');
                 } else {
-                    alert('Please enter a category name');
+                    alert('Please enter a product name');
+                }
+                return;
+            }
+
+            if(!$('#unit_id').val()) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure('Please select a unit');
+                } else {
+                    alert('Please select a unit');
+                }
+                return;
+            }
+
+            if(!$('#category_id').val()) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure('Please select a category');
+                } else {
+                    alert('Please select a category');
+                }
+                return;
+            }
+
+            if(!$('#stock_level').val() || $('#stock_level').val() < 0) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure('Please enter a valid stock level');
+                } else {
+                    alert('Please enter a valid stock level');
                 }
                 return;
             }
 
             // Show loading
             if (typeof Notiflix !== 'undefined') {
-                Notiflix.Loading.standard('Updating category, please wait...');
+                Notiflix.Loading.standard('Updating product, please wait...');
             } else {
-                console.log('Updating category...');  // ✅ At least shows something
+                console.log('Updating product...');
             }
 
             // Create FormData and manually add _method for PATCH
