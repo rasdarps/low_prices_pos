@@ -1,8 +1,8 @@
 @extends('layout.main')
-@section('title') {{'Create Purchase'}} @endsection
+@section('title') {{'Create Invoice'}} @endsection
 
 @section('content')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <div class="page-content">
         <div class="container-fluid">
@@ -10,10 +10,10 @@
                 <div class="col-12">
                     <div class="card" style="margin-top: 5px;">
                         <div class="card-header with-border">
-                            <span class="card-title" style="font-size:20px;">Create | Purchase</span>
-                            <a href="{{route('purchases.index')}}" style="float:right">
+                            <span class="card-title" style="font-size:20px;">Create | Invoice</span>
+                            <a href="{{route('invoices.index')}}" style="float:right">
                                 <button style="background-color:#034141" type="button" class="btn btn-primary modal_btn">
-                                    View Purchases
+                                    View Invoices
                                 </button>
                             </a>
                             <hr>
@@ -25,26 +25,22 @@
                                     </button>
                                     <ul id="errors"></ul>
                                 </div>
-                                <form method="post" action="{{ route('purchases.store') }}" id="purchaseForm">
+                                <form method="post" action="{{ route('invoices.store') }}" id="invoiceForm">
                                     @csrf
                                         <div class="row mb-2">
                                             <div class="col-md-4 d-flex align-items-center">
-                                                {{-- <label for="purchase_no" class="mb-0 mr-2" style="min-width:70px;"><strong>Number</strong></label> --}}
-                                                <input class="form-control" name="purchase_no" type="text" value="{{ $purchase_no }}" id="purchase_no" readonly style="background-color:#ddd;">
+                                                <input class="form-control" name="invoice_no" type="text" value="{{ $invoice_no }}" id="invoice_no" readonly style="background-color:#ddd;">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-center">
-                                                {{-- <label for="current_stock_qty" class="mb-0 mr-2" style="min-width:60px;"><strong>Stock</strong></label> --}}
                                                 <input class="form-control" name="current_stock_qty" type="text" id="current_stock_qty" readonly style="background-color:#ddd">
                                             </div>
                                             <div class="col-md-4 d-flex align-items-center justify-content-end">
-                                                {{-- <label for="date" class="mb-0 mr-2" style="min-width:60px;"><strong>Date <span class="text-danger">*</span></strong></label> --}}
                                                 <input class="form-control" value="{{ $date }}" name="date" type="date" id="date">
                                             </div>
                                         </div>
                                     <div class="row align-items-end mb-2">
                                         <div class="col-md-4">
                                             <div class="form-group mb-1 d-flex align-items-center">
-                                                {{-- <label for="category_id" class="mb-0 mr-2" style="min-width:90px;"><strong>Category <span class="text-danger">*</span></strong></label> --}}
                                                 <select name="category_id" id="category_id" class="form-control select2" aria-label="Select category">
                                                     <option disabled selected value="">Select Category</option>
                                                     @foreach($category as $cat)
@@ -55,7 +51,6 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group mb-1 d-flex align-items-center">
-                                                {{-- <label for="product_id" class="mb-0 mr-2" style="min-width:90px;"><strong>Product <span class="text-danger">*</span></strong></label> --}}
                                                 <select name="product_id" id="product_id" class="form-control select2" aria-label="Select product">
                                                     <option disabled selected value="">Select Product</option>
                                                 </select>
@@ -63,7 +58,6 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group mb-1 d-flex align-items-center">
-                                                {{-- <label for="unit_id" class="mb-0 mr-2" style="min-width:60px;"><strong>Unit <span class="text-danger">*</span></strong></label> --}}
                                                 <select name="unit_id" id="unit_id" class="form-control select2" aria-label="Select unit">
                                                     <option disabled selected value="">Select Unit</option>
                                                 </select>
@@ -126,32 +120,32 @@
                                             <input type="text" name="paid_amount" class="form-control paid_amount mt-2" placeholder="Enter Paid Amount" style="display:none;">
                                         </div>
                                         <div class="form-group col-md-9">
-                                            <label><strong>Supplier Name <span class="text-danger">*</span></strong></label>
-                                            <select name="supplier_id" id="supplier_id" class="form-control">
-                                                <option value="">Select Supplier</option>
-                                                @foreach($suppliers as $supplier)
-                                                    <option value="{{ $supplier->id }}">{{ $supplier->name }} - {{ $supplier->mobile_no }}</option>
+                                            <label><strong>Customer Name <span class="text-danger">*</span></strong></label>
+                                            <select name="customer_id" id="customer_id" class="form-control">
+                                                <option value="">Select Customer</option>
+                                                @foreach($costomer as $cust)
+                                                    <option value="{{ $cust->id }}">{{ $cust->name }} - {{ $cust->mobile_no }}</option>
                                                 @endforeach
-                                                <option value="0">New Supplier</option>
+                                                <option value="0">New Customer</option>
                                             </select>
                                         </div>
                                     </div>
 
-                                    <!-- Hidden Add Supplier Form -->
-                                    <div class="row new_supplier mt-3" style="display:none;">
+                                    <!-- Hidden Add Customer Form -->
+                                    <div class="row new_customer mt-3" style="display:none;">
                                         <div class="form-group col-md-4">
-                                            <input type="text" name="name" id="name" class="form-control" placeholder="Supplier Name">
+                                            <input type="text" name="name" id="name" class="form-control" placeholder="Customer Name">
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Supplier Mobile No" minlength="10" maxlength="10" onkeypress="return isNumberKey(event)">
+                                            <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Customer Mobile No" minlength="10" maxlength="10" onkeypress="return isNumberKey(event)">
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <input type="text" name="email" id="email" class="form-control" placeholder="Supplier Email">
+                                            <input type="text" name="email" id="email" class="form-control" placeholder="Customer Email">
                                         </div>
                                     </div>
                                     <div class="form-group mt-4">
                                         <center>
-                                            <button type="submit" class="btn btn-success storeButton" id="storeButton">Submit Purchase</button>
+                                            <button type="submit" class="btn btn-success storeButton" id="storeButton">Submit Invoice</button>
                                         </center>
                                     </div>
                                 </form>
@@ -162,13 +156,13 @@
             </div>
         </div>
     </div>
+</div>
+</div>
 
-@endsection 
+@endsection
 
 @section('styles')
     <style>
-        /* Ensure main content is not hidden under sidebar */
-        /* Remove custom margin, let theme handle sidebar spacing */
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease-in-out;
@@ -235,7 +229,7 @@
     <script type="text/javascript">
         $(document).ready(function (){
             // Handle form submission
-            $('#purchaseForm').on('submit', function(e) {
+            $('#invoiceForm').on('submit', function(e) {
                 e.preventDefault();
                 // Client-side validation (Notiflix style)
                 function notify(msg) {
@@ -244,13 +238,11 @@
                             timeout: 3000,
                             showOnlyTheLastOne: true,
                             position: 'right-top',
-                            // Notiflix default error color is red, matches category error style
                         });
                     } else {
                         alert(msg);
                     }
                 }
-
 
                 if(!$('#date').val().trim()) {
                     notify('Please enter a date');
@@ -269,16 +261,16 @@
                     return;
                 }
 
-                // Validate at least one purchase item
+                // Validate at least one invoice item
                 if($('#addRow').children('tr').length === 0) {
-                    notify('Please add at least one purchase item.');
+                    notify('Please add at least one invoice item.');
                     return;
                 }
 
-                // Validate purchase item fields (buying_qty, unit_price > 0)
+                // Validate invoice item fields (selling_qty, unit_price > 0)
                 var validItems = true;
                 $('#addRow tr').each(function() {
-                    var qty = $(this).find('input.buying_qty').val();
+                    var qty = $(this).find('input.selling_qty').val();
                     var price = $(this).find('input.unit_price').val();
                     if (!qty || isNaN(qty) || parseFloat(qty) <= 0) {
                         notify('Each item must have a valid quantity greater than 0.');
@@ -297,8 +289,8 @@
                     notify('Please select a paid status');
                     return;
                 }
-                if(!$('#supplier_id').val()) {
-                    notify('Please select a supplier');
+                if(!$('#customer_id').val()) {
+                    notify('Please select a customer name');
                     return;
                 }
 
@@ -311,30 +303,30 @@
                     }
                 }
 
-                // Validate new supplier fields if "New Supplier" is selected
-                if($('#supplier_id').val() === '0') {
+                // Validate new customer fields if "New Customer" is selected
+                if($('#customer_id').val() === '0') {
                     var name = $('#name').val();
                     var mobile = $('#mobile_no').val();
                     var email = $('#email').val();
                     if(!name || !name.trim()) {
-                        notify('Supplier name is required.');
+                        notify('Customer name is required.');
                         return;
                     }
                     if(!mobile || !/^\d{10}$/.test(mobile)) {
-                        notify('Supplier mobile number must be 10 digits.');
+                        notify('Customer mobile number must be 10 digits.');
                         return;
                     }
                     if(!email || !/^\S+@\S+\.\S+$/.test(email)) {
-                        notify('Please enter a valid supplier email.');
+                        notify('Please enter a valid customer email.');
                         return;
                     }
                 }
 
                 // Show loading
                 if (typeof Notiflix !== 'undefined') {
-                    Notiflix.Loading.standard('Creating purchase, please wait...');
+                    Notiflix.Loading.standard('Creating invoice, please wait...');
                 } else {
-                    console.log('Creating purchase...');
+                    console.log('Creating invoice...');
                 }
                 var form = this;
                 $.ajax({
@@ -354,8 +346,8 @@
                                 alert(data.message);
                             }
                             // Clear form fields
-                            $('#purchaseForm')[0].reset();
-                            // Remove all dynamic purchase items
+                            $('#invoiceForm')[0].reset();
+                            // Remove all dynamic invoice items
                             $('#addRow').empty();
                             // Hide and clear error alert
                             $('#errorAlert').hide();
@@ -364,12 +356,6 @@
                             if ($('.select2').length) {
                                 $('.select2').val('').trigger('change');
                             }
-                            // Fetch and set the next purchase number
-                            $.get("/purchases/next-number", function(res) {
-                                if (res.purchase_no) {
-                                    $('#purchase_no').val(res.purchase_no);
-                                }
-                            });
                         } else {
                             if (typeof Notiflix !== 'undefined') {
                                 Notiflix.Notify.failure(data.message);
@@ -397,28 +383,12 @@
                                 scrollTop: $('#errorAlert').offset().top - 100
                             }, 500);
                         } else {
-                            let duplicate = false;
-                            if (xhr.responseText && xhr.status === 500) {
-                                // Check for SQL duplicate entry error
-                                if (xhr.responseText.includes('1062') && xhr.responseText.includes('purchase_no')) {
-                                    duplicate = true;
-                                }
-                            }
                             $('#errorAlert').show();
-                            if (duplicate) {
-                                $('#errors').append('<li>Duplicate purchase number. Please refresh the page and try again.</li>');
-                                if (typeof Notiflix !== 'undefined') {
-                                    Notiflix.Notify.failure('Duplicate purchase number. Please refresh the page and try again.');
-                                } else {
-                                    alert('Duplicate purchase number. Please refresh the page and try again.');
-                                }
+                            $('#errors').append('<li>An error occurred. Please try again later.</li>');
+                            if (typeof Notiflix !== 'undefined') {
+                                Notiflix.Notify.failure('An error occurred. Please try again later.');
                             } else {
-                                $('#errors').append('<li>An error occurred. Please try again later.</li>');
-                                if (typeof Notiflix !== 'undefined') {
-                                    Notiflix.Notify.failure('An error occurred. Please try again later.');
-                                } else {
-                                    alert('An error occurred. Please try again later.');
-                                }
+                                alert('An error occurred. Please try again later.');
                             }
                         }
                     }
@@ -427,233 +397,255 @@
         });
     </script>
 
-    {{-- Handles delete and add item --}}
     <script id="document-template" type="text/x-handlebars-template">
      
-        <tr class="delete_add_more_item" id="delete_add_more_item">
-            <input type="hidden" name="date" value="@{{date}}">
-            <input type="hidden" name="purchase_no" value="@{{purchase_no}}">
-            
-    
-            <td>
-                <input type="hidden" name="category_id[]" value="@{{category_id}}">
-                @{{ category_name }}
-            </td>
+    <tr class="delete_add_more_item" id="delete_add_more_item">
+        <input type="hidden" name="date" value="@{{date}}">
+        <input type="hidden" name="invoice_no" value="@{{invoice_no}}">
+        
+   
+        <td>
+            <input type="hidden" name="category_id[]" value="@{{category_id}}">
+            @{{ category_name }}
+        </td>
 
-            <td>
-                <input type="hidden" name="product_id[]" value="@{{product_id}}">
-                @{{ product_name }}
-            </td>
-
-
-            <td>
-                <input type="number" min="1" class="form-control buying_qty text-right" id="buying_qty" name="buying_qty[]" value="{{ old('buying_qty') }}"> 
-            </td>
-
-            <td>
-                <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}"> 
-            </td>
-
-            <td>
-                <input type="hidden" name="unit_id[]" value="@{{unit_id}}">
-                @{{ unit_name }}
-            </td>
-
-            <td>
-                <input type="number" class="form-control buying_price text-right" name="buying_price[]" value="0" readonly> 
-            </td>
-
-            <td>
-                <i class="btn btn-danger btn-sm fas fa-window-close removeeventmore"></i>
-            </td>
-
-        </tr>
-
-    </script>
-
-     {{-- handles add more item in purchase --}}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(document).on("click", ".addeventmore", function(){
-                var date = $('#date').val();
-                var purchase_no = $('#purchase_no').val(); 
-                var category_id  = $('#category_id').val();
-                var category_name = $('#category_id').find('option:selected').text();
-                var product_id = $('#product_id').val();
-                var product_name = $('#product_id').find('option:selected').text();
-                var unit_id  = $('#unit_id').val();
-                var unit_name = $('#unit_id').find('option:selected').text();
-                function notifyPop(msg) {
-                    if (typeof Notiflix !== 'undefined') {
-                        Notiflix.Notify.failure(msg);
-                    } else if (typeof $.notify !== 'undefined') {
-                        $.notify(msg, {globalPosition: 'top right', className:'error'});
-                    } else {
-                        alert(msg);
-                    }
-                }
-
-                if(date == ''){
-                    notifyPop("Date is Required");
-                    return false;
-                }
-                if(category_id == '' || category_name.trim() === 'Select Category'){
-                    notifyPop("Category is Required");
-                    return false;
-                }
-                if(product_id == '' || product_name.trim() === 'Select Product'){
-                    notifyPop("Product Field is Required");
-                    return false;
-                }
-                if(unit_id == '' || unit_name.trim() === 'Select Unit'){
-                    notifyPop("Unit Field is Required");
-                    return false;
-                }
-
-                var source = $("#document-template").html();
-                var tamplate = Handlebars.compile(source);
-                var data = {
-                    date:date,
-                    purchase_no:purchase_no, 
-                    category_id:category_id,
-                    category_name:category_name,
-                    product_id:product_id,
-                    product_name:product_name,
-                    unit_id:unit_id,
-                    unit_name:unit_name,
-                };
-                var html = tamplate(data);
-                $("#addRow").append(html);
-            });
-
-            $(document).on("click",".removeeventmore",function(event){
-                $(this).closest(".delete_add_more_item").remove();
-                totalAmountPrice();
-            });
-
-            $(document).on('keyup click','.unit_price,.buying_qty', function(){
-                var unit_price = $(this).closest("tr").find("input.unit_price").val();
-                var qty = $(this).closest("tr").find("input.buying_qty").val();
-                var total = unit_price * qty;
-                $(this).closest("tr").find("input.buying_price").val(total);
-                $('#discount_amount').trigger('keyup');
-            });
-
-            $(document).on('keyup','#discount_amount',function(){
-                totalAmountPrice();
-            });
-
-            // Calculate sum of amout in purchase 
-
-            function totalAmountPrice(){
-                var sum = 0;
-                $(".buying_price").each(function(){
-                    var value = $(this).val();
-                    if(!isNaN(value) && value.length != 0){
-                        sum += parseFloat(value);
-                    }
-                });
-
-                var discount_amount = parseFloat($('#discount_amount').val());
-                if(!isNaN(discount_amount) && discount_amount.length != 0){
-                        sum -= parseFloat(discount_amount);
-                    }
-
-                $('#estimated_amount').val(sum);
-            }  
-
-        });
-
-
-    </script>
- 
-    {{-- auto pull product when category selected --}}
-    <script type="text/javascript">
+        <td>
+            <input type="hidden" name="product_id[]" value="@{{product_id}}">
+            @{{ product_name }}
+        </td>
 
         
-        $(function(){
-            $(document).on('change','#category_id',function(){
-                var category_id = $(this).val();
-                $.ajax({
-                    url:"{{ route('get-product') }}",
-                    type: "GET",
-                    data:{category_id:category_id},
-                    success:function(data){
-                        var html = '<option value="">Select Product</option>';
-                        $.each(data,function(key,v){
-                            html += '<option value=" '+v.id+' "> '+v.name+'</option>';
-                        });
-                        $('#product_id').html(html);
-                    }
-                })
-            });
+        <td>
+            <input type="number" min="1" class="form-control selling_qty text-right" id="selling_qty" name="selling_qty[]" value="{{ old('selling_qty') }}" onchange="checkQuantity()"> 
+        </td>
+
+        <td>
+            <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}" onchange="checkQuantity()"> 
+        </td>
+
+        <td>
+            <input type="hidden" name="unit_id[]" value="@{{unit_id}}">
+            @{{ unit_name }}
+        </td>
+
+
+        <td>
+            <input type="number" class="form-control selling_price text-right" name="selling_price[]" value="0" readonly> 
+            
+        </td>
+
+        <td>
+            <i class="btn btn-danger btn-sm fas fa-window-close removeeventmore"></i>
+        </td>
+
+    </tr>
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on("click", ".addeventmore", function(){
+            var date = $('#date').val();
+            var invoice_no = $('#invoice_no').val(); 
+            var category_id  = $('#category_id').val();
+            var category_name = $('#category_id').find('option:selected').text();
+            var product_id = $('#product_id').val();
+            var product_name = $('#product_id').find('option:selected').text();
+            var unit_id  = $('#unit_id').val();
+            var unit_name = $('#unit_id').find('option:selected').text();
+
+            function notifyPop(msg) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure(msg);
+                } else {
+                    alert(msg);
+                }
+            }
+
+            if(date == ''){
+                notifyPop("Date is Required");
+                return false;
+            }
+            if(category_id == '' || category_name.trim() === 'Select Category'){
+                notifyPop("Category is Required");
+                return false;
+            }
+            if(product_id == '' || product_name.trim() === 'Select Product'){
+                notifyPop("Product Field is Required");
+                return false;
+            }
+            if(unit_id == '' || unit_name.trim() === 'Select Unit'){
+                notifyPop("Unit Field is Required");
+                return false;
+            }
+
+            var source = $("#document-template").html();
+            var tamplate = Handlebars.compile(source);
+            var data = {
+                date:date,
+                invoice_no:invoice_no, 
+                category_id:category_id,
+                category_name:category_name,
+                product_id:product_id,
+                product_name:product_name,
+                unit_id:unit_id,
+                unit_name:unit_name,
+            };
+            var html = tamplate(data);
+            $("#addRow").append(html);
         });
 
-    </script> 
+        $(document).on("click",".removeeventmore",function(event){
+            $(this).closest(".delete_add_more_item").remove();
+            totalAmountPrice();
+        });
 
-    <!--Select Product to pull related Unit-->
-    <script type="text/javascript">
-        $(function(){
-            $(document).on('change','#product_id',function(){
-                var product_id = $(this).val();
-                $.ajax({
-                    url:"{{ route('get-unit') }}",
-                    type: "GET",
-                    data:{product_id:product_id},
-                    success:function(data){
-                        var html = '<option value="">Select Unit</option>';
-                        $.each(data,function(key,v){
-                            html += '<option value=" '+v.unit_id+' "> '+v.unit.name+'</option>';
-                        });
-                        $('#unit_id').html(html);
-                    }
-                })
+        $(document).on('keyup click','.unit_price,.selling_qty', function(){
+            var unit_price = $(this).closest("tr").find("input.unit_price").val();
+            var qty = $(this).closest("tr").find("input.selling_qty").val();
+            var total = unit_price * qty;
+            $(this).closest("tr").find("input.selling_price").val(total);
+            $('#discount_amount').trigger('keyup');
+        });
+
+        $(document).on('keyup','#discount_amount',function(){
+            totalAmountPrice();
+        });
+
+        // Calculate sum of amout in invoice 
+
+        function totalAmountPrice(){
+            var sum = 0;
+            $(".selling_price").each(function(){
+                var value = $(this).val();
+                if(!isNaN(value) && value.length != 0){
+                    sum += parseFloat(value);
+                }
+            });
+
+            var discount_amount = parseFloat($('#discount_amount').val());
+            if(!isNaN(discount_amount) && discount_amount.length != 0){
+                    sum -= parseFloat(discount_amount);
+                }
+
+            $('#estimated_amount').val(sum);
+        }  
+
+    });
+
+
+</script>
+ 
+
+<script type="text/javascript">
+
+    //auto pull product when category selected
+    $(function(){
+        $(document).on('change','#category_id',function(){
+            var category_id = $(this).val();
+            $.ajax({
+                url:"{{ route('get-product') }}",
+                type: "GET",
+                data:{category_id:category_id},
+                success:function(data){
+                    var html = '<option value="">Select Category</option>';
+                    $.each(data,function(key,v){
+                        html += '<option value=" '+v.id+' "> '+v.name+'</option>';
+                    });
+                    $('#product_id').html(html);
+                }
+            })
+        });
+    });
+
+</script>
+
+<!--Select Product to pull related Unit-->
+<script type="text/javascript">
+    $(function(){
+        $(document).on('change','#product_id',function(){
+            var product_id = $(this).val();
+            $.ajax({
+                url:"{{ route('get-unit') }}",
+                type: "GET",
+                data:{product_id:product_id},
+                success:function(data){
+                    var html = '<option value="">Select Unit</option>';
+                    $.each(data,function(key,v){
+                        html += '<option value=" '+v.unit_id+' "> '+v.unit.name+'</option>';
+                    });
+                    $('#unit_id').html(html);
+                }
+            })
+        });
+    });
+</script>
+ 
+ <script type="text/javascript">
+   //get current stock quantity when product selected
+    $(function(){
+        $(document).on('change','#product_id',function(){
+            var product_id = $(this).val();
+            $.ajax({
+                url:"{{ route('check-product-stock') }}",
+                type: "GET",
+                data:{product_id:product_id},
+                success:function(data){                   
+                    $('#current_stock_qty').val(data);
+                }
             });
         });
+    });
+
+</script>
+
+{{-- check quantity script --}}
+<script>
+    function checkQuantity() {
+      var unit_prices = document.getElementsByName('unit_price[]');
+      var current_stock_qtys = document.getElementsByName('current_stock_qty');
+      var selling_qtys = document.getElementsByName('selling_qty[]');
+      
+      for (var i = 0; i < unit_prices.length; i++) {
+        var unit_price = unit_prices[i];
+        // var current_stock_qty = current_stock_qtys[i];
+        var selling_qty = selling_qtys[i];
+        
+        if (parseInt(selling_qty.value) > parseInt(current_stock_qty.value)) {
+          alert('Selling quantity cannot be more than current stock quantity!');
+          unit_price.disabled = true;
+        } else {
+          unit_price.disabled = false;
+        }
+      }
+    }
     </script>
-
-    {{-- get current stock quantity when product selected --}}
-    <script type="text/javascript">
-        $(function(){
-            $(document).on('change','#product_id',function(){
-                var product_id = $(this).val();
-                $.ajax({
-                    url:"{{ route('check-product-stock') }}",
-                    type: "GET",
-                    data:{product_id:product_id},
-                    success:function(data){                   
-                        $('#current_stock_qty').val(data);
-                    }
-                });
-            });
-        });
-
-    </script>
-
     
-    {{-- //Payment and customer validation --}}
-    <!-- Removed old .storeButton click validation handler. All validation now uses Notiflix in the main form submission handler. -->
 
-    {{-- //payment status and customer show or hide --}}
-    <script type="text/javascript">
-        $(document).on('change','#paid_status', function(){
-            var paid_status = $(this).val();
-            if (paid_status == 'partial_paid') {
-                $('.paid_amount').show();
-            }else{
-                $('.paid_amount').hide();
-            }
-        });
-
-        $(document).on('change','#supplier_id', function(){
-            var supplier_id = $(this).val();
-            if (supplier_id == '0') {
-                $('.new_supplier').show();
-            }else{
-                $('.new_supplier').hide();
-            }
-        });
+<!-- Removed old .storeButton click validation handler. All validation now uses Notiflix in the main form submission handler. -->
 
 
-    </script>  
+<script type="text/javascript">
+   //payment status and customer show or hide
+    $(document).on('change','#paid_status', function(){
+        var paid_status = $(this).val();
+        if (paid_status == 'partial_paid') {
+            $('.paid_amount').show();
+        }else{
+            $('.paid_amount').hide();
+        }
+    });
+
+      $(document).on('change','#customer_id', function(){
+        var customer_id = $(this).val();
+        if (customer_id == '0') {
+            $('.new_customer').show();
+        }else{
+            $('.new_customer').hide();
+        }
+    });
+
+
+</script>
 @endsection

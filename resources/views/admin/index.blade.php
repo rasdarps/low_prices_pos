@@ -1,5 +1,5 @@
-@extends('admin.admin_master')
-@section('title') {{'Admin Dashboard'}} @endsection
+@extends('layout.main')
+@section('title') {{'Create Invoice'}} @endsection
 
 <style>
     .sell-card{
@@ -23,7 +23,8 @@
 
 
 </style>
-@section('admin')
+
+@section('content')
 
 
 <div class="page-content">
@@ -56,7 +57,7 @@
 
 <div class="row">
     <div class="col-xl-3 col-md-6">
-    <a href="{{ route('invoice.add') }}">
+    <a href="{{ route('invoices.create') }}">
     <div class="card sell-card">
     <div class="card-body">
         <div class="d-flex">

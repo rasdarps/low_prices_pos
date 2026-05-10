@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Pos;
 
+use App\DataTables\Admin\Settings\UnitsDataTable;
+use App\Http\Controllers\Controller;
 use App\Models\Unit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class UnitController extends Controller
 {
@@ -19,13 +18,16 @@ class UnitController extends Controller
          $this->middleware('permission:unit-create', ['only' => ['create','store']]);
          $this->middleware('permission:unit-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:unit-delete', ['only' => ['destroy']]);
+    } 
+
+    public function index(UnitsDataTable $dataTable)
+    {
+        //
+        return $dataTable->render('backend.unit.index');
+
     }
 
-    public function index(){
-        $units = Unit::orderBy('name', 'asc')->get();
-        return view('backend.unit.index', compact('units'));
-    } // End Method 
-
+    
     public function create(){
         return view('backend.unit.create');
     } // End Method 
@@ -145,10 +147,10 @@ class UnitController extends Controller
         }
     }// End Method 
 
-    public function destroy($encryptedId){
+    public function destroy($id){
         try {
-            $id = Crypt::decrypt($encryptedId);
-            $unit = Unit::find($id);
+            // $id = Crypt::decrypt($encryptedId);
+            $unit = Unit::findOrFail(Crypt::decrypt($id));
             
             if (!$unit) {
                 return response()->json([

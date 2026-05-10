@@ -77,8 +77,8 @@
         <div class="os-animation" data-os-animation="zoomIn" data-os-animation-delay="0.5s">
             <div class="col-md-8 mx-auto">
             <img src="{{asset('images/spinners.gif')}}" width="200px" /> <br><br>
-                <h1 style="text-align:center;">rictPOS System.....</h1>
-                <h5 style="text-align:center;">Powered by <a href="https://rictconsult.com">RICT Consult.....</a></h5>
+                <h1 style="text-align:center;">Low Prices POS System.....</h1>
+                <h5 style="text-align:center;">Powered by <a href="https://rictconsult.org">RICT Consult.....</a></h5>
             </div>
         </div>
 

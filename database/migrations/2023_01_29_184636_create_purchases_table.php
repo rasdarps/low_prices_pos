@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('purchase_no')->nullable();
-            $table->date('date')->nullable();
+            $table->string('purchase_no')->unique();
+            $table->date('date');
             $table->text('description')->nullable(); 
             $table->tinyInteger('status')->default('1')->comment('0=Pending, 1=Approved');
             

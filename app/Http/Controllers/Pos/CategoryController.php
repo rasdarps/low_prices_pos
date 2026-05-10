@@ -2,24 +2,30 @@
 
 namespace App\Http\Controllers\Pos;
 
+use App\DataTables\Admin\Settings\CategoryDataTable;
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 
 class CategoryController extends Controller
 {
-    public function index(){
+    // public function index(){
 
-        $categoris = Category::orderBy('name', 'asc')->get();
-        return view('backend.category.index',compact('categoris'));
+    //     $categoris = Category::orderBy('name', 'asc')->get();
+    //     return view('backend.category.index',compact('categoris'));
 
-    } // End Mehtod 
+    // } 
+
+    public function index(CategoryDataTable $dataTable)
+    {
+        //
+        return $dataTable->render('backend.category.index');
+    }
+
 
     public function create(){
      return view('backend.category.create');

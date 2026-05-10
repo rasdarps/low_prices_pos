@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
@@ -202,7 +201,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
             Route::get('/edit/{id}', [PurchaseController::class, 'edit'])->name('edit');
             Route::patch('/update/{id}', [PurchaseController::class, 'update'])->name('update');
             Route::delete('/destroy/{id}', [PurchaseController::class, 'destroy'])->name('destroy');
-             
+            // Route to get the next purchase number
+            Route::get('/next-number', [PurchaseController::class, 'nextNumber'])->name('nextNumber');
 
          });
 
@@ -228,11 +228,26 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
         });
 
 
+         // Invoice All Route 
+        Route::prefix('invoices')->name('invoices.')->group(function () {
+            Route::get('/', [InvoiceController::class, 'index'])->name('index');
+            // Route::get('/show/{id}', [CategoryController::class, 'show'])->name('show');
+            Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+            Route::post('/store', [InvoiceController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [InvoiceController::class, 'edit'])->name('edit');
+            Route::patch('/update/{id}', [InvoiceController::class, 'update'])->name('update');
+            Route::delete('/destroy/{id}', [InvoiceController::class, 'destroy'])->name('destroy');
+            // Route to get the next invoice number
+            Route::get('/next-number', [InvoiceController::class, 'nextNumber'])->name('nextNumber');
+
+         });
+
+
         // Invoice All Route 
         Route::controller(InvoiceController::class)->group(function () {
-            Route::get('/invoice/all', 'InvoiceAll')->name('invoice.all'); 
-            Route::get('/invoice/add', 'invoiceAdd')->name('invoice.add');
-            Route::post('/invoice/store', 'InvoiceStore')->name('invoice.store');
+            // Route::get('/invoice/all', 'InvoiceAll')->name('invoice.all'); 
+            // Route::get('/invoice/add', 'invoiceAdd')->name('invoice.add');
+            // Route::post('/invoice/store', 'InvoiceStore')->name('invoice.store');
 
             // Route::get('/invoice/pending/list', 'PendingList')->name('invoice.pending.list');
             // Route::get('/invoice/approved/list', 'ApprovedList')->name('invoice.approved.list');

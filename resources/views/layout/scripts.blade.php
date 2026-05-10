@@ -11,14 +11,31 @@
         <!-- jquery.vectormap map -->
         <script src="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
         <script src="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script>
-
-        <!-- Required datatable js -->
-        <script src="{{ asset('backend/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('backend/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
         
-        <!-- Responsive examples -->
-        <script src="{{ asset('backend/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('backend/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+        {{-- Yajra Data Table Scripts --}}
+         <!-- CDN Scripts -->
+         <!-- JQUERY DataTables -->
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <!-- Bootstrap 4 integration -->
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+        <!-- Responsive -->
+        <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap4.min.js"></script>
+        <!-- Buttons -->
+        <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+        <!-- Export dependencies -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <!-- Buttons features -->
+        <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+        
+        <!-- Datatable init js -->
+        <script src="{{ asset('backend/assets/js/pages/datatables.init.js') }}"></script>
+
+        {{-- Yajra Data Table Scripts end--}}
 
         <script src="{{ asset('backend/assets/js/pages/dashboard.init.js') }}"></script>
 
@@ -56,22 +73,6 @@
  @endif 
  
 </script>
-
- <!-- Required datatable js -->
- <script src="{{ asset('backend/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
- <script src="{{ asset('backend/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
- <script src="{{ asset('backend/assets/libs/datatables.net-bs4/js/dataTables.buttons.min.js') }}"></script>
-
- <!-- Datatable init js -->
- <script src="{{ asset('backend/assets/js/pages/datatables.init.js') }}"></script>
-
- <!--New Datatables-->
- <script type="text/javascript" src="{{asset('datatables/JSZip-2.5.0/jszip.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('datatables/pdfmake-0.1.36/pdfmake.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('datatables/pdfmake-0.1.36/vfs_fonts.js')}}"></script>
-<script type="text/javascript" src="{{asset('datatables/Buttons-2.2.3/js/dataTables.buttons.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('datatables/Buttons-2.2.3/js/buttons.html5.min.js')}}"></script>
-<script type="text/javascript" src="{{asset('datatables/Buttons-2.2.3/js/buttons.print.min.js')}}"></script>
 
  <!-- field Validation -->
  <script src="{{ asset('backend/assets/js/validate.min.js') }}"></script>

@@ -22,7 +22,7 @@ return new class extends Migration
             ->onDelete('cascade');
             
             $table->double('current_paid_amount')->nullable();
-            $table->date('date')->nullable();
+            $table->date('date');
             
             // Fixed: Proper foreign key relationship to users table
             $table->unsignedBigInteger('updated_by')->nullable();

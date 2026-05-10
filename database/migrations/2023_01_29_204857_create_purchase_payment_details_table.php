@@ -22,7 +22,7 @@ return new class extends Migration
             ->onDelete('cascade');
             
             $table->double('current_paid_amount')->nullable();
-            $table->date('date')->nullable();
+            $table->date('date');
             $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });

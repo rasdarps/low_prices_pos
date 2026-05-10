@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionTableSeeder extends Seeder
 {
@@ -32,13 +31,13 @@ class PermissionTableSeeder extends Seeder
          }
 
 
-          //Job Applications Management Permissions
+          //Products Management Permissions
         $products_management_permissions = [
             'product-list','product-create','product-edit','product-delete',
             
         ];
 
-         // Create job application permissions in the database if they don't already exist
+         // Create products management permissions in the database if they don't already exist
         foreach ($products_management_permissions as $product_permission) {
             Permission::firstOrCreate(['name' => $product_permission]);
         }
@@ -50,7 +49,7 @@ class PermissionTableSeeder extends Seeder
         ];
 
 
-        // Create job application permissions in the database if they don't already exist
+        // Create supplier management permissions in the database if they don't already exist
         foreach ($supplier_management_permissions as $supplier_permission) {
             Permission::firstOrCreate(['name' => $supplier_permission]);
         }
@@ -61,7 +60,7 @@ class PermissionTableSeeder extends Seeder
         ];
 
 
-        // Create job application permissions in the database if they don't already exist
+        // Create customer management permissions in the database if they don't already exist
         foreach ($customers_management_permissions as $customer_permission) {
             Permission::firstOrCreate(['name' => $customer_permission]);
         }
@@ -73,7 +72,7 @@ class PermissionTableSeeder extends Seeder
         ];
 
 
-        // Create job application permissions in the database if they don't already exist
+        // Create transactions management permissions in the database if they don't already exist
         foreach ($transactions_management_permissions as $transaction_permission) {
             Permission::firstOrCreate(['name' => $transaction_permission]);
         }
@@ -104,6 +103,11 @@ class PermissionTableSeeder extends Seeder
             if (!$role->hasPermissionTo($supplier_permission)) {
                 $role->givePermissionTo($supplier_permission);
             }
+
+            // Check if Manager doesn't have the permission, then assign it
+            if (!$manager_role->hasPermissionTo($supplier_permission)) {
+                $manager_role->givePermissionTo($supplier_permission);
+            }
            
         }
 
@@ -114,7 +118,11 @@ class PermissionTableSeeder extends Seeder
             if (!$role->hasPermissionTo($customer_permission)) {
                 $role->givePermissionTo($customer_permission);
             }
-           
+            // Check if Manager doesn't have the permission, then assign it
+            if (!$manager_role->hasPermissionTo($customer_permission)) {
+                $manager_role->givePermissionTo($customer_permission);
+            }
+
         }
 
         
@@ -124,7 +132,10 @@ class PermissionTableSeeder extends Seeder
             if (!$role->hasPermissionTo($transaction_permission)) {
                 $role->givePermissionTo($transaction_permission);
             }
-           
+            // Check if Manager doesn't have the permission, then assign it
+            if (!$manager_role->hasPermissionTo($transaction_permission)) {
+                $manager_role->givePermissionTo($transaction_permission);
+            }
         }
 
 

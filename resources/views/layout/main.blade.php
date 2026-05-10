@@ -20,16 +20,15 @@
         <link href="{{ asset('backend/assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
         
         <!-- DataTables -->
-        <link href="{{ asset('backend/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
-
-        <!-- Responsive datatable examples -->
+        {{-- <link href="{{ asset('backend/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('backend/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />  
-         
-        <!--new datatables css-->
-         <!-- Custom datatable styles for this page -->
         <link rel="stylesheet" type="text/css" href="{{asset('datatables/Buttons-2.2.3/css/buttons.dataTables.min.css')}}"/>
-        <link href="{{asset('datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-        
+        <link href="{{asset('datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> --}}
+        <!-- Yajra DataTables CSS -->
+       <link href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" rel="stylesheet">
+       <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+       <link rel="stylesheet" href="{{ asset('DataTables/datatables.css') }}" />  
+
         {{-- notiflix --}}
         <link rel="stylesheet" href=  "{{ asset('notiflix/notiflix-3.2.8.min.css') }}"/>
 
@@ -47,10 +46,58 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
         
         @yield('styles')
+
+        <style>
+            /* Yajra DataTables Global Styles */
+            table.dataTable thead th {
+                border-bottom: 2px solid #dee2e6 !important;
+                border-top: none !important;
+                border-left: none !important;
+                border-right: none !important;
+                background-color: #f8f9fa !important;
+                font-weight: 600 !important;
+                padding: 12px 8px !important;
+            }
+             table.dataTable tbody tr {
+                border-bottom: 1px solid #dee2e6 !important;
+                border-top: none !important;
+                border-left: none !important;
+                border-right: none !important;
+            }
+
+            table.dataTable tbody td {
+                padding: 10px 8px !important;
+                border: none !important;
+                border-bottom: 1px solid #dee2e6 !important;
+            }
+            
+            table.dataTable tbody tr:nth-child(odd) {
+                background-color: #ffffff !important;
+            }
+            
+            table.dataTable tbody tr:nth-child(even) {
+                background-color: #f8f9fa !important;
+            }
+            
+            table.dataTable tbody tr:hover {
+                background-color: #e9ecef !important;
+            }
+            
+            /* Remove all outer table borders */
+            table.dataTable {
+                border: none !important;
+                border-collapse: collapse !important;
+            }
+            
+            table.dataTable tbody tr:hover {
+                background-color: #e9ecef !important;
+            }
+        </style>
         
     </head>
 
-    <body data-topbar="dark" oncontextmenu="return false;">
+    {{-- <body data-topbar="dark" oncontextmenu="return false;"> --}}
+    <body data-topbar="dark">
 
     <!-- <body data-layout="horizontal" data-topbar="dark"> -->
 

@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Pos;
 
-use App\Models\Payment;
-use App\Models\Customer;
-use Illuminate\Http\Request;
-use App\Models\PaymentDetail;
-use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
+use App\DataTables\Admin\Settings\CustomerDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\Payment;
+use App\Models\PaymentDetail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -23,10 +22,15 @@ class CustomerController extends Controller
          $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
     }
 
-    public function index(){
-        $customer = Customer::orderBy('name', 'asc')->get();
-        return view('backend.customer.index', compact('customer'));
-    } // End Method
+    // public function index(){
+    //     $customer = Customer::orderBy('name', 'asc')->get();
+    //     return view('backend.customer.index', compact('customer'));
+    // } // End Method
+    public function index(CustomerDataTable $dataTable)
+    {
+        //
+        return $dataTable->render('backend.customer.index');
+    }
 
     public function create(){
         return view('backend.customer.create');

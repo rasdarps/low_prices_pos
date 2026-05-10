@@ -5,8 +5,8 @@
 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<div class="page-content">
-<div class="container-fluid">
+    <div class="page-content">
+        <div class="container-fluid">
 
             <div class="row">
                 <div class="col-12">
@@ -24,7 +24,7 @@
 
                             <div class="card-body">
 
-                                <form action="{{ route('suppliers.store') }}" method="POST" id="myForm" enctype="multipart/form-data">
+                                <form action="{{ route('suppliers.store') }}" method="POST" id="myForm" enctype="multipart/form-data" novalidate>
                                     @csrf
 
                                     {{-- backend error alerts --}}
@@ -46,7 +46,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="mobile_no"><strong>Mobile Number <span class="text-danger">*</span></strong></label>
-                                                <input type="text" id="mobile_no" name="mobile_no" class="form-control" value="{{ old('mobile_no') }}" placeholder="enter mobile number" maxlength="15">
+                                                <input type="text" id="mobile_no" name="mobile_no" class="form-control" value="{{ old('mobile_no') }}" placeholder="enter mobile number" onkeypress="return isNumberKey(event)" minlength="10" maxlength="10">
                                             </div>
                                         </div>
                                     </div>
@@ -120,194 +120,203 @@
 @endsection 
 
 @section('styles')
-<style>
+    <style>
 
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease-in-out;
-        border-radius: 15px;
-        overflow: hidden;
-        transform: translateY(0);
-    }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            border-radius: 15px;
+            overflow: hidden;
+            transform: translateY(0);
+        }
 
-    .card:hover {
-        box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.3);
-        transform: translateY(-5px);
-        border-radius: 20px;
-    }
+        .card:hover {
+            box-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+            border-radius: 20px;
+        }
 
-    .card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 0.5s;
-        z-index: 1;
-    }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+            z-index: 1;
+        }
 
-    .card:hover::before {
-        left: 100%;
-    }
+        .card:hover::before {
+            left: 100%;
+        }
 
-    .card-body {
-        position: relative;
-        z-index: 2;
-    }
+        .card-body {
+            position: relative;
+            z-index: 2;
+        }
 
-    .card {
-        background: linear-gradient(145deg, #ffffff, #f0f0f0);
-        border: none;
-    }
+        .card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border: none;
+        }
 
-    .card:hover {
-        background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-    }
+        .card:hover {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+        }
 
-    .is-invalid {
-        border-color: #dc3545;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-    }
-    
-    .invalid-feedback {
-        display: block;
-        width: 100%;
-        margin-top: 0.25rem;
-        font-size: 0.875em;
-        color: #dc3545;
-    }
-    
-    .form-control:focus {
-        border-color: #80bdff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
-    
-    .form-control.is-invalid:focus {
-        border-color: #dc3545;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-    }
+        .is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 0.875em;
+            color: #dc3545;
+        }
+        
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .form-control.is-invalid:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
 
-    .select2 {
-        width: 100% !important;
-    }
-</style>
+        .select2 {
+            width: 100% !important;
+        }
+    </style>
 @endsection
 
 @section('scripts')
-<script type="text/javascript">
-        $(document).ready(function (){
-           
-            // Handle form submission
-            $('#myForm').on('submit', function(e) {
-                e.preventDefault();
+    <script type="text/javascript">
+            $(document).ready(function (){
+            
+                // Handle form submission
+                $('#myForm').on('submit', function(e) {
+                    e.preventDefault();
 
-                // Client-side validation
-                if(!$('#name').val().trim()) {
-                    if (typeof Notiflix !== 'undefined') {
-                        Notiflix.Notify.failure('Please enter a supplier name');
-                    } else {
-                        alert('Please enter a supplier name');
-                    }
-                    return;
-                }
-
-                if(!$('#mobile_no').val().trim()) {
-                    if (typeof Notiflix !== 'undefined') {
-                        Notiflix.Notify.failure('Please enter a mobile number');
-                    } else {
-                        alert('Please enter a mobile number');
-                    }
-                    return;
-                }
-
-
-                // Email validation (if provided)
-                if($('#email').val().trim() && !isValidEmail($('#email').val())) {
-                    if (typeof Notiflix !== 'undefined') {
-                        Notiflix.Notify.failure('Please enter a valid email address');
-                    } else {
-                        alert('Please enter a valid email address');
-                    }
-                    return;
-                }
-
-                // Show loading
-                if (typeof Notiflix !== 'undefined') {
-                    Notiflix.Loading.standard('Creating supplier, please wait...');
-                } else {
-                    console.log('Creating supplier...');
-                }
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: $(this).attr('method'),
-                    data: new FormData(this),
-                    contentType: false,
-                    processData: false,
-                    success: function(data) {
+                    // Client-side validation
+                    if(!$('#name').val().trim()) {
                         if (typeof Notiflix !== 'undefined') {
-                            Notiflix.Loading.remove();
-                        }
-                        
-                        if (data.status === 200) {
-                            if (typeof Notiflix !== 'undefined') {
-                                Notiflix.Notify.success(data.message);
-                            } else {
-                                alert(data.message);
-                            }
-                            $('#myForm')[0].reset();
-                            if (data.redirect) {
-                                window.location.href = data.redirect;
-                            }
+                            Notiflix.Notify.failure('Please enter a supplier name');
                         } else {
-                            if (typeof Notiflix !== 'undefined') {
-                                Notiflix.Notify.failure(data.message);
-                            } else {
-                                alert('Error: ' + data.message);
-                            }
+                            alert('Please enter a supplier name');
                         }
-                    },
-                    error: function(xhr, status, error) {
+                        return;
+                    }
+
+
+                    var mobile = $('#mobile_no').val().trim();
+                    if(!mobile) {
                         if (typeof Notiflix !== 'undefined') {
-                            Notiflix.Loading.remove();
+                            Notiflix.Notify.failure('Please enter a mobile number');
+                        } else {
+                            alert('Please enter a mobile number');
                         }
-                        
-                        $('#errors').empty();
-                        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
-                            $('#errorAlert').show();
-                            $.each(xhr.responseJSON.errors, function(field, messages) {
-                                $('#errors').append('<li>' + messages[0] + '</li>');
+                        return;
+                    }
+                    if(mobile.length !== 10 || !/^\d{10}$/.test(mobile)) {
+                        if (typeof Notiflix !== 'undefined') {
+                            Notiflix.Notify.failure('Mobile number must be exactly 10 digits');
+                        } else {
+                            alert('Mobile number must be exactly 10 digits');
+                        }
+                        return;
+                    }
+
+
+                    // Email validation (if provided)
+                    if($('#email').val().trim() && !isValidEmail($('#email').val())) {
+                        if (typeof Notiflix !== 'undefined') {
+                            Notiflix.Notify.failure('Please enter a valid email address');
+                        } else {
+                            alert('Please enter a valid email address');
+                        }
+                        return;
+                    }
+
+                    // Show loading
+                    if (typeof Notiflix !== 'undefined') {
+                        Notiflix.Loading.standard('Creating supplier, please wait...');
+                    } else {
+                        console.log('Creating supplier...');
+                    }
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: $(this).attr('method'),
+                        data: new FormData(this),
+                        contentType: false,
+                        processData: false,
+                        success: function(data) {
+                            if (typeof Notiflix !== 'undefined') {
+                                Notiflix.Loading.remove();
+                            }
+                            
+                            if (data.status === 200) {
                                 if (typeof Notiflix !== 'undefined') {
-                                    Notiflix.Notify.failure(messages[0]);
+                                    Notiflix.Notify.success(data.message);
                                 } else {
-                                    alert('Validation Error: ' + messages[0]);
+                                    alert(data.message);
                                 }
-                            });
-                            $('html, body').animate({
-                                scrollTop: $('#errorAlert').offset().top - 100
-                            }, 500);
-                        } else {
-                            $('#errorAlert').show();
-                            $('#errors').append('<li>An error occurred. Please try again later.</li>');
-                            if (typeof Notiflix !== 'undefined') {
-                                Notiflix.Notify.failure('An error occurred. Please try again later.');
+                                $('#myForm')[0].reset();
+                                if (data.redirect) {
+                                    window.location.href = data.redirect;
+                                }
                             } else {
-                                alert('An error occurred. Please try again later.');
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure(data.message);
+                                } else {
+                                    alert('Error: ' + data.message);
+                                }
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            if (typeof Notiflix !== 'undefined') {
+                                Notiflix.Loading.remove();
+                            }
+                            
+                            $('#errors').empty();
+                            if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                                $('#errorAlert').show();
+                                $.each(xhr.responseJSON.errors, function(field, messages) {
+                                    $('#errors').append('<li>' + messages[0] + '</li>');
+                                    if (typeof Notiflix !== 'undefined') {
+                                        Notiflix.Notify.failure(messages[0]);
+                                    } else {
+                                        alert('Validation Error: ' + messages[0]);
+                                    }
+                                });
+                                $('html, body').animate({
+                                    scrollTop: $('#errorAlert').offset().top - 100
+                                }, 500);
+                            } else {
+                                $('#errorAlert').show();
+                                $('#errors').append('<li>An error occurred. Please try again later.</li>');
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure('An error occurred. Please try again later.');
+                                } else {
+                                    alert('An error occurred. Please try again later.');
+                                }
                             }
                         }
-                    }
+                    });
                 });
+
+                // Email validation helper function
+                function isValidEmail(email) {
+                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                }
+
             });
-
-            // Email validation helper function
-            function isValidEmail(email) {
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
-
-        });
-</script>
-
+    </script>
 @endsection

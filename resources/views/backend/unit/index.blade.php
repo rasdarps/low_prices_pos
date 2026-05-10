@@ -21,44 +21,18 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <a href="{{ route('units.create') }}" class="btn btn-dark btn-rounded waves-effect waves-light" style="float:right;">
+                        <a href="{{ route('units.create') }}" class="btn btn-success" style="float:right;">
                             <i class="fas fa-plus-circle"> Add Unit </i>
                         </a> 
                         <br><br>               
 
                         <h4 class="card-title">Unit All Data</h4>
 
-                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th width="5%">Sl</th>
-                                    <th>Name</th> 
-                                    <th width="20%">Action</th>
-                                </tr>
-                            </thead>
+                         <div class="table-responsive">
+                            {!! $dataTable->table() !!}
+                         </div>
 
-                            <tbody>
-                                @foreach($units as $key => $unit)
-                                <tr>
-                                    <td>{{ $key+1 }}</td>
-                                    <td>{{ $unit->name }}</td>  
-                                    <td>
-                                        @can('unit-edit')
-                                            <a href="{{ route('units.edit', Crypt::encrypt($unit->id)) }}" class="btn btn-info sm" title="Edit Data">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        @endcan
-
-                                        @can('unit-delete')
-                                            <a href="{{ route('units.destroy', Crypt::encrypt($unit->id)) }}" class="btn btn-danger sm" title="Delete Data" id="delete">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        @endcan
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    
 
                     </div>
                 </div>
@@ -68,4 +42,7 @@
     </div> <!-- container-fluid -->
 </div>
 
+@endsection
+@section('scripts')
+    {{ $dataTable->scripts() }}
 @endsection

@@ -1,9 +1,12 @@
 @extends('layouts.app')
+@section('title') {{'Login'}} @endsection
 
 @section('content')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <div class="container" style="">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card" style="color:#000; font-weight:bold;">
                 <div class="card-header" style="background-color:#000; color:#fff">{{ __('Reset Password') }}</div>
 
@@ -14,7 +17,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="{{ route('password.email') }}" id="passwordResetForm" novalidate>
                         @csrf
 
                         <div class="row mb-3">
@@ -44,4 +47,44 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<!-- Notiflix CSS & JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notiflix/dist/notiflix-3.2.6.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/notiflix/dist/notiflix-3.2.6.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#passwordResetForm').on('submit', function(e) {
+        var email = $('#email').val().trim();
+        function notify(msg) {
+            if (typeof Notiflix !== 'undefined') {
+                Notiflix.Notify.failure(msg, {
+                    timeout: 3000,
+                    showOnlyTheLastOne: true,
+                    position: 'right-top',
+                });
+            } else {
+                alert(msg);
+            }
+        }
+        if (!email) {
+            notify('Please enter your email address.');
+            $('#email').focus();
+            e.preventDefault();
+            return false;
+        }
+        // Simple email format check
+        var emailPattern = /^\S+@\S+\.\S+$/;
+        if (!emailPattern.test(email)) {
+            notify('Please enter a valid email address.');
+            $('#email').focus();
+            e.preventDefault();
+            return false;
+        }
+        if (typeof Notiflix !== 'undefined') {
+            Notiflix.Loading.standard('Sending reset link...');
+        }
+    });
+});
+</script>
 @endsection

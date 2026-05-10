@@ -44,7 +44,7 @@
 
     </head>
 
-    <body data-topbar="dark" oncontextmenu="return false;">
+    <body data-topbar="dark">
 
     <!-- <body data-layout="horizontal" data-topbar="dark"> -->
 

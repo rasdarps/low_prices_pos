@@ -51,8 +51,8 @@
                                                 <span>Invoice</span>
                                             </a>
                                             <ul class="sub-menu" aria-expanded="false">
-                                                <li><a href="{{ route('invoice.add') }}">Create</a></li>
-                                                <li><a href="{{ route('invoice.all') }}">All Invoice</a></li>
+                                                <li><a href="{{ route('invoices.create') }}">Create</a></li>
+                                                <li><a href="{{ route('invoices.index') }}">All Invoice</a></li>
                                                 {{-- <li><a href="{{ route('invoice.approved.list') }}">Approved List</a></li>
                                                 <li><a href="{{ route('invoice.pending.list') }}">Pending Approval</a></li> --}}
                                                 <li><a href="{{ route('print.invoice.list') }}">Print Invoice List</a></li>

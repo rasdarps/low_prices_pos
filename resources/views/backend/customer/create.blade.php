@@ -47,7 +47,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="mobile_no"><strong>Mobile Number <span class="text-danger">*</span></strong></label>
-                                        <input type="text" id="mobile_no" name="mobile_no" class="form-control" value="{{ old('mobile_no') }}" placeholder="enter mobile number" maxlength="15">
+                                        <input type="text" id="mobile_no" name="mobile_no" class="form-control" value="{{ old('mobile_no') }}" placeholder="enter mobile number" onkeypress="return isNumberKey(event)" minlength="10" maxlength="10">
                                     </div>
                                 </div>
                             </div>
@@ -185,11 +185,21 @@
                 return;
             }
 
-            if(!$('#mobile_no').val().trim()) {
+
+            var mobile = $('#mobile_no').val().trim();
+            if(!mobile) {
                 if (typeof Notiflix !== 'undefined') {
                     Notiflix.Notify.failure('Please enter a mobile number');
                 } else {
                     alert('Please enter a mobile number');
+                }
+                return;
+            }
+            if(mobile.length !== 10 || !/^\d{10}$/.test(mobile)) {
+                if (typeof Notiflix !== 'undefined') {
+                    Notiflix.Notify.failure('Mobile number must be exactly 10 digits');
+                } else {
+                    alert('Mobile number must be exactly 10 digits');
                 }
                 return;
             }
