@@ -29,6 +29,7 @@ return new class extends Migration
             ->onDelete('cascade');
 
             $table->string('name')->unique();
+            $table->string('barcode', 50)->nullable()->unique(); // <-- Added for scanning
             $table->double('quantity')->default('0');
             $table->double('stock_level')->default('0');
             $table->tinyInteger('status')->default('1');

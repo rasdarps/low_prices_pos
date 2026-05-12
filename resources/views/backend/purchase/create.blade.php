@@ -42,6 +42,14 @@
                                             </div>
                                         </div>
                                     <div class="row align-items-end mb-2">
+                                        {{-- //barcode field for product lookup --}}
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-1 d-flex align-items-center">
+                                                <input type="text" id="barcode" class="form-control" placeholder="Scan Barcode" autofocus>
+                                                {{-- <small class="form-text text-muted">Scan product barcode here</small> --}}
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group mb-1 d-flex align-items-center">
                                                 {{-- <label for="category_id" class="mb-0 mr-2" style="min-width:90px;"><strong>Category <span class="text-danger">*</span></strong></label> --}}
@@ -81,8 +89,9 @@
                                             <table class="table-sm table-bordered" width="100%" style="border-color: #ddd;">
                                                 <thead>
                                                     <tr style="background-color:#034141; text-align:center;" class="text-white">
-                                                        <th width="15%">Category</th>
-                                                        <th width="15%">Product Name</th>
+                                                        <th width="10%">Category</th>
+                                                        <th width="12%">Barcode</th>
+                                                        <th width="10%">Product Name</th>
                                                         <th width="15%">PSC/KG</th>
                                                         <th width="10%">Unit Price</th>
                                                         <th width="15%">Per</th>
@@ -93,13 +102,13 @@
                                                 <tbody id="addRow" class="addRow"></tbody>
                                                 <tbody>
                                                     <tr>
-                                                        <td colspan="5">Discount</td>
+                                                        <td colspan="6">Discount</td>
                                                         <td>
                                                             <input type="text" name="discount_amount" id="discount_amount" class="form-control estimated_amount" placeholder="Discount Amount">
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="5">Grand Total</td>
+                                                        <td colspan="6">Grand Total</td>
                                                         <td>
                                                             <input type="text" name="estimated_amount" value="0" id="estimated_amount" class="form-control estimated_amount" readonly style="background-color: #ddd;">
                                                         </td>
@@ -118,10 +127,10 @@
                                         <div class="form-group col-md-3">
                                             <label><strong>Paid Status <span class="text-danger">*</span></strong></label>
                                             <select name="paid_status" id="paid_status" class="form-control">
-                                                <option value="">Select Payment Status</option>
+                                                {{-- <option value="">Select Payment Status</option> --}}
                                                 <option value="full_paid">Full Paid</option>
-                                                <option value="full_due">Full Due</option>
-                                                <option value="partial_paid">Partial Paid</option>
+                                                <option value="full_due" disabled>Full Due</option>
+                                                <option value="partial_paid" disabled>Partial Paid</option>
                                             </select>
                                             <input type="text" name="paid_amount" class="form-control paid_amount mt-2" placeholder="Enter Paid Amount" style="display:none;">
                                         </div>
@@ -428,16 +437,20 @@
     </script>
 
     {{-- Handles delete and add item --}}
-    <script id="document-template" type="text/x-handlebars-template">
+       <script id="document-template" type="text/x-handlebars-template">
      
-        <tr class="delete_add_more_item" id="delete_add_more_item">
+        <tr class="delete_add_more_item">
             <input type="hidden" name="date" value="@{{date}}">
             <input type="hidden" name="purchase_no" value="@{{purchase_no}}">
-            
     
             <td>
                 <input type="hidden" name="category_id[]" value="@{{category_id}}">
                 @{{ category_name }}
+            </td>
+
+            <td>
+                <input type="hidden" name="barcode[]" value="@{{barcode}}">
+                @{{ barcode }}
             </td>
 
             <td>
@@ -447,11 +460,11 @@
 
 
             <td>
-                <input type="number" min="1" class="form-control buying_qty text-right" id="buying_qty" name="buying_qty[]" value="{{ old('buying_qty') }}"> 
+                <input type="number" min="1" class="form-control buying_qty text-right" name="buying_qty[]" value="0"> 
             </td>
 
             <td>
-                <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}"> 
+                <input type="number" class="form-control unit_price text-right" name="unit_price[]" value=""> 
             </td>
 
             <td>
@@ -460,7 +473,7 @@
             </td>
 
             <td>
-                <input type="number" class="form-control buying_price text-right" name="buying_price[]" value="0" readonly> 
+                <input type="number" class="form-control buying_price text-right" name="buying_price[]" value="" readonly> 
             </td>
 
             <td>
@@ -474,6 +487,62 @@
      {{-- handles add more item in purchase --}}
     <script type="text/javascript">
         $(document).ready(function(){
+
+            // 🔹 Handle barcode scan/entry
+            $(document).on("change", "#barcode", function(){
+                var barcode = $(this).val();
+                if(!barcode) return;
+
+                $.ajax({
+                    url: "{{ route('products.findByBarcode') }}", // lookup route
+                    type: "GET",
+                    data: { barcode: barcode },
+                    success: function(product){
+                        if(product && product.id){
+                            var date = $('#date').val();
+                            var purchase_no = $('#purchase_no').val();
+
+                            // 🔹 Update dropdowns and stock field so barcode flow matches manual flow
+                        $('#category_id').val(product.category_id).trigger('change');
+                        $('#product_id').html('<option value="'+product.id+'" selected>'+product.name+'</option>');
+                        $('#unit_id').html('<option value="'+product.unit_id+'" selected>'+product.unit.name+'</option>');
+                        $('#current_stock_qty').val(product.quantity);
+
+                            // Prepare data for Handlebars row
+                            var source = $("#document-template").html();
+                            var template = Handlebars.compile(source);
+                            var data = {
+                                date: date,
+                                purchase_no: purchase_no,
+                                barcode: product.barcode,          // 🔹 added
+                                category_id: product.category_id,
+                                category_name: product.category.name,
+                                product_id: product.id,
+                                product_name: product.name,
+                                unit_id: product.unit_id,
+                                unit_name: product.unit.name,
+                            };
+                            var html = template(data);
+                            $("#addRow").append(html);
+
+                            // Clear barcode field after scan
+                            $('#barcode').val('');
+
+                            // 🔹 Optional: show stock quantity
+                            // $('#current_stock_qty').val(product.quantity);
+
+                            Notiflix.Notify.success('Product added via barcode');
+                        } else {
+                            Notiflix.Notify.failure('Product not found for this barcode. Please select manually.');
+                        }
+                    },
+                    error: function(){
+                        Notiflix.Notify.failure('Error looking up barcode. Try again.');
+                    }
+                });
+            });
+
+            // Existing add button flow (manual selection)
             $(document).on("click", ".addeventmore", function(){
                 var date = $('#date').val();
                 var purchase_no = $('#purchase_no').val(); 
@@ -483,6 +552,7 @@
                 var product_name = $('#product_id').find('option:selected').text();
                 var unit_id  = $('#unit_id').val();
                 var unit_name = $('#unit_id').find('option:selected').text();
+
                 function notifyPop(msg) {
                     if (typeof Notiflix !== 'undefined') {
                         Notiflix.Notify.failure(msg);
@@ -511,26 +581,29 @@
                 }
 
                 var source = $("#document-template").html();
-                var tamplate = Handlebars.compile(source);
+                var template = Handlebars.compile(source);
                 var data = {
-                    date:date,
-                    purchase_no:purchase_no, 
-                    category_id:category_id,
-                    category_name:category_name,
-                    product_id:product_id,
-                    product_name:product_name,
-                    unit_id:unit_id,
-                    unit_name:unit_name,
+                    date: date,
+                    purchase_no: purchase_no, 
+                    category_id: category_id,
+                    category_name: category_name,
+                    product_id: product_id,
+                    product_name: product_name,
+                    unit_id: unit_id,
+                    unit_name: unit_name,
+                    barcode: '' // 🔹 empty if added manually
                 };
-                var html = tamplate(data);
+                var html = template(data);
                 $("#addRow").append(html);
             });
 
+            // Remove row
             $(document).on("click",".removeeventmore",function(event){
                 $(this).closest(".delete_add_more_item").remove();
                 totalAmountPrice();
             });
 
+            // Calculate row total
             $(document).on('keyup click','.unit_price,.buying_qty', function(){
                 var unit_price = $(this).closest("tr").find("input.unit_price").val();
                 var qty = $(this).closest("tr").find("input.buying_qty").val();
@@ -539,12 +612,12 @@
                 $('#discount_amount').trigger('keyup');
             });
 
+            // Discount recalculation
             $(document).on('keyup','#discount_amount',function(){
                 totalAmountPrice();
             });
 
-            // Calculate sum of amout in purchase 
-
+            // Calculate sum of all items
             function totalAmountPrice(){
                 var sum = 0;
                 $(".buying_price").each(function(){
@@ -556,15 +629,13 @@
 
                 var discount_amount = parseFloat($('#discount_amount').val());
                 if(!isNaN(discount_amount) && discount_amount.length != 0){
-                        sum -= parseFloat(discount_amount);
-                    }
+                    sum -= parseFloat(discount_amount);
+                }
 
                 $('#estimated_amount').val(sum);
             }  
 
         });
-
-
     </script>
  
     {{-- auto pull product when category selected --}}
@@ -581,7 +652,7 @@
                     success:function(data){
                         var html = '<option value="">Select Product</option>';
                         $.each(data,function(key,v){
-                            html += '<option value=" '+v.id+' "> '+v.name+'</option>';
+                            html += '<option value="'+v.id+'"> '+v.name+'</option>';
                         });
                         $('#product_id').html(html);
                     }
@@ -603,7 +674,7 @@
                     success:function(data){
                         var html = '<option value="">Select Unit</option>';
                         $.each(data,function(key,v){
-                            html += '<option value=" '+v.unit_id+' "> '+v.unit.name+'</option>';
+                            html += '<option value="'+v.unit_id+'"> '+v.unit.name+'</option>';
                         });
                         $('#unit_id').html(html);
                     }
@@ -629,10 +700,6 @@
         });
 
     </script>
-
-    
-    {{-- //Payment and customer validation --}}
-    <!-- Removed old .storeButton click validation handler. All validation now uses Notiflix in the main form submission handler. -->
 
     {{-- //payment status and customer show or hide --}}
     <script type="text/javascript">

@@ -38,12 +38,22 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="name"><strong>Product Name <span class="text-danger">*</span></strong></label>
-                                                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" placeholder="enter product name">
+                                                <label for="barcode"><strong>Barcode</strong></label>
+                                                <input type="text" id="barcode" name="barcode" class="form-control" value="{{ old('barcode') }}" placeholder="scan or enter barcode" autofocus>
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name"><strong>Product Name <span class="text-danger">*</span></strong></label>
+                                                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" placeholder="enter product name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- row 1 ends --}}
+
+                                    <div class="row">
+                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="unit_id"><strong>Unit Name <span class="text-danger">*</span></strong></label>
                                                 <select name="unit_id" id="unit_id" class="form-control select2" aria-label="Select unit">
@@ -54,10 +64,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    {{-- row 1 ends --}}
 
-                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="category_id"><strong>Category Name <span class="text-danger">*</span></strong></label>
@@ -67,13 +74,6 @@
                                                     <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                                                    @endforeach
                                                 </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="stock_level"><strong>Stock Level <span class="text-danger">*</span></strong></label>
-                                                <input type="number" id="stock_level" name="stock_level" class="form-control" value="{{ old('stock_level', 0) }}" placeholder="enter stock level" min="0">
                                             </div>
                                         </div>
                                     </div>
@@ -196,6 +196,11 @@
                     } else {
                         alert('Please enter a product name');
                     }
+                    return;
+                }
+
+                if($('#barcode').val() && $('#barcode').val().length > 50) {
+                    Notiflix.Notify.failure('Barcode must not exceed 50 characters');
                     return;
                 }
 

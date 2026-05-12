@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title') {{'Create Supplier'}} @endsection
+@section('title') {{'Create Purchase'}} @endsection
 
 @section('content')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -8,11 +8,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card" style="margin-top: 5px;">
                         <div class="card-header with-border">
                             <span class="card-title" style="font-size:20px;">Create | Purchase</span>
                             <a href="{{route('purchases.index')}}" style="float:right">
-                                <button type="button" class="btn btn-primary modal_btn">
+                                <button style="background-color:#034141" type="button" class="btn btn-primary modal_btn">
                                     View Purchases
                                 </button>
                             </a>
@@ -27,22 +27,32 @@
                                 </div>
                                 <form method="post" action="{{ route('purchases.store') }}" id="purchaseForm">
                                     @csrf
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label for="date"><strong>Date <span class="text-danger">*</span></strong></label>
+                                        <div class="row mb-2">
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                {{-- <label for="purchase_no" class="mb-0 mr-2" style="min-width:70px;"><strong>Number</strong></label> --}}
+                                                <input class="form-control" name="purchase_no" type="text" value="{{ $purchase_no }}" id="purchase_no" readonly style="background-color:#ddd;">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-center">
+                                                {{-- <label for="current_stock_qty" class="mb-0 mr-2" style="min-width:60px;"><strong>Stock</strong></label> --}}
+                                                <input class="form-control" name="current_stock_qty" type="text" id="current_stock_qty" readonly style="background-color:#ddd">
+                                            </div>
+                                            <div class="col-md-4 d-flex align-items-center justify-content-end">
+                                                {{-- <label for="date" class="mb-0 mr-2" style="min-width:60px;"><strong>Date <span class="text-danger">*</span></strong></label> --}}
                                                 <input class="form-control" value="{{ $date }}" name="date" type="date" id="date">
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <label for="purchase_no"><strong>Pur No</strong></label>
-                                                <input class="form-control" name="purchase_no" type="text" value="{{ $purchase_no }}" id="purchase_no" readonly style="background-color:#ddd">
+                                    <div class="row align-items-end mb-2">
+                                        {{-- //barcode field for product lookup --}}
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-1 d-flex align-items-center">
+                                                <input type="text" id="barcode" class="form-control" placeholder="Scan Barcode" autofocus>
+                                                <small class="form-text text-muted">Scan product barcode here</small>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="category_id"><strong>Category Name <span class="text-danger">*</span></strong></label>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-1 d-flex align-items-center">
+                                                {{-- <label for="category_id" class="mb-0 mr-2" style="min-width:90px;"><strong>Category <span class="text-danger">*</span></strong></label> --}}
                                                 <select name="category_id" id="category_id" class="form-control select2" aria-label="Select category">
                                                     <option disabled selected value="">Select Category</option>
                                                     @foreach($category as $cat)
@@ -51,38 +61,34 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="product_id"><strong>Product Name <span class="text-danger">*</span></strong></label>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-1 d-flex align-items-center">
+                                                {{-- <label for="product_id" class="mb-0 mr-2" style="min-width:90px;"><strong>Product <span class="text-danger">*</span></strong></label> --}}
                                                 <select name="product_id" id="product_id" class="form-control select2" aria-label="Select product">
                                                     <option disabled selected value="">Select Product</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 my-2">
-                                            <div class="form-group">
-                                                <label for="unit_id"><strong>Unit <span class="text-danger">*</span></strong></label>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-1 d-flex align-items-center">
+                                                {{-- <label for="unit_id" class="mb-0 mr-2" style="min-width:60px;"><strong>Unit <span class="text-danger">*</span></strong></label> --}}
                                                 <select name="unit_id" id="unit_id" class="form-control select2" aria-label="Select unit">
                                                     <option disabled selected value="">Select Unit</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label for="current_stock_qty"><strong>Stock (Pic/Kg)</strong></label>
-                                                <input class="form-control" name="current_stock_qty" type="text" id="current_stock_qty" readonly style="background-color:#ddd">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 d-flex align-items-end">
-                                            <button type="button" class="btn btn-secondary waves-effect waves-light fas fa-plus-circle addeventmore" style="margin-top: 32px;"> Add</button>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-12 text-center">
+                                            <button style="background-color:#034141" type="button" class="btn btn-secondary waves-effect waves-light fas fa-plus-circle addeventmore" style="margin-top: 10px;"> Add</button>
                                         </div>
                                     </div>
-                                    <hr>
+                                    {{-- <hr> --}}
                                     <div class="row">
                                         <div class="col-12">
                                             <table class="table-sm table-bordered" width="100%" style="border-color: #ddd;">
                                                 <thead>
-                                                    <tr>
+                                                    <tr style="background-color:#034141; text-align:center;" class="text-white">
                                                         <th width="15%">Category</th>
                                                         <th width="15%">Product Name</th>
                                                         <th width="15%">PSC/KG</th>
@@ -366,6 +372,12 @@
                             if ($('.select2').length) {
                                 $('.select2').val('').trigger('change');
                             }
+                            // Fetch and set the next purchase number
+                            $.get("/purchases/next-number", function(res) {
+                                if (res.purchase_no) {
+                                    $('#purchase_no').val(res.purchase_no);
+                                }
+                            });
                         } else {
                             if (typeof Notiflix !== 'undefined') {
                                 Notiflix.Notify.failure(data.message);
@@ -393,12 +405,28 @@
                                 scrollTop: $('#errorAlert').offset().top - 100
                             }, 500);
                         } else {
+                            let duplicate = false;
+                            if (xhr.responseText && xhr.status === 500) {
+                                // Check for SQL duplicate entry error
+                                if (xhr.responseText.includes('1062') && xhr.responseText.includes('purchase_no')) {
+                                    duplicate = true;
+                                }
+                            }
                             $('#errorAlert').show();
-                            $('#errors').append('<li>An error occurred. Please try again later.</li>');
-                            if (typeof Notiflix !== 'undefined') {
-                                Notiflix.Notify.failure('An error occurred. Please try again later.');
+                            if (duplicate) {
+                                $('#errors').append('<li>Duplicate purchase number. Please refresh the page and try again.</li>');
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure('Duplicate purchase number. Please refresh the page and try again.');
+                                } else {
+                                    alert('Duplicate purchase number. Please refresh the page and try again.');
+                                }
                             } else {
-                                alert('An error occurred. Please try again later.');
+                                $('#errors').append('<li>An error occurred. Please try again later.</li>');
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure('An error occurred. Please try again later.');
+                                } else {
+                                    alert('An error occurred. Please try again later.');
+                                }
                             }
                         }
                     }
@@ -414,6 +442,10 @@
             <input type="hidden" name="date" value="@{{date}}">
             <input type="hidden" name="purchase_no" value="@{{purchase_no}}">
             
+            <td>
+                <input type="hidden" name="barcode[]" value="@{{barcode}}">
+                @{{ barcode }}
+            </td>
     
             <td>
                 <input type="hidden" name="category_id[]" value="@{{category_id}}">
@@ -559,7 +591,7 @@
                     type: "GET",
                     data:{category_id:category_id},
                     success:function(data){
-                        var html = '<option value="">Select Category</option>';
+                        var html = '<option value="">Select Product</option>';
                         $.each(data,function(key,v){
                             html += '<option value=" '+v.id+' "> '+v.name+'</option>';
                         });
@@ -609,10 +641,6 @@
         });
 
     </script>
-
-    
-    {{-- //Payment and customer validation --}}
-    <!-- Removed old .storeButton click validation handler. All validation now uses Notiflix in the main form submission handler. -->
 
     {{-- //payment status and customer show or hide --}}
     <script type="text/javascript">

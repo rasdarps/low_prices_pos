@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Customer;
-use App\Models\Supplier;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CreateAdminUserSeeder::class,
             PermissionTableSeeder::class,
+            CategorySeeder::class,
+            UnitSeeder::class,
            
 
         ]);

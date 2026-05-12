@@ -34,7 +34,7 @@ Auth::routes();
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
- Route::middleware('auth')->group(function(){
+    Route::middleware('auth')->group(function(){
 
 
 
@@ -54,16 +54,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
         Route::resource('/roles', RoleController::class);
         Route::resource('/users', UserController::class);
 
-
-        // Supplier All Route 
-        // Route::controller(SupplierController::class)->group(function () {
-        //     Route::get('/supplier/all', 'SupplierAll')->name('supplier.all'); 
-        //     Route::get('/supplier/add', 'SupplierAdd')->name('supplier.add'); 
-        //     Route::post('/supplier/store', 'SupplierStore')->name('supplier.store');
-        //     Route::get('/supplier/edit/{id}', 'SupplierEdit')->name('supplier.edit'); 
-        //     Route::post('/supplier/update', 'SupplierUpdate')->name('supplier.update');
-        //     Route::get('/supplier/delete/{id}', 'SupplierDelete')->name('supplier.delete');
-        // });
 
         Route::prefix('suppliers')->name('suppliers.')->group(function () {
             Route::get('/', [SupplierController::class, 'index'])->name('index');
@@ -91,13 +81,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
          });
         Route::controller(CustomerController::class)->group(function () {
-            // Route::get('/customer/all', 'CustomerAll')->name('customer.all'); 
-            // Route::get('/customer/add', 'CustomerAdd')->name('customer.add');
-            // Route::post('/customer/store', 'CustomerStore')->name('customer.store');
-            // Route::get('/customer/edit/{id}', 'CustomerEdit')->name('customer.edit');
-            // Route::post('/customer/update', 'CustomerUpdate')->name('customer.update');
-            // Route::get('/customer/delete/{id}', 'CustomerDelete')->name('customer.delete');
-
             Route::get('/credit/customer', 'CreditCustomer')->name('credit.customer');
             Route::get('/credit/customer/print/pdf', 'CreditCustomerPrintPdf')->name('credit.customer.print.pdf');
 
@@ -116,17 +99,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
         });
 
 
-        // Unit All Route 
-        // Route::controller(UnitController::class)->group(function () {
-        //     Route::get('/unit/all', 'UnitAll')->name('unit.all'); 
-        //     Route::get('/unit/add', 'UnitAdd')->name('unit.add');
-        //     Route::post('/unit/store', 'UnitStore')->name('unit.store');
-        //     Route::get('/unit/edit/{id}', 'UnitEdit')->name('unit.edit');
-        //     Route::post('/unit/update', 'UnitUpdate')->name('unit.update');
-        //     Route::get('/unit/delete/{id}', 'UnitDelete')->name('unit.delete');
-            
-        // });
-
         Route::prefix('units')->name('units.')->group(function () {
             Route::get('/', [UnitController::class, 'index'])->name('index');
             // Route::get('/show/{id}', [CategoryController::class, 'show'])->name('show');
@@ -138,18 +110,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
              
 
          });
-
-
-        // Category All Route 
-        // Route::controller(CategoryController::class)->group(function () {
-        //     Route::get('/category/all', 'CategoryAll')->name('category.all'); 
-        //     Route::get('/category/add', 'CategoryAdd')->name('category.add');
-        //     Route::post('/category/store', 'CategoryStore')->name('category.store');
-        //     Route::get('/category/edit/{id}', 'CategoryEdit')->name('category.edit');
-        //     Route::post('/category/update', 'CategoryUpdate')->name('category.update');
-        //     Route::get('/category/delete/{id}', 'CategoryDelete')->name('category.delete');
-            
-        // });
 
          Route::prefix('categories')->name('categories.')->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
@@ -164,20 +124,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
          });
 
 
-        // Product All Route 
-        // Route::controller(ProductController::class)->group(function () {
-        //     Route::get('/product/all', 'ProductAll')->name('product.all'); 
-        //     Route::get('/product/add', 'ProductAdd')->name('product.add');
-        //     Route::post('/product/store', 'ProductStore')->name('product.store');
-        //     Route::get('/product/edit/{id}', 'ProductEdit')->name('product.edit');
-        //     Route::post('/product/update', 'ProductUpdate')->name('product.update');
-        //     Route::get('/product/delete/{id}', 'ProductDelete')->name('product.delete');
-        //     // Route::post('/check-quantity', 'ProductController@checkQuantity')->name('checkQuantity');
-        //     //Route::post('/check-quantity', 'checkQuantity')->name('checkQuantity');
-
-
-        // });
-
         Route::prefix('products')->name('products.')->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
             // Route::get('/show/{id}', [CategoryController::class, 'show'])->name('show');
@@ -186,7 +132,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
             Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
             Route::patch('/update/{id}', [ProductController::class, 'update'])->name('update');
             Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
-             
+            
+            // ✅ New route for barcode lookup
+            Route::post('/find-by-barcode', [ProductController::class, 'findByBarcode'])->name('findByBarcode');
 
          });
 

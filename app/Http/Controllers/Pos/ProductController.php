@@ -6,8 +6,6 @@ use App\Models\Unit;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +28,25 @@ class ProductController extends Controller
         return view('backend.product.index', compact('product'));
     } // End Method 
 
+    //barcode lookup method for POS scanning
+    public function findByBarcode(Request $request)
+    {
+        $barcode = $request->input('barcode');
+        $product = Product::where('barcode', $barcode)->first();
+
+        if (!$product) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Product not found for this barcode.',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'product' => $product,
+        ]);
+    }
+
     public function create(){
         $unit = Unit::orderBy('name', 'asc')->get();
         $category = Category::orderBy('name', 'asc')->get();
@@ -39,12 +56,16 @@ class ProductController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             'name' => 'required|string|max:255|unique:products,name',
+            'barcode'     => 'nullable|string|max:50|unique:products,barcode',
             'unit_id' => 'required|exists:units,id',
             'category_id' => 'required|exists:categories,id',
             'stock_level' => 'required|numeric|min:0',
         ], [
             'name.required' => 'Please enter a Product name',
             'name.unique' => 'This product already exists',
+            'barcode.unique'       => 'This barcode is already registered',
+            'barcode.string'       => 'Barcode must be a string',
+            'barcode.max'          => 'Barcode must not exceed 50 characters',
             'unit_id.required' => 'Please select a unit',
             'unit_id.exists' => 'Selected unit is invalid',
             'category_id.required' => 'Please select a category',
@@ -132,28 +153,29 @@ class ProductController extends Controller
 
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255|unique:products,name,' . $id,
+                'barcode'     => 'nullable|string|max:50|unique:products,barcode,' . $id,
                 'unit_id' => 'required|exists:units,id',
                 'category_id' => 'required|exists:categories,id',
-                'stock_level' => 'required|numeric|min:0',
             ], [
                 'name.required' => 'Please enter a product name',
                 'name.unique' => 'This product already exists',
+                'barcode.unique'       => 'This barcode is already registered',
+                'barcode.string'       => 'Barcode must be a string',
+                'barcode.max'          => 'Barcode must not exceed 50 characters',
                 'unit_id.required' => 'Please select a unit',
                 'unit_id.exists' => 'Selected unit is invalid',
                 'category_id.required' => 'Please select a category',
                 'category_id.exists' => 'Selected category is invalid',
-                'stock_level.required' => 'Please enter stock level',
-                'stock_level.numeric' => 'Stock level must be a number',
-                'stock_level.min' => 'Stock level cannot be negative',
+                
             ]);
 
             try {
                 DB::transaction(function () use ($validatedData, $product) {
                     $updateData = [
                         'name' => $validatedData['name'],
+                        'barcode'     => $validatedData['barcode'] ?? $product->barcode,
                         'unit_id' => $validatedData['unit_id'],
                         'category_id' => $validatedData['category_id'],
-                        'stock_level' => $validatedData['stock_level'],
                         'updated_by' => Auth::id(),
                     ];
                     

@@ -38,44 +38,54 @@
                                                 <input class="form-control" value="{{ $date }}" name="date" type="date" id="date">
                                             </div>
                                         </div>
-                                    <div class="row align-items-end mb-2">
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-1 d-flex align-items-center">
-                                                <select name="category_id" id="category_id" class="form-control select2" aria-label="Select category">
-                                                    <option disabled selected value="">Select Category</option>
-                                                    @foreach($category as $cat)
-                                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                                    @endforeach
-                                                </select>
+
+                                        <div class="row align-items-end mb-2">
+                                            {{-- //barcode field for product lookup --}}
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-1 d-flex align-items-center">
+                                                    <input type="text" id="barcode" class="form-control" placeholder="Scan Barcode" autofocus>
+                                                    {{-- <small class="form-text text-muted">Scan product barcode here</small> --}}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-1 d-flex align-items-center">
+                                                    <select name="category_id" id="category_id" class="form-control select2" aria-label="Select category">
+                                                        <option disabled selected value="">Select Category</option>
+                                                        @foreach($category as $cat)
+                                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-1 d-flex align-items-center">
+                                                    <select name="product_id" id="product_id" class="form-control select2" aria-label="Select product">
+                                                        <option disabled selected value="">Select Product</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-1 d-flex align-items-center">
+                                                    <select name="unit_id" id="unit_id" class="form-control select2" aria-label="Select unit">
+                                                        <option disabled selected value="">Select Unit</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-1 d-flex align-items-center">
-                                                <select name="product_id" id="product_id" class="form-control select2" aria-label="Select product">
-                                                    <option disabled selected value="">Select Product</option>
-                                                </select>
+
+                                        <div class="row mb-2">
+                                            <div class="col-12 text-center">
+                                                <button style="background-color:#034141" type="button" class="btn btn-secondary waves-effect waves-light fas fa-plus-circle addeventmore" style="margin-top: 10px;"> Add</button>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-1 d-flex align-items-center">
-                                                <select name="unit_id" id="unit_id" class="form-control select2" aria-label="Select unit">
-                                                    <option disabled selected value="">Select Unit</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col-12 text-center">
-                                            <button style="background-color:#034141" type="button" class="btn btn-secondary waves-effect waves-light fas fa-plus-circle addeventmore" style="margin-top: 10px;"> Add</button>
-                                        </div>
-                                    </div>
                                     {{-- <hr> --}}
                                     <div class="row">
                                         <div class="col-12">
                                             <table class="table-sm table-bordered" width="100%" style="border-color: #ddd;">
                                                 <thead>
-                                                    <tr style="background-color:#034141; text-align:center;" class="text-white">
+                                                    <tr style="background-color:#034141; text-align:center;" class="text-white">  
                                                         <th width="15%">Category</th>
+                                                        <th width="12%">Barcode</th>
                                                         <th width="15%">Product Name</th>
                                                         <th width="15%">PSC/KG</th>
                                                         <th width="10%">Unit Price</th>
@@ -87,13 +97,13 @@
                                                 <tbody id="addRow" class="addRow"></tbody>
                                                 <tbody>
                                                     <tr>
-                                                        <td colspan="5">Discount</td>
+                                                        <td colspan="6">Discount</td>
                                                         <td>
                                                             <input type="text" name="discount_amount" id="discount_amount" class="form-control estimated_amount" placeholder="Discount Amount">
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="5">Grand Total</td>
+                                                        <td colspan="6">Grand Total</td>
                                                         <td>
                                                             <input type="text" name="estimated_amount" value="0" id="estimated_amount" class="form-control estimated_amount" readonly style="background-color: #ddd;">
                                                         </td>
@@ -432,6 +442,11 @@
             </td>
 
             <td>
+                <input type="hidden" name="barcode[]" value="@{{barcode}}">
+                @{{ barcode }}
+            </td>
+
+            <td>
                 <input type="hidden" name="product_id[]" value="@{{product_id}}">
                 @{{ product_name }}
             </td>
@@ -464,9 +479,65 @@
 
     </script>
 
-
+    {{-- handles add more item in purchase --}}
     <script type="text/javascript">
         $(document).ready(function(){
+
+             // 🔹 Handle barcode scan/entry
+            $(document).on("change", "#barcode", function(){
+                var barcode = $(this).val();
+                if(!barcode) return;
+
+                $.ajax({
+                    url: "{{ route('products.findByBarcode') }}", // lookup route
+                    type: "GET",
+                    data: { barcode: barcode },
+                    success: function(product){
+                        if(product && product.id){
+                            var date = $('#date').val();
+                            var invoice_no = $('#invoice_no').val();
+
+                            // 🔹 Update dropdowns and stock field so barcode flow matches manual flow
+                        $('#category_id').val(product.category_id).trigger('change');
+                        $('#product_id').html('<option value="'+product.id+'" selected>'+product.name+'</option>');
+                        $('#unit_id').html('<option value="'+product.unit_id+'" selected>'+product.unit.name+'</option>');
+                        $('#current_stock_qty').val(product.quantity);
+
+                            // Prepare data for Handlebars row
+                            var source = $("#document-template").html();
+                            var template = Handlebars.compile(source);
+                            var data = {
+                                date: date,
+                                invoice_no: invoice_no,
+                                barcode: product.barcode,          // 🔹 added
+                                category_id: product.category_id,
+                                category_name: product.category.name,
+                                product_id: product.id,
+                                product_name: product.name,
+                                unit_id: product.unit_id,
+                                unit_name: product.unit.name,
+                            };
+                            var html = template(data);
+                            $("#addRow").append(html);
+
+                            // Clear barcode field after scan
+                            $('#barcode').val('');
+
+                            // 🔹 Optional: show stock quantity
+                            // $('#current_stock_qty').val(product.quantity);
+
+                            Notiflix.Notify.success('Product added via barcode');
+                        } else {
+                            Notiflix.Notify.failure('Product not found for this barcode. Please select manually.');
+                        }
+                    },
+                    error: function(){
+                        Notiflix.Notify.failure('Error looking up barcode. Try again.');
+                    }
+                });
+            });
+
+            // Existing add button flow (manual selection)
             $(document).on("click", ".addeventmore", function(){
                 var date = $('#date').val();
                 var invoice_no = $('#invoice_no').val(); 
@@ -513,6 +584,7 @@
                     product_name:product_name,
                     unit_id:unit_id,
                     unit_name:unit_name,
+                    barcode: '' // 🔹 empty if added manually
                 };
                 var html = tamplate(data);
                 $("#addRow").append(html);

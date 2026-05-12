@@ -58,6 +58,7 @@ class PurchaseController extends Controller
         $rules = [
             'date' => ['required', 'date'],
             'purchase_no' => ['required'],
+            'barcode' => ['nullable', 'string'],
             'category_id' => ['required', 'array', 'min:1'],
             'category_id.*' => ['required'],
             'product_id' => ['required', 'array', 'min:1'],
@@ -75,7 +76,7 @@ class PurchaseController extends Controller
         // New supplier fields required if supplier_id == 0
         if ($request->supplier_id == '0') {
             $rules['name'] = ['required', 'string', 'max:255'];
-            $rules['mobile_no'] = ['required', 'string', 'max:20'];
+            $rules['mobile_no'] = ['required', 'digits:10'];
             $rules['email'] = ['required', 'email', 'max:255'];
         }
 
@@ -83,6 +84,8 @@ class PurchaseController extends Controller
 
         // Use Model's fillable attributes
         DB::transaction(function() use($request) {
+
+        // Create purchase record
             $purchase = Purchase::create([
                 'purchase_no' => $request->purchase_no,
                 'date' => $request->date,
@@ -102,7 +105,7 @@ class PurchaseController extends Controller
                 $purchase_details->unit_price = $request->unit_price[$i];
                 $purchase_details->buying_price = $request->buying_price[$i];
                 $purchase_details->unit_id = $request->unit_id[$i];
-                $purchase_details->status = '1';
+                $purchase_details->status = 1;
                 $purchase_details->save();
 
                 // stock addition control

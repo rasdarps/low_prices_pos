@@ -120,11 +120,11 @@
                                             <input type="text" name="paid_amount" class="form-control paid_amount mt-2" placeholder="Enter Paid Amount" style="display:none;">
                                         </div>
                                         <div class="form-group col-md-9">
-                                            <label><strong>Customer Name <span class="text-danger">*</span></strong></label>
+                                            <label><strong>Account Name <span class="text-danger">*</span></strong></label>
                                             <select name="customer_id" id="customer_id" class="form-control">
                                                 <option value="">Select Customer</option>
                                                 @foreach($costomer as $cust)
-                                                    <option value="{{ $cust->id }}">{{ $cust->name }} - {{ $cust->mobile_no }}</option>
+                                                    <option value="{{ $cust->id }}">{{ $cust->name }} </option>
                                                 @endforeach
                                                 <option value="0">New Customer</option>
                                             </select>
@@ -356,6 +356,12 @@
                             if ($('.select2').length) {
                                 $('.select2').val('').trigger('change');
                             }
+                            // Fetch and set the next invoice number
+                            $.get("/invoices/next-number", function(res) {
+                                if (res.invoice_no) {
+                                    $('#invoice_no').val(res.invoice_no);
+                                }
+                            });
                         } else {
                             if (typeof Notiflix !== 'undefined') {
                                 Notiflix.Notify.failure(data.message);
@@ -383,12 +389,28 @@
                                 scrollTop: $('#errorAlert').offset().top - 100
                             }, 500);
                         } else {
+                            let duplicate = false;
+                            if (xhr.responseText && xhr.status === 500) {
+                                // Check for SQL duplicate entry error
+                                if (xhr.responseText.includes('1062') && xhr.responseText.includes('invoice_no')) {
+                                    duplicate = true;
+                                }
+                            }
                             $('#errorAlert').show();
-                            $('#errors').append('<li>An error occurred. Please try again later.</li>');
-                            if (typeof Notiflix !== 'undefined') {
-                                Notiflix.Notify.failure('An error occurred. Please try again later.');
+                            if (duplicate) {
+                                $('#errors').append('<li>Duplicate invoice number. Please refresh the page and try again.</li>');
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure('Duplicate invoice number. Please refresh the page and try again.');
+                                } else {
+                                    alert('Duplicate invoice number. Please refresh the page and try again.');
+                                }
                             } else {
-                                alert('An error occurred. Please try again later.');
+                                $('#errors').append('<li>An error occurred. Please try again later.</li>');
+                                if (typeof Notiflix !== 'undefined') {
+                                    Notiflix.Notify.failure('An error occurred. Please try again later.');
+                                } else {
+                                    alert('An error occurred. Please try again later.');
+                                }
                             }
                         }
                     }
@@ -399,253 +421,258 @@
 
     <script id="document-template" type="text/x-handlebars-template">
      
-    <tr class="delete_add_more_item" id="delete_add_more_item">
-        <input type="hidden" name="date" value="@{{date}}">
-        <input type="hidden" name="invoice_no" value="@{{invoice_no}}">
-        
-   
-        <td>
-            <input type="hidden" name="category_id[]" value="@{{category_id}}">
-            @{{ category_name }}
-        </td>
-
-        <td>
-            <input type="hidden" name="product_id[]" value="@{{product_id}}">
-            @{{ product_name }}
-        </td>
-
-        
-        <td>
-            <input type="number" min="1" class="form-control selling_qty text-right" id="selling_qty" name="selling_qty[]" value="{{ old('selling_qty') }}" onchange="checkQuantity()"> 
-        </td>
-
-        <td>
-            <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}" onchange="checkQuantity()"> 
-        </td>
-
-        <td>
-            <input type="hidden" name="unit_id[]" value="@{{unit_id}}">
-            @{{ unit_name }}
-        </td>
-
-
-        <td>
-            <input type="number" class="form-control selling_price text-right" name="selling_price[]" value="0" readonly> 
+        <tr class="delete_add_more_item" id="delete_add_more_item">
+            <input type="hidden" name="date" value="@{{date}}">
+            <input type="hidden" name="invoice_no" value="@{{invoice_no}}">
             
-        </td>
+    
+            <td>
+                <input type="hidden" name="category_id[]" value="@{{category_id}}">
+                @{{ category_name }}
+            </td>
 
-        <td>
-            <i class="btn btn-danger btn-sm fas fa-window-close removeeventmore"></i>
-        </td>
+            <td>
+                <input type="hidden" name="product_id[]" value="@{{product_id}}">
+                @{{ product_name }}
+            </td>
 
-    </tr>
+            
+            <td>
+                <input type="number" min="1" class="form-control selling_qty text-right" id="selling_qty" name="selling_qty[]" value="{{ old('selling_qty') }}" onchange="checkQuantity()"> 
+            </td>
 
-</script>
+            <td>
+                <input type="number" class="form-control unit_price text-right" id="unit_price" name="unit_price[]" value="{{ old('unit_price') }}" onchange="checkQuantity()"> 
+            </td>
+
+            <td>
+                <input type="hidden" name="unit_id[]" value="@{{unit_id}}">
+                @{{ unit_name }}
+            </td>
 
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(document).on("click", ".addeventmore", function(){
-            var date = $('#date').val();
-            var invoice_no = $('#invoice_no').val(); 
-            var category_id  = $('#category_id').val();
-            var category_name = $('#category_id').find('option:selected').text();
-            var product_id = $('#product_id').val();
-            var product_name = $('#product_id').find('option:selected').text();
-            var unit_id  = $('#unit_id').val();
-            var unit_name = $('#unit_id').find('option:selected').text();
+            <td>
+                <input type="number" class="form-control selling_price text-right" name="selling_price[]" value="0" readonly> 
+                
+            </td>
 
-            function notifyPop(msg) {
-                if (typeof Notiflix !== 'undefined') {
-                    Notiflix.Notify.failure(msg);
+            <td>
+                <i class="btn btn-danger btn-sm fas fa-window-close removeeventmore"></i>
+            </td>
+
+        </tr>
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(document).on("click", ".addeventmore", function(){
+                var date = $('#date').val();
+                var invoice_no = $('#invoice_no').val(); 
+                var category_id  = $('#category_id').val();
+                var category_name = $('#category_id').find('option:selected').text();
+                var product_id = $('#product_id').val();
+                var product_name = $('#product_id').find('option:selected').text();
+                var unit_id  = $('#unit_id').val();
+                var unit_name = $('#unit_id').find('option:selected').text();
+
+                function notifyPop(msg) {
+                    if (typeof Notiflix !== 'undefined') {
+                        Notiflix.Notify.failure(msg);
+                    } else {
+                        alert(msg);
+                    }
+                }
+
+                if(date == ''){
+                    notifyPop("Date is Required");
+                    return false;
+                }
+                if(category_id == '' || category_name.trim() === 'Select Category'){
+                    notifyPop("Category is Required");
+                    return false;
+                }
+                if(product_id == '' || product_name.trim() === 'Select Product'){
+                    notifyPop("Product Field is Required");
+                    return false;
+                }
+                if(unit_id == '' || unit_name.trim() === 'Select Unit'){
+                    notifyPop("Unit Field is Required");
+                    return false;
+                }
+
+                var source = $("#document-template").html();
+                var tamplate = Handlebars.compile(source);
+                var data = {
+                    date:date,
+                    invoice_no:invoice_no, 
+                    category_id:category_id,
+                    category_name:category_name,
+                    product_id:product_id,
+                    product_name:product_name,
+                    unit_id:unit_id,
+                    unit_name:unit_name,
+                };
+                var html = tamplate(data);
+                $("#addRow").append(html);
+            });
+
+            $(document).on("click",".removeeventmore",function(event){
+                $(this).closest(".delete_add_more_item").remove();
+                totalAmountPrice();
+            });
+
+            $(document).on('keyup click','.unit_price,.selling_qty', function(){
+                var unit_price = $(this).closest("tr").find("input.unit_price").val();
+                var qty = $(this).closest("tr").find("input.selling_qty").val();
+                var total = unit_price * qty;
+                $(this).closest("tr").find("input.selling_price").val(total);
+                $('#discount_amount').trigger('keyup');
+            });
+
+            $(document).on('keyup','#discount_amount',function(){
+                totalAmountPrice();
+            });
+
+            // Calculate sum of amout in invoice 
+
+            function totalAmountPrice(){
+                var sum = 0;
+                $(".selling_price").each(function(){
+                    var value = $(this).val();
+                    if(!isNaN(value) && value.length != 0){
+                        sum += parseFloat(value);
+                    }
+                });
+
+                var discount_amount = parseFloat($('#discount_amount').val());
+                if(!isNaN(discount_amount) && discount_amount.length != 0){
+                        sum -= parseFloat(discount_amount);
+                    }
+
+                $('#estimated_amount').val(sum);
+            }  
+
+        });
+
+
+    </script>
+ 
+
+    <script type="text/javascript">
+
+        //auto pull product when category selected
+        $(function(){
+            $(document).on('change','#category_id',function(){
+                var category_id = $(this).val();
+                $.ajax({
+                    url:"{{ route('get-product') }}",
+                    type: "GET",
+                    data:{category_id:category_id},
+                    success:function(data){
+                        var html = '<option value="">Select Product</option>';
+                        $.each(data,function(key,v){
+                            html += '<option value=" '+v.id+' "> '+v.name+'</option>';
+                        });
+                        $('#product_id').html(html);
+                    }
+                })
+            });
+        });
+
+    </script>
+
+    <!--Select Product to pull related Unit-->
+    <script type="text/javascript">
+        $(function(){
+            $(document).on('change','#product_id',function(){
+                var product_id = $(this).val();
+                $.ajax({
+                    url:"{{ route('get-unit') }}",
+                    type: "GET",
+                    data:{product_id:product_id},
+                    success:function(data){
+                        var html = '<option value="">Select Unit</option>';
+                        $.each(data,function(key,v){
+                            html += '<option value=" '+v.unit_id+' "> '+v.unit.name+'</option>';
+                        });
+                        $('#unit_id').html(html);
+                    }
+                })
+            });
+        });
+    </script>
+ 
+    <script type="text/javascript">
+    //get current stock quantity when product selected
+        $(function(){
+            $(document).on('change','#product_id',function(){
+                var product_id = $(this).val();
+                $.ajax({
+                    url:"{{ route('check-product-stock') }}",
+                    type: "GET",
+                    data:{product_id:product_id},
+                    success:function(data){                   
+                        $('#current_stock_qty').val(data);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    {{-- check quantity script --}}
+    <script>
+        function checkQuantity() {
+            var unit_prices = document.getElementsByName('unit_price[]');
+            var current_stock_qtys = document.getElementsByName('current_stock_qty');
+            var selling_qtys = document.getElementsByName('selling_qty[]');
+            for (var i = 0; i < unit_prices.length; i++) {
+                var unit_price = unit_prices[i];
+                // var current_stock_qty = current_stock_qtys[i];
+                var selling_qty = selling_qtys[i];
+                var current_stock_qty = document.getElementById('current_stock_qty');
+                var current_stock = current_stock_qty ? parseInt(current_stock_qty.value) : 0;
+                var selling = selling_qty ? parseInt(selling_qty.value) : 0;
+                if (selling > current_stock) {
+                    if (typeof Notiflix !== 'undefined') {
+                        Notiflix.Notify.failure('Selling quantity cannot be more than current stock quantity!');
+                    } else {
+                        alert('Selling quantity cannot be more than current stock quantity!');
+                    }
+                    unit_price.disabled = true;
                 } else {
-                    alert(msg);
+                    unit_price.disabled = false;
                 }
             }
-
-            if(date == ''){
-                notifyPop("Date is Required");
-                return false;
-            }
-            if(category_id == '' || category_name.trim() === 'Select Category'){
-                notifyPop("Category is Required");
-                return false;
-            }
-            if(product_id == '' || product_name.trim() === 'Select Product'){
-                notifyPop("Product Field is Required");
-                return false;
-            }
-            if(unit_id == '' || unit_name.trim() === 'Select Unit'){
-                notifyPop("Unit Field is Required");
-                return false;
-            }
-
-            var source = $("#document-template").html();
-            var tamplate = Handlebars.compile(source);
-            var data = {
-                date:date,
-                invoice_no:invoice_no, 
-                category_id:category_id,
-                category_name:category_name,
-                product_id:product_id,
-                product_name:product_name,
-                unit_id:unit_id,
-                unit_name:unit_name,
-            };
-            var html = tamplate(data);
-            $("#addRow").append(html);
-        });
-
-        $(document).on("click",".removeeventmore",function(event){
-            $(this).closest(".delete_add_more_item").remove();
-            totalAmountPrice();
-        });
-
-        $(document).on('keyup click','.unit_price,.selling_qty', function(){
-            var unit_price = $(this).closest("tr").find("input.unit_price").val();
-            var qty = $(this).closest("tr").find("input.selling_qty").val();
-            var total = unit_price * qty;
-            $(this).closest("tr").find("input.selling_price").val(total);
-            $('#discount_amount').trigger('keyup');
-        });
-
-        $(document).on('keyup','#discount_amount',function(){
-            totalAmountPrice();
-        });
-
-        // Calculate sum of amout in invoice 
-
-        function totalAmountPrice(){
-            var sum = 0;
-            $(".selling_price").each(function(){
-                var value = $(this).val();
-                if(!isNaN(value) && value.length != 0){
-                    sum += parseFloat(value);
-                }
-            });
-
-            var discount_amount = parseFloat($('#discount_amount').val());
-            if(!isNaN(discount_amount) && discount_amount.length != 0){
-                    sum -= parseFloat(discount_amount);
-                }
-
-            $('#estimated_amount').val(sum);
-        }  
-
-    });
-
-
-</script>
- 
-
-<script type="text/javascript">
-
-    //auto pull product when category selected
-    $(function(){
-        $(document).on('change','#category_id',function(){
-            var category_id = $(this).val();
-            $.ajax({
-                url:"{{ route('get-product') }}",
-                type: "GET",
-                data:{category_id:category_id},
-                success:function(data){
-                    var html = '<option value="">Select Category</option>';
-                    $.each(data,function(key,v){
-                        html += '<option value=" '+v.id+' "> '+v.name+'</option>';
-                    });
-                    $('#product_id').html(html);
-                }
-            })
-        });
-    });
-
-</script>
-
-<!--Select Product to pull related Unit-->
-<script type="text/javascript">
-    $(function(){
-        $(document).on('change','#product_id',function(){
-            var product_id = $(this).val();
-            $.ajax({
-                url:"{{ route('get-unit') }}",
-                type: "GET",
-                data:{product_id:product_id},
-                success:function(data){
-                    var html = '<option value="">Select Unit</option>';
-                    $.each(data,function(key,v){
-                        html += '<option value=" '+v.unit_id+' "> '+v.unit.name+'</option>';
-                    });
-                    $('#unit_id').html(html);
-                }
-            })
-        });
-    });
-</script>
- 
- <script type="text/javascript">
-   //get current stock quantity when product selected
-    $(function(){
-        $(document).on('change','#product_id',function(){
-            var product_id = $(this).val();
-            $.ajax({
-                url:"{{ route('check-product-stock') }}",
-                type: "GET",
-                data:{product_id:product_id},
-                success:function(data){                   
-                    $('#current_stock_qty').val(data);
-                }
-            });
-        });
-    });
-
-</script>
-
-{{-- check quantity script --}}
-<script>
-    function checkQuantity() {
-      var unit_prices = document.getElementsByName('unit_price[]');
-      var current_stock_qtys = document.getElementsByName('current_stock_qty');
-      var selling_qtys = document.getElementsByName('selling_qty[]');
-      
-      for (var i = 0; i < unit_prices.length; i++) {
-        var unit_price = unit_prices[i];
-        // var current_stock_qty = current_stock_qtys[i];
-        var selling_qty = selling_qtys[i];
-        
-        if (parseInt(selling_qty.value) > parseInt(current_stock_qty.value)) {
-          alert('Selling quantity cannot be more than current stock quantity!');
-          unit_price.disabled = true;
-        } else {
-          unit_price.disabled = false;
         }
-      }
-    }
     </script>
     
 
-<!-- Removed old .storeButton click validation handler. All validation now uses Notiflix in the main form submission handler. -->
+    <!-- Removed old .storeButton click validation handler. All validation now uses Notiflix in the main form submission handler. -->
 
 
-<script type="text/javascript">
-   //payment status and customer show or hide
-    $(document).on('change','#paid_status', function(){
-        var paid_status = $(this).val();
-        if (paid_status == 'partial_paid') {
-            $('.paid_amount').show();
-        }else{
-            $('.paid_amount').hide();
-        }
-    });
+    <script type="text/javascript">
+    //payment status and customer show or hide
+        $(document).on('change','#paid_status', function(){
+            var paid_status = $(this).val();
+            if (paid_status == 'partial_paid') {
+                $('.paid_amount').show();
+            }else{
+                $('.paid_amount').hide();
+            }
+        });
 
-      $(document).on('change','#customer_id', function(){
-        var customer_id = $(this).val();
-        if (customer_id == '0') {
-            $('.new_customer').show();
-        }else{
-            $('.new_customer').hide();
-        }
-    });
+        $(document).on('change','#customer_id', function(){
+            var customer_id = $(this).val();
+            if (customer_id == '0') {
+                $('.new_customer').show();
+            }else{
+                $('.new_customer').hide();
+            }
+        });
 
 
-</script>
+    </script>
 @endsection
